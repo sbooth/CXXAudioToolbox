@@ -1,0 +1,7 @@
+module CXXAudioToolbox {
+	requires cplusplus17
+	header "ATAudioConverter.hpp"
+	header "ATAudioFile.hpp"
+	header "ATAudioFormat.hpp"
+	export *
+}
