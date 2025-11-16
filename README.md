@@ -7,6 +7,7 @@ Assorted C++ classes simplifying the use of Audio Toolbox.
 | [ATAudioConverter](Sources/CXXAudioToolbox/include/ATAudioConverter.hpp) | An `AudioConverter` wrapper.|
 | [ATAudioFile](Sources/CXXAudioToolbox/include/ATAudioFile.hpp) | An `AudioFile` wrapper. |
 | [ATAudioFormat](Sources/CXXAudioToolbox/include/ATAudioFormat.hpp) | An `AudioFormat` wrapper. |
+| [ATAUGraph](Sources/CXXAudioToolbox/include/ATAUGraph.hpp) | An `AUGraph` wrapper. |
 
 > [!NOTE]
 > C++17 is required.

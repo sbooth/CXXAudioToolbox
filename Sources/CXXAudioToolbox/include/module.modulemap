@@ -3,5 +3,6 @@ module CXXAudioToolbox {
 	header "ATAudioConverter.hpp"
 	header "ATAudioFile.hpp"
 	header "ATAudioFormat.hpp"
+	header "ATAUGraph.hpp"
 	export *
 }

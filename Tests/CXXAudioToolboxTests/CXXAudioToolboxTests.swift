@@ -3,12 +3,17 @@ import Testing
 
 @Suite struct CXXCoreAudioTests {
 	@Test func audioConverter() async {
-		var converter = CXXAudioToolbox.ATAudioConverter()
+		let converter = CXXAudioToolbox.ATAudioConverter()
 		#expect(converter.IsValid() == false)
 	}
 
 	@Test func audioFile() async {
-		var af = CXXAudioToolbox.ATAudioFile()
+		let af = CXXAudioToolbox.ATAudioFile()
 		#expect(af.IsValid() == false)
+	}
+
+	@Test func auGraph() async {
+		let graph = CXXAudioToolbox.ATAUGraph()
+		#expect(graph.IsValid() == false)
 	}
 }
