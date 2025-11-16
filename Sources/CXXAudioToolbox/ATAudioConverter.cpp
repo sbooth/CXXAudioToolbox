@@ -43,12 +43,12 @@ public:
 			case kAudioConverterErr_HardwareInUse: 						return "kAudioConverterErr_HardwareInUse";
 			case kAudioConverterErr_NoHardwarePermission: 				return "kAudioConverterErr_NoHardwarePermission";
 #endif /* TARGET_OS_IPHONE */
-			default:													return "Unknown Audio Converter error";
+			default:													return "Unknown AudioConverter error";
 		}
 	}
 };
 
-/// Global instance of audio converter error category.
+/// Global instance of AudioConverter error category.
 const AudioConverterErrorCategory audioConverterErrorCategory_;
 
 /// Throws a std::system_error in the AudioConverterErrorCategory if result != kAudio_NoError.
@@ -112,7 +112,7 @@ void CXXAudioToolbox::ATAudioConverter::Reset()
 	ThrowIfAudioConverterError(result, "AudioConverterReset");
 }
 
-void CXXAudioToolbox::ATAudioConverter::GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable)
+void CXXAudioToolbox::ATAudioConverter::GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 *outSize, Boolean *outWritable)
 {
 	auto result = AudioConverterGetPropertyInfo(converter_, inPropertyID, outSize, outWritable);
 	ThrowIfAudioConverterError(result, "AudioConverterGetPropertyInfo");
@@ -136,7 +136,7 @@ void CXXAudioToolbox::ATAudioConverter::ConvertBuffer(UInt32 inInputDataSize, co
 	ThrowIfAudioConverterError(result, "AudioConverterConvertBuffer");
 }
 
-void CXXAudioToolbox::ATAudioConverter::FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void * _Nullable inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription * _Nullable outPacketDescription)
+void CXXAudioToolbox::ATAudioConverter::FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void *inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription *outPacketDescription)
 {
 	auto result = AudioConverterFillComplexBuffer(converter_, inInputDataProc, inInputDataProcUserData, &ioOutputDataPacketSize, outOutputData, outPacketDescription);
 	ThrowIfAudioConverterError(result, "AudioConverterFillComplexBuffer");

@@ -25,14 +25,14 @@ public:
 	// This class is non-assignable
 	ATAudioConverter& operator=(const ATAudioConverter&) = delete;
 
-	/// Destroys the audio converter and releases all associated resources.
-	~ATAudioConverter() noexcept;
-
-	/// Move constructor
+	/// Move constructor.
 	ATAudioConverter(ATAudioConverter&& rhs) noexcept;
 
-	/// Move assignment operator
+	/// Move assignment operator.
 	ATAudioConverter& operator=(ATAudioConverter&& rhs) noexcept;
+
+	/// Destroys the audio converter and releases all associated resources.
+	~ATAudioConverter() noexcept;
 
 	/// Returns the object's internal AudioConverter object.
 	AudioConverterRef const _Nullable GetAudioConverter() const noexcept
