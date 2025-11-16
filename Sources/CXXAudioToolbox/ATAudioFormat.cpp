@@ -39,7 +39,7 @@ public:
 	}
 };
 
-/// Global instance of audio format error category.
+/// Global instance of AudioFormat error category.
 const AudioFormatErrorCategory audioFormatErrorCategory_;
 
 /// Throws a std::system_error in the AudioFormatErrorCategory if result != kAudio_NoError.
