@@ -11,7 +11,7 @@
 
 #import <AudioToolbox/AUGraph.h>
 
-#import <CAStreamDescription.hpp>
+#import <CXXCoreAudio/CAStreamDescription.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
 

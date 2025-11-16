@@ -10,7 +10,7 @@
 
 #import <AudioToolbox/AudioFile.h>
 
-#import <CAStreamDescription.hpp>
+#import <CXXCoreAudio/CAStreamDescription.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
 

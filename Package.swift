@@ -25,6 +25,9 @@ let package = Package(
 			dependencies: [
 				"CXXCoreAudio",
 			],
+			cSettings: [
+				.headerSearchPath("include/CXXAudioToolbox"),
+			],
 			linkerSettings: [
 				.linkedFramework("AudioToolbox"),
 			]
