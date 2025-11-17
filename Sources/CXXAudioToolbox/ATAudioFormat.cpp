@@ -4,55 +4,8 @@
 // MIT license
 //
 
-#import <exception>
-#import <system_error>
-
 #import "ATAudioFormat.hpp"
-
-namespace {
-
-/// A std::error_category for return values from the AudioFormat API.
-class AudioFormatErrorCategory : public std::error_category {
-public:
-	virtual const char * name() const noexcept override final { return "AudioFormat"; }
-	virtual std::string message(int condition) const override final
-	{
-		switch(static_cast<OSStatus>(condition)) {
-				// CoreAudioBaseTypes.h
-			case kAudio_NoError: 							return "The function call completed successfully";
-			case kAudio_UnimplementedError: 				return "Unimplemented core routine";
-			case kAudio_FileNotFoundError: 					return "File not found";
-			case kAudio_FilePermissionError: 				return "File cannot be opened due to either file, directory, or sandbox permissions";
-			case kAudio_TooManyFilesOpenError: 				return "File cannot be opened because too many files are already open";
-			case kAudio_BadFilePathError: 					return "File cannot be opened because the specified path is malformed";
-			case kAudio_ParamError: 						return "Error in user parameter list";
-			case kAudio_MemFullError: 						return "Not enough room in heap zone";
-				// AudioFormat.h
-			case kAudioFormatUnspecifiedError: 				return "kAudioFormatUnspecifiedError";
-			case kAudioFormatUnsupportedPropertyError: 		return "kAudioFormatUnsupportedPropertyError";
-			case kAudioFormatBadPropertySizeError: 			return "kAudioFormatBadPropertySizeError";
-			case kAudioFormatBadSpecifierSizeError: 		return "kAudioFormatBadSpecifierSizeError";
-			case kAudioFormatUnsupportedDataFormatError: 	return "kAudioFormatUnsupportedDataFormatError";
-			case kAudioFormatUnknownFormatError: 			return "kAudioFormatUnknownFormatError";
-			default:										return "Unknown AudioFormat error";
-		}
-	}
-};
-
-/// Global instance of AudioFormat error category.
-const AudioFormatErrorCategory audioFormatErrorCategory_;
-
-/// Throws a std::system_error in the AudioFormatErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioFormatErrorCategory.
-inline void ThrowIfAudioFormatError(OSStatus result, const char * const operation = nullptr)
-{
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, audioFormatErrorCategory_, operation);
-}
-
-} /* namespace */
+#import "ATErrors.hpp"
 
 UInt32 CXXAudioToolbox::ATAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier)
 {

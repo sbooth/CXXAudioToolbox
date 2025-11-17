@@ -4,64 +4,10 @@
 // MIT license
 //
 
-#import <exception>
-#import <system_error>
 #import <utility>
 
 #import "ATAudioConverter.hpp"
-
-namespace {
-
-/// A std::error_category for return values from the AudioConverter API.
-class AudioConverterErrorCategory : public std::error_category {
-public:
-	virtual const char * name() const noexcept override final { return "AudioConverter"; }
-	virtual std::string message(int condition) const override final
-	{
-		switch(static_cast<OSStatus>(condition)) {
-				// CoreAudioBaseTypes.h
-			case kAudio_NoError: 										return "The function call completed successfully";
-			case kAudio_UnimplementedError: 							return "Unimplemented core routine";
-			case kAudio_FileNotFoundError: 								return "File not found";
-			case kAudio_FilePermissionError: 							return "File cannot be opened due to either file, directory, or sandbox permissions";
-			case kAudio_TooManyFilesOpenError: 							return "File cannot be opened because too many files are already open";
-			case kAudio_BadFilePathError: 								return "File cannot be opened because the specified path is malformed";
-			case kAudio_ParamError: 									return "Error in user parameter list";
-			case kAudio_MemFullError: 									return "Not enough room in heap zone";
-				// AudioConverter.h
-			case kAudioConverterErr_FormatNotSupported: 				return "kAudioConverterErr_FormatNotSupported or kAudioFileUnsupportedDataFormatError";
-			case kAudioConverterErr_OperationNotSupported: 				return "kAudioConverterErr_OperationNotSupported";
-			case kAudioConverterErr_PropertyNotSupported: 				return "kAudioConverterErr_PropertyNotSupported";
-			case kAudioConverterErr_InvalidInputSize: 					return "kAudioConverterErr_InvalidInputSize";
-			case kAudioConverterErr_InvalidOutputSize: 					return "kAudioConverterErr_InvalidOutputSize";
-			case kAudioConverterErr_UnspecifiedError: 					return "kAudioConverterErr_UnspecifiedError";
-			case kAudioConverterErr_BadPropertySizeError: 				return "kAudioConverterErr_BadPropertySizeError";
-			case kAudioConverterErr_RequiresPacketDescriptionsError: 	return "kAudioConverterErr_RequiresPacketDescriptionsError";
-			case kAudioConverterErr_InputSampleRateOutOfRange: 			return "kAudioConverterErr_InputSampleRateOutOfRange";
-			case kAudioConverterErr_OutputSampleRateOutOfRange: 		return "kAudioConverterErr_OutputSampleRateOutOfRange";
-#if TARGET_OS_IPHONE
-			case kAudioConverterErr_HardwareInUse: 						return "kAudioConverterErr_HardwareInUse";
-			case kAudioConverterErr_NoHardwarePermission: 				return "kAudioConverterErr_NoHardwarePermission";
-#endif /* TARGET_OS_IPHONE */
-			default:													return "Unknown AudioConverter error";
-		}
-	}
-};
-
-/// Global instance of AudioConverter error category.
-const AudioConverterErrorCategory audioConverterErrorCategory_;
-
-/// Throws a std::system_error in the AudioConverterErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioConverterErrorCategory.
-inline void ThrowIfAudioConverterError(OSStatus result, const char * const operation = nullptr)
-{
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, audioConverterErrorCategory_, operation);
-}
-
-} /* namespace */
+#import "ATErrors.hpp"
 
 CXXAudioToolbox::ATAudioConverter::~ATAudioConverter() noexcept
 {

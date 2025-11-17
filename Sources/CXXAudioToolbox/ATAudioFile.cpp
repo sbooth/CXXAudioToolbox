@@ -4,67 +4,10 @@
 // MIT license
 //
 
-#import <exception>
-#import <system_error>
 #import <utility>
 
 #import "ATAudioFile.hpp"
-
-namespace {
-
-/// A std::error_category for return values from the AudioFile API.
-class AudioFileErrorCategory : public std::error_category {
-public:
-	virtual const char * name() const noexcept override final { return "AudioFile"; }
-	virtual std::string message(int condition) const override final
-	{
-		switch(static_cast<OSStatus>(condition)) {
-				// CoreAudioBaseTypes.h
-			case kAudio_NoError: 							return "The function call completed successfully";
-			case kAudio_UnimplementedError: 				return "Unimplemented core routine";
-			case kAudio_FileNotFoundError: 					return "File not found";
-			case kAudio_FilePermissionError: 				return "File cannot be opened due to either file, directory, or sandbox permissions";
-			case kAudio_TooManyFilesOpenError: 				return "File cannot be opened because too many files are already open";
-			case kAudio_BadFilePathError: 					return "File cannot be opened because the specified path is malformed";
-			case kAudio_ParamError: 						return "Error in user parameter list";
-			case kAudio_MemFullError: 						return "Not enough room in heap zone";
-				// AudioFile.h
-			case kAudioFileUnspecifiedError: 				return "An unspecified error has occurred";
-			case kAudioFileUnsupportedFileTypeError: 		return "The file type is not supported";
-			case kAudioFileUnsupportedDataFormatError: 		return "The data format is not supported by this file type";
-			case kAudioFileUnsupportedPropertyError: 		return "The property is not supported";
-			case kAudioFileBadPropertySizeError: 			return "The size of the property data was not correct";
-			case kAudioFilePermissionsError: 				return "The operation violated the file permissions";
-			case kAudioFileNotOptimizedError: 				return "There are chunks following the audio data chunk that prevent extending the audio data chunk. The file must be optimized in order to write more audio data.";
-			case kAudioFileInvalidChunkError: 				return "The chunk does not exist in the file or is not supported by the file";
-			case kAudioFileDoesNotAllow64BitDataSizeError: 	return "The a file offset was too large for the file type. AIFF and WAVE have a 32 bit file size limit.";
-			case kAudioFileInvalidPacketOffsetError: 		return "A packet offset was past the end of the file, or not at the end of the file when writing a VBR format, or a corrupt packet size was read when building the packet table.";
-			case kAudioFileInvalidPacketDependencyError: 		return "Either the packet dependency info that's necessary for the audio format has not been provided, or the provided packet dependency info indicates dependency on a packet that's unavailable.";
-			case kAudioFileInvalidFileError:				return "The file is malformed, or otherwise not a valid instance of an audio file of its type";
-			case kAudioFileOperationNotSupportedError: 		return "The operation cannot be performed";
-			case kAudioFileNotOpenError:					return "The file is closed";
-			case kAudioFileEndOfFileError: 					return "End of file";
-			case kAudioFilePositionError: 					return "Invalid file position";
-//			case kAudioFileFileNotFoundError: 				return "File not found";
-			default:										return "Unknown AudioFile error";
-		}
-	}
-};
-
-/// Global instance of AudioFile error category.
-const AudioFileErrorCategory audioFileErrorCategory_;
-
-/// Throws a std::system_error in the AudioFileErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioFileErrorCategory.
-inline void ThrowIfAudioFileError(OSStatus result, const char * const operation = nullptr)
-{
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, audioFileErrorCategory_, operation);
-}
-
-} /* namespace */
+#import "ATErrors.hpp"
 
 CXXAudioToolbox::ATAudioFile::ATAudioFile(ATAudioFile&& rhs) noexcept
 : mAudioFileID{std::exchange(rhs.mAudioFileID, nullptr)}
