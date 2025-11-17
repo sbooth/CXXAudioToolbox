@@ -17,6 +17,8 @@ Assorted C++ classes simplifying the use of Audio Toolbox.
 
 All classes are in the `CXXAudioToolbox` namespace.
 
+This package depends on the [CXXCoreAudio](https://github.com/sbooth/CXXCoreAudio) package.
+
 ## Installation
 
 ### Swift Package Manager
