@@ -2,7 +2,7 @@
 
 Assorted C++ classes simplifying the use of Audio Toolbox.
 
-| C++ Class | Description |
+| Class | Description |
 | --- | --- |
 | [ATAudioConverter](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATAudioConverter.hpp) | An [`AudioConverter`](https://developer.apple.com/documentation/audiotoolbox/audio-converter-services?language=objc) wrapper.|
 | [ATAudioFile](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATAudioFile.hpp) | An [`AudioFile`](https://developer.apple.com/documentation/audiotoolbox/audio-file-services?language=objc) wrapper. |
