@@ -12,6 +12,11 @@ import Testing
 		#expect(af.IsValid() == false)
 	}
 
+	@Test func extAudioFile() async {
+		let eaf = CXXAudioToolbox.ATExtAudioFile()
+		#expect(eaf.IsValid() == false)
+	}
+
 	@Test func auGraph() async {
 		let graph = CXXAudioToolbox.ATAUGraph()
 		#expect(graph.IsValid() == false)

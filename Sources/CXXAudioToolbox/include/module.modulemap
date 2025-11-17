@@ -4,6 +4,7 @@ module CXXAudioToolbox {
 	header "CXXAudioToolbox/ATAudioFile.hpp"
 	header "CXXAudioToolbox/ATAudioFormat.hpp"
 	header "CXXAudioToolbox/ATAUGraph.hpp"
+	header "CXXAudioToolbox/ATExtAudioFile.hpp"
 	header "CXXAudioToolbox/AudioFileWrapper.hpp"
 	header "CXXAudioToolbox/ExtAudioFileWrapper.hpp"
 	export *
