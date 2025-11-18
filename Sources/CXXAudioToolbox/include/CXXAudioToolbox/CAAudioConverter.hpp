@@ -13,26 +13,26 @@ CF_ASSUME_NONNULL_BEGIN
 namespace CXXAudioToolbox {
 
 /// An AudioConverter wrapper.
-class ATAudioConverter final {
+class CAAudioConverter final {
 public:
 
 	/// Creates an audio converter.
-	ATAudioConverter() noexcept = default;
+	CAAudioConverter() noexcept = default;
 
 	// This class is non-copyable
-	ATAudioConverter(const ATAudioConverter&) = delete;
+	CAAudioConverter(const CAAudioConverter&) = delete;
 
 	// This class is non-assignable
-	ATAudioConverter& operator=(const ATAudioConverter&) = delete;
+	CAAudioConverter& operator=(const CAAudioConverter&) = delete;
 
 	/// Move constructor.
-	ATAudioConverter(ATAudioConverter&& rhs) noexcept;
+	CAAudioConverter(CAAudioConverter&& rhs) noexcept;
 
 	/// Move assignment operator.
-	ATAudioConverter& operator=(ATAudioConverter&& rhs) noexcept;
+	CAAudioConverter& operator=(CAAudioConverter&& rhs) noexcept;
 
 	/// Destroys the audio converter and releases all associated resources.
-	~ATAudioConverter() noexcept;
+	~CAAudioConverter() noexcept;
 
 	/// Returns the object's internal AudioConverter object.
 	AudioConverterRef const _Nullable GetAudioConverter() const noexcept

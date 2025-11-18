@@ -13,7 +13,7 @@
 CF_ASSUME_NONNULL_BEGIN
 
 namespace CXXAudioToolbox {
-namespace ATAudioFormat {
+namespace CAAudioFormat {
 
 /// Retrieves information about the given property.
 /// @param inPropertyID An AudioFormatPropertyID constant.

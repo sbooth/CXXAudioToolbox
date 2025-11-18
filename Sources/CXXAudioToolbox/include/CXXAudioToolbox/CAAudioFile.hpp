@@ -17,26 +17,26 @@ CF_ASSUME_NONNULL_BEGIN
 namespace CXXAudioToolbox {
 
 /// An AudioFile wrapper.
-class ATAudioFile final {
+class CAAudioFile final {
 public:
 
 	/// Creates an audio file.
-	ATAudioFile() noexcept = default;
+	CAAudioFile() noexcept = default;
 
 	// This class is non-copyable
-	ATAudioFile(const ATAudioFile&) = delete;
+	CAAudioFile(const CAAudioFile&) = delete;
 
 	// This class is non-assignable
-	ATAudioFile& operator=(const ATAudioFile&) = delete;
+	CAAudioFile& operator=(const CAAudioFile&) = delete;
 
 	/// Move constructor.
-	ATAudioFile(ATAudioFile&& rhs) noexcept;
+	CAAudioFile(CAAudioFile&& rhs) noexcept;
 
 	/// Move assignment operator.
-	ATAudioFile& operator=(ATAudioFile&& rhs) noexcept;
+	CAAudioFile& operator=(CAAudioFile&& rhs) noexcept;
 
 	/// Destroys the audio file and releases all associated resources.
-	~ATAudioFile() noexcept;
+	~CAAudioFile() noexcept;
 
 	/// Returns true if this object's internal AudioFile object is not null.
 	explicit operator bool() const noexcept

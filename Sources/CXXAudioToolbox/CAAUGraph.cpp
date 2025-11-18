@@ -6,20 +6,20 @@
 
 #import <utility>
 
-#import "ATAUGraph.hpp"
-#import "ATErrors.hpp"
+#import "CAAUGraph.hpp"
+#import "AudioToolboxErrors.hpp"
 
-CXXAudioToolbox::ATAUGraph::~ATAUGraph() noexcept
+CXXAudioToolbox::CAAUGraph::~CAAUGraph() noexcept
 {
 	if(auGraph_)
 		DisposeAUGraph(auGraph_);
 }
 
-CXXAudioToolbox::ATAUGraph::ATAUGraph(ATAUGraph&& rhs) noexcept
+CXXAudioToolbox::CAAUGraph::CAAUGraph(CAAUGraph&& rhs) noexcept
 : auGraph_{std::exchange(rhs.auGraph_, nullptr)}
 {}
 
-CXXAudioToolbox::ATAUGraph& CXXAudioToolbox::ATAUGraph::operator=(ATAUGraph&& rhs) noexcept
+CXXAudioToolbox::CAAUGraph& CXXAudioToolbox::CAAUGraph::operator=(CAAUGraph&& rhs) noexcept
 {
 	if(this != &rhs) {
 		if(auGraph_)
@@ -29,14 +29,14 @@ CXXAudioToolbox::ATAUGraph& CXXAudioToolbox::ATAUGraph::operator=(ATAUGraph&& rh
 	return *this;
 }
 
-void CXXAudioToolbox::ATAUGraph::New()
+void CXXAudioToolbox::CAAUGraph::New()
 {
 	Dispose();
 	auto result = NewAUGraph(&auGraph_);
 	ThrowIfAUGraphError(result, "NewAUGraph");
 }
 
-void CXXAudioToolbox::ATAUGraph::Dispose()
+void CXXAudioToolbox::CAAUGraph::Dispose()
 {
 	if(auGraph_) {
 		auto result = DisposeAUGraph(auGraph_);
@@ -47,7 +47,7 @@ void CXXAudioToolbox::ATAUGraph::Dispose()
 
 // MARK: - Node State
 
-AUNode CXXAudioToolbox::ATAUGraph::AddNode(const AudioComponentDescription *inDescription)
+AUNode CXXAudioToolbox::CAAUGraph::AddNode(const AudioComponentDescription *inDescription)
 {
 	AUNode node{-1};
 	auto result = AUGraphAddNode(auGraph_, inDescription, &node);
@@ -55,13 +55,13 @@ AUNode CXXAudioToolbox::ATAUGraph::AddNode(const AudioComponentDescription *inDe
 	return node;
 }
 
-void CXXAudioToolbox::ATAUGraph::RemoveNode(AUNode inNode)
+void CXXAudioToolbox::CAAUGraph::RemoveNode(AUNode inNode)
 {
 	auto result = AUGraphRemoveNode(auGraph_, inNode);
 	ThrowIfAUGraphError(result, "AUGraphRemoveNode");
 }
 
-UInt32 CXXAudioToolbox::ATAUGraph::GetNodeCount() const
+UInt32 CXXAudioToolbox::CAAUGraph::GetNodeCount() const
 {
 	UInt32 numberOfNodes = 0;
 	auto result = AUGraphGetNodeCount(auGraph_, &numberOfNodes);
@@ -69,7 +69,7 @@ UInt32 CXXAudioToolbox::ATAUGraph::GetNodeCount() const
 	return numberOfNodes;
 }
 
-AUNode CXXAudioToolbox::ATAUGraph::GetIndNode(UInt32 inIndex) const
+AUNode CXXAudioToolbox::CAAUGraph::GetIndNode(UInt32 inIndex) const
 {
 	AUNode node = -1;
 	auto result = AUGraphGetIndNode(auGraph_, inIndex, &node);
@@ -77,7 +77,7 @@ AUNode CXXAudioToolbox::ATAUGraph::GetIndNode(UInt32 inIndex) const
 	return node;
 }
 
-void CXXAudioToolbox::ATAUGraph::NodeInfo(AUNode inNode, AudioComponentDescription *outDescription, AudioUnit *outAudioUnit) const
+void CXXAudioToolbox::CAAUGraph::NodeInfo(AUNode inNode, AudioComponentDescription *outDescription, AudioUnit *outAudioUnit) const
 {
 	auto result = AUGraphNodeInfo(auGraph_, inNode, outDescription, outAudioUnit);
 	ThrowIfAUGraphError(result, "AUGraphNodeInfo");
@@ -87,7 +87,7 @@ void CXXAudioToolbox::ATAUGraph::NodeInfo(AUNode inNode, AudioComponentDescripti
 #if !TARGET_OS_IPHONE
 // MARK: - Sub Graphs
 
-AUNode CXXAudioToolbox::ATAUGraph::NewNodeSubGraph()
+AUNode CXXAudioToolbox::CAAUGraph::NewNodeSubGraph()
 {
 	AUNode node = -1;
 	auto result = AUGraphNewNodeSubGraph(auGraph_, &node);
@@ -95,7 +95,7 @@ AUNode CXXAudioToolbox::ATAUGraph::NewNodeSubGraph()
 	return node;
 }
 
-AUGraph CXXAudioToolbox::ATAUGraph::GetNodeInfoSubGraph(AUNode inNode) const
+AUGraph CXXAudioToolbox::CAAUGraph::GetNodeInfoSubGraph(AUNode inNode) const
 {
 	AUGraph subGraph = nullptr;
 	auto result = AUGraphGetNodeInfoSubGraph(auGraph_, inNode, &subGraph);
@@ -103,7 +103,7 @@ AUGraph CXXAudioToolbox::ATAUGraph::GetNodeInfoSubGraph(AUNode inNode) const
 	return subGraph;
 }
 
-bool CXXAudioToolbox::ATAUGraph::IsNodeSubGraph(AUNode inNode) const
+bool CXXAudioToolbox::CAAUGraph::IsNodeSubGraph(AUNode inNode) const
 {
 	Boolean flag = 0;
 	auto result = AUGraphIsNodeSubGraph(auGraph_, inNode, &flag);
@@ -114,31 +114,31 @@ bool CXXAudioToolbox::ATAUGraph::IsNodeSubGraph(AUNode inNode) const
 
 // MARK: - Node Interactions
 
-void CXXAudioToolbox::ATAUGraph::ConnectNodeInput(AUNode inSourceNode, UInt32 inSourceOutputNumber, AUNode inDestNode, UInt32 inDestInputNumber)
+void CXXAudioToolbox::CAAUGraph::ConnectNodeInput(AUNode inSourceNode, UInt32 inSourceOutputNumber, AUNode inDestNode, UInt32 inDestInputNumber)
 {
 	auto result = AUGraphConnectNodeInput(auGraph_, inSourceNode, inSourceOutputNumber, inDestNode, inDestInputNumber);
 	ThrowIfAUGraphError(result, "AUGraphConnectNodeInput");
 }
 
-void CXXAudioToolbox::ATAUGraph::SetNodeInputCallback(AUNode inDestNode, UInt32 inDestInputNumber, const AURenderCallbackStruct *inInputCallback)
+void CXXAudioToolbox::CAAUGraph::SetNodeInputCallback(AUNode inDestNode, UInt32 inDestInputNumber, const AURenderCallbackStruct *inInputCallback)
 {
 	auto result = AUGraphSetNodeInputCallback(auGraph_, inDestNode, inDestInputNumber, inInputCallback);
 	ThrowIfAUGraphError(result, "AUGraphSetNodeInputCallback");
 }
 
-void CXXAudioToolbox::ATAUGraph::DisconnectNodeInput(AUNode inDestNode, UInt32 inDestInputNumber)
+void CXXAudioToolbox::CAAUGraph::DisconnectNodeInput(AUNode inDestNode, UInt32 inDestInputNumber)
 {
 	auto result = AUGraphDisconnectNodeInput(auGraph_, inDestNode, inDestInputNumber);
 	ThrowIfAUGraphError(result, "AUGraphDisconnectNodeInput");
 }
 
-void CXXAudioToolbox::ATAUGraph::ClearConnections()
+void CXXAudioToolbox::CAAUGraph::ClearConnections()
 {
 	auto result = AUGraphClearConnections(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphClearConnections");
 }
 
-UInt32 CXXAudioToolbox::ATAUGraph::GetNumberOfInteractions() const
+UInt32 CXXAudioToolbox::CAAUGraph::GetNumberOfInteractions() const
 {
 	UInt32 numberOfInteractions = 0;
 	auto result = AUGraphGetNumberOfInteractions(auGraph_, &numberOfInteractions);
@@ -146,7 +146,7 @@ UInt32 CXXAudioToolbox::ATAUGraph::GetNumberOfInteractions() const
 	return numberOfInteractions;
 }
 
-AUNodeInteraction CXXAudioToolbox::ATAUGraph::GetInteractionInfo(UInt32 inInteractionIndex) const
+AUNodeInteraction CXXAudioToolbox::CAAUGraph::GetInteractionInfo(UInt32 inInteractionIndex) const
 {
 	AUNodeInteraction interaction{};
 	auto result = AUGraphGetInteractionInfo(auGraph_, inInteractionIndex, &interaction);
@@ -154,7 +154,7 @@ AUNodeInteraction CXXAudioToolbox::ATAUGraph::GetInteractionInfo(UInt32 inIntera
 	return interaction;
 }
 
-UInt32 CXXAudioToolbox::ATAUGraph::CountNodeInteractions(AUNode inNode) const
+UInt32 CXXAudioToolbox::CAAUGraph::CountNodeInteractions(AUNode inNode) const
 {
 	UInt32 numberOfInteractions = 0;
 	auto result = AUGraphCountNodeInteractions(auGraph_, inNode, &numberOfInteractions);
@@ -162,7 +162,7 @@ UInt32 CXXAudioToolbox::ATAUGraph::CountNodeInteractions(AUNode inNode) const
 	return numberOfInteractions;
 }
 
-void CXXAudioToolbox::ATAUGraph::GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions) const
+void CXXAudioToolbox::CAAUGraph::GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions) const
 {
 	auto result = AUGraphGetNodeInteractions(auGraph_, inNode, ioNumInteractions, outInteractions);
 	ThrowIfAUGraphError(result, "AUGraphGetNodeInteractions");
@@ -170,7 +170,7 @@ void CXXAudioToolbox::ATAUGraph::GetNodeInteractions(AUNode inNode, UInt32 *ioNu
 
 // MARK: -
 
-bool CXXAudioToolbox::ATAUGraph::Update()
+bool CXXAudioToolbox::CAAUGraph::Update()
 {
 	Boolean flag = 0;
 	auto result = AUGraphUpdate(auGraph_, &flag);
@@ -180,43 +180,43 @@ bool CXXAudioToolbox::ATAUGraph::Update()
 
 // MARK: - State Management
 
-void CXXAudioToolbox::ATAUGraph::Open()
+void CXXAudioToolbox::CAAUGraph::Open()
 {
 	auto result = AUGraphOpen(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphOpen");
 }
 
-void CXXAudioToolbox::ATAUGraph::Close()
+void CXXAudioToolbox::CAAUGraph::Close()
 {
 	auto result = AUGraphClose(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphClose");
 }
 
-void CXXAudioToolbox::ATAUGraph::Initialize()
+void CXXAudioToolbox::CAAUGraph::Initialize()
 {
 	auto result = AUGraphInitialize(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphInitialize");
 }
 
-void CXXAudioToolbox::ATAUGraph::Uninitialize()
+void CXXAudioToolbox::CAAUGraph::Uninitialize()
 {
 	auto result = AUGraphUninitialize(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphUninitialize");
 }
 
-void CXXAudioToolbox::ATAUGraph::Start()
+void CXXAudioToolbox::CAAUGraph::Start()
 {
 	auto result = AUGraphStart(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphStart");
 }
 
-void CXXAudioToolbox::ATAUGraph::Stop()
+void CXXAudioToolbox::CAAUGraph::Stop()
 {
 	auto result = AUGraphStop(auGraph_);
 	ThrowIfAUGraphError(result, "AUGraphStop");
 }
 
-bool CXXAudioToolbox::ATAUGraph::IsOpen() const
+bool CXXAudioToolbox::CAAUGraph::IsOpen() const
 {
 	Boolean flag = 0;
 	auto result = AUGraphIsOpen(auGraph_, &flag);
@@ -224,7 +224,7 @@ bool CXXAudioToolbox::ATAUGraph::IsOpen() const
 	return flag != 0;
 }
 
-bool CXXAudioToolbox::ATAUGraph::IsInitialized() const
+bool CXXAudioToolbox::CAAUGraph::IsInitialized() const
 {
 	Boolean flag = 0;
 	auto result = AUGraphIsInitialized(auGraph_, &flag);
@@ -232,7 +232,7 @@ bool CXXAudioToolbox::ATAUGraph::IsInitialized() const
 	return flag != 0;
 }
 
-bool CXXAudioToolbox::ATAUGraph::IsRunning() const
+bool CXXAudioToolbox::CAAUGraph::IsRunning() const
 {
 	Boolean flag = 0;
 	auto result = AUGraphIsRunning(auGraph_, &flag);
@@ -242,7 +242,7 @@ bool CXXAudioToolbox::ATAUGraph::IsRunning() const
 
 // MARK: - Utilities
 
-Float32 CXXAudioToolbox::ATAUGraph::GetCPULoad() const
+Float32 CXXAudioToolbox::CAAUGraph::GetCPULoad() const
 {
 	Float32 value = 0;
 	auto result = AUGraphGetCPULoad(auGraph_, &value);
@@ -250,7 +250,7 @@ Float32 CXXAudioToolbox::ATAUGraph::GetCPULoad() const
 	return value;
 }
 
-Float32 CXXAudioToolbox::ATAUGraph::GetMaxCPULoad() const
+Float32 CXXAudioToolbox::CAAUGraph::GetMaxCPULoad() const
 {
 	Float32 value = 0;
 	auto result = AUGraphGetMaxCPULoad(auGraph_, &value);
@@ -258,13 +258,13 @@ Float32 CXXAudioToolbox::ATAUGraph::GetMaxCPULoad() const
 	return value;
 }
 
-void CXXAudioToolbox::ATAUGraph::AddRenderNotify(AURenderCallback inCallback, void *inRefCon)
+void CXXAudioToolbox::CAAUGraph::AddRenderNotify(AURenderCallback inCallback, void *inRefCon)
 {
 	auto result = AUGraphAddRenderNotify(auGraph_, inCallback, inRefCon);
 	ThrowIfAUGraphError(result, "AUGraphAddRenderNotify");
 }
 
-void CXXAudioToolbox::ATAUGraph::RemoveRenderNotify(AURenderCallback inCallback, void *inRefCon)
+void CXXAudioToolbox::CAAUGraph::RemoveRenderNotify(AURenderCallback inCallback, void *inRefCon)
 {
 	auto result = AUGraphRemoveRenderNotify(auGraph_, inCallback, inRefCon);
 	ThrowIfAUGraphError(result, "AUGraphRemoveRenderNotify");
@@ -272,7 +272,7 @@ void CXXAudioToolbox::ATAUGraph::RemoveRenderNotify(AURenderCallback inCallback,
 
 // MARK: - Helpers
 
-std::vector<AUNode> CXXAudioToolbox::ATAUGraph::Nodes() const
+std::vector<AUNode> CXXAudioToolbox::CAAUGraph::Nodes() const
 {
 	auto nodeCount = GetNodeCount();
 	auto nodes = std::vector<AUNode>(nodeCount);
@@ -283,7 +283,7 @@ std::vector<AUNode> CXXAudioToolbox::ATAUGraph::Nodes() const
 	return nodes;
 }
 
-std::vector<AUNodeInteraction> CXXAudioToolbox::ATAUGraph::NodeInteractions(AUNode inNode) const
+std::vector<AUNodeInteraction> CXXAudioToolbox::CAAUGraph::NodeInteractions(AUNode inNode) const
 {
 	auto interactionCount = CountNodeInteractions(inNode);
 	auto interactions = std::vector<AUNodeInteraction>(interactionCount);
@@ -291,7 +291,7 @@ std::vector<AUNodeInteraction> CXXAudioToolbox::ATAUGraph::NodeInteractions(AUNo
 	return interactions;
 }
 
-std::map<AUNode, std::vector<AUNodeInteraction>> CXXAudioToolbox::ATAUGraph::NodesAndInteractions() const
+std::map<AUNode, std::vector<AUNodeInteraction>> CXXAudioToolbox::CAAUGraph::NodesAndInteractions() const
 {
 	auto nodes = Nodes();
 	auto nodesAndInteractions = std::map<AUNode, std::vector<AUNodeInteraction>>();
@@ -300,7 +300,7 @@ std::map<AUNode, std::vector<AUNodeInteraction>> CXXAudioToolbox::ATAUGraph::Nod
 	return nodesAndInteractions;
 }
 
-Float64 CXXAudioToolbox::ATAUGraph::Latency() const
+Float64 CXXAudioToolbox::CAAUGraph::Latency() const
 {
 	Float64 latency = 0;
 	auto nodeCount = GetNodeCount();
@@ -320,7 +320,7 @@ Float64 CXXAudioToolbox::ATAUGraph::Latency() const
 	return latency;
 }
 
-Float64 CXXAudioToolbox::ATAUGraph::TailTime() const
+Float64 CXXAudioToolbox::CAAUGraph::TailTime() const
 {
 	Float64 tailTime = 0;
 	auto nodeCount = GetNodeCount();
