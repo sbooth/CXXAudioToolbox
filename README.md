@@ -4,11 +4,11 @@ Assorted C++ classes simplifying the use of Audio Toolbox.
 
 | Class | Description |
 | --- | --- |
-| [ATAudioConverter](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATAudioConverter.hpp) | An [`AudioConverter`](https://developer.apple.com/documentation/audiotoolbox/audio-converter-services?language=objc) wrapper.|
-| [ATAudioFile](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATAudioFile.hpp) | An [`AudioFile`](https://developer.apple.com/documentation/audiotoolbox/audio-file-services?language=objc) wrapper. |
-| [ATAudioFormat](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATAudioFormat.hpp) | An [`AudioFormat`](https://developer.apple.com/documentation/audiotoolbox/audio-format-services?language=objc) wrapper. |
-| [ATAUGraph](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATAUGraph.hpp) | An [`AUGraph`](https://developer.apple.com/documentation/audiotoolbox/audio-unit-processing-graph-services?language=objc) wrapper. |
-| [ATExtAudioFile](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ATExtAudioFile.hpp) | An [`ExtAudioFile`](https://developer.apple.com/documentation/audiotoolbox/extended-audio-file-services?language=objc) wrapper. |
+| [CAAudioConverter](Sources/CXXAudioToolbox/include/CXXAudioToolbox/CAAudioConverter.hpp) | An [`AudioConverter`](https://developer.apple.com/documentation/audiotoolbox/audio-converter-services?language=objc) wrapper.|
+| [CAAudioFile](Sources/CXXAudioToolbox/include/CXXAudioToolbox/CAAudioFile.hpp) | An [`AudioFile`](https://developer.apple.com/documentation/audiotoolbox/audio-file-services?language=objc) wrapper. |
+| [CAAudioFormat](Sources/CXXAudioToolbox/include/CXXAudioToolbox/CAAudioFormat.hpp) | An [`AudioFormat`](https://developer.apple.com/documentation/audiotoolbox/audio-format-services?language=objc) wrapper. |
+| [CAAUGraph](Sources/CXXAudioToolbox/include/CXXAudioToolbox/CAAUGraph.hpp) | An [`AUGraph`](https://developer.apple.com/documentation/audiotoolbox/audio-unit-processing-graph-services?language=objc) wrapper. |
+| [CAExtAudioFile](Sources/CXXAudioToolbox/include/CXXAudioToolbox/CAExtAudioFile.hpp) | An [`ExtAudioFile`](https://developer.apple.com/documentation/audiotoolbox/extended-audio-file-services?language=objc) wrapper. |
 | [AudioFileWrapper](Sources/CXXAudioToolbox/include/CXXAudioToolbox/AudioFileWrapper.hpp) | A bare-bones [`AudioFile`](https://developer.apple.com/documentation/audiotoolbox/audio-file-services?language=objc) wrapper modeled after [`std::unique_ptr`](https://en.cppreference.com/w/cpp/memory/unique_ptr.html). |
 | [ExtAudioFileWrapper](Sources/CXXAudioToolbox/include/CXXAudioToolbox/ExtAudioFileWrapper.hpp) | A bare-bones [`ExtAudioFile`](https://developer.apple.com/documentation/audiotoolbox/extended-audio-file-services?language=objc) wrapper modeled after [`std::unique_ptr`](https://en.cppreference.com/w/cpp/memory/unique_ptr.html). |
 

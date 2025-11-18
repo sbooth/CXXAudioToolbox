@@ -4,10 +4,10 @@
 // MIT license
 //
 
-#import "ATAudioFormat.hpp"
-#import "ATErrors.hpp"
+#import "CAAudioFormat.hpp"
+#import "AudioToolboxErrors.hpp"
 
-UInt32 CXXAudioToolbox::ATAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier)
+UInt32 CXXAudioToolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier)
 {
 	UInt32 size;
 	auto result = AudioFormatGetPropertyInfo(inPropertyID, inSpecifierSize, inSpecifier, &size);
@@ -15,13 +15,13 @@ UInt32 CXXAudioToolbox::ATAudioFormat::GetPropertyInfo(AudioFormatPropertyID inP
 	return size;
 }
 
-void CXXAudioToolbox::ATAudioFormat::GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier, UInt32& ioPropertyDataSize, void *outPropertyData)
+void CXXAudioToolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier, UInt32& ioPropertyDataSize, void *outPropertyData)
 {
 	auto result = AudioFormatGetProperty(inPropertyID, inSpecifierSize, inSpecifier, &ioPropertyDataSize, outPropertyData);
 	ThrowIfAudioFormatError(result, "AudioFormatGetProperty");
 }
 
-std::vector<AudioFormatID> CXXAudioToolbox::ATAudioFormat::EncodeFormatIDs()
+std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFormat::EncodeFormatIDs()
 {
 	auto size = GetPropertyInfo(kAudioFormatProperty_EncodeFormatIDs, 0, nullptr);
 	auto count = size / sizeof(AudioFormatID);
@@ -30,7 +30,7 @@ std::vector<AudioFormatID> CXXAudioToolbox::ATAudioFormat::EncodeFormatIDs()
 	return formatIDs;
 }
 
-std::vector<AudioFormatID> CXXAudioToolbox::ATAudioFormat::DecodeFormatIDs()
+std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFormat::DecodeFormatIDs()
 {
 	auto size = GetPropertyInfo(kAudioFormatProperty_DecodeFormatIDs, 0, nullptr);
 	auto count = size / sizeof(AudioFormatID);

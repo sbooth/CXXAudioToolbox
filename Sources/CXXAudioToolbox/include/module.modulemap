@@ -1,10 +1,10 @@
 module CXXAudioToolbox {
 	requires cplusplus17
-	header "CXXAudioToolbox/ATAudioConverter.hpp"
-	header "CXXAudioToolbox/ATAudioFile.hpp"
-	header "CXXAudioToolbox/ATAudioFormat.hpp"
-	header "CXXAudioToolbox/ATAUGraph.hpp"
-	header "CXXAudioToolbox/ATExtAudioFile.hpp"
+	header "CXXAudioToolbox/CAAudioConverter.hpp"
+	header "CXXAudioToolbox/CAAudioFile.hpp"
+	header "CXXAudioToolbox/CAAudioFormat.hpp"
+	header "CXXAudioToolbox/CAAUGraph.hpp"
+	header "CXXAudioToolbox/CAExtAudioFile.hpp"
 	header "CXXAudioToolbox/AudioFileWrapper.hpp"
 	header "CXXAudioToolbox/ExtAudioFileWrapper.hpp"
 	export *

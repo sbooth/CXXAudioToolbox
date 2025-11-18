@@ -18,27 +18,27 @@ CF_ASSUME_NONNULL_BEGIN
 namespace CXXAudioToolbox {
 
 /// An AUGraph wrapper.
-class ATAUGraph final {
+class CAAUGraph final {
 public:
 	// MARK: Creation and Destruction
 
 	/// Creates an Audio Unit graph.
-	ATAUGraph() noexcept = default;
+	CAAUGraph() noexcept = default;
 
 	// This class is non-copyable
-	ATAUGraph(const ATAUGraph&) = delete;
+	CAAUGraph(const CAAUGraph&) = delete;
 
 	// This class is non-assignable
-	ATAUGraph& operator=(const ATAUGraph&) = delete;
+	CAAUGraph& operator=(const CAAUGraph&) = delete;
 
 	/// Move constructor
-	ATAUGraph(ATAUGraph&& rhs) noexcept;
+	CAAUGraph(CAAUGraph&& rhs) noexcept;
 
 	/// Move assignment operator.
-	ATAUGraph& operator=(ATAUGraph&& rhs) noexcept;
+	CAAUGraph& operator=(CAAUGraph&& rhs) noexcept;
 
 	/// Destroys the Audio Unit graph and releases all associated resources.
-	~ATAUGraph() noexcept;
+	~CAAUGraph() noexcept;
 
 	/// Returns true if this object's internal AUGraph object is not null.
 	explicit operator bool() const noexcept

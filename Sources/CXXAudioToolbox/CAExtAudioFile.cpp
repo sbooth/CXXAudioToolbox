@@ -6,8 +6,8 @@
 
 #import <utility>
 
-#import "ATExtAudioFile.hpp"
-#import "ATErrors.hpp"
+#import "CAExtAudioFile.hpp"
+#import "AudioToolboxErrors.hpp"
 
 namespace {
 
@@ -18,19 +18,19 @@ struct free_deleter {
 	}
 };
 
-}
+} /* namespace */
 
-CXXAudioToolbox::ATExtAudioFile::~ATExtAudioFile() noexcept
+CXXAudioToolbox::CAExtAudioFile::~CAExtAudioFile() noexcept
 {
 	if(extAudioFile_)
 		ExtAudioFileDispose(extAudioFile_);
 }
 
-CXXAudioToolbox::ATExtAudioFile::ATExtAudioFile(ATExtAudioFile&& rhs) noexcept
+CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& rhs) noexcept
 : extAudioFile_{std::exchange(rhs.extAudioFile_, nullptr)}
 {}
 
-CXXAudioToolbox::ATExtAudioFile& CXXAudioToolbox::ATExtAudioFile::operator=(ATExtAudioFile&& rhs) noexcept
+CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& rhs) noexcept
 {
 	if(this != &rhs) {
 		if(extAudioFile_)
@@ -40,28 +40,28 @@ CXXAudioToolbox::ATExtAudioFile& CXXAudioToolbox::ATExtAudioFile::operator=(ATEx
 	return *this;
 }
 
-void CXXAudioToolbox::ATExtAudioFile::OpenURL(CFURLRef inURL)
+void CXXAudioToolbox::CAExtAudioFile::OpenURL(CFURLRef inURL)
 {
 	Close();
 	auto result = ExtAudioFileOpenURL(inURL, &extAudioFile_);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
 }
 
-void CXXAudioToolbox::ATExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool inForWriting)
+void CXXAudioToolbox::CAExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool inForWriting)
 {
 	Close();
 	auto result = ExtAudioFileWrapAudioFileID(inFileID, inForWriting, &extAudioFile_);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileWrapAudioFileID");
 }
 
-void CXXAudioToolbox::ATExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags)
+void CXXAudioToolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags)
 {
 	Close();
 	auto result = ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileCreateWithURL");
 }
 
-void CXXAudioToolbox::ATExtAudioFile::Close()
+void CXXAudioToolbox::CAExtAudioFile::Close()
 {
 	if(extAudioFile_) {
 		auto result = ExtAudioFileDispose(extAudioFile_);
@@ -70,13 +70,13 @@ void CXXAudioToolbox::ATExtAudioFile::Close()
 	}
 }
 
-void CXXAudioToolbox::ATExtAudioFile::Read(UInt32& ioNumberFrames, AudioBufferList *ioData)
+void CXXAudioToolbox::CAExtAudioFile::Read(UInt32& ioNumberFrames, AudioBufferList *ioData)
 {
 	auto result = ExtAudioFileRead(extAudioFile_, &ioNumberFrames, ioData);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileRead");
 }
 
-void CXXAudioToolbox::ATExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer& buffer)
+void CXXAudioToolbox::CAExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer& buffer)
 {
 	buffer.PrepareForReading();
 	UInt32 frameCount = buffer.FrameCapacity();
@@ -87,7 +87,7 @@ void CXXAudioToolbox::ATExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer& buffer)
 #if TARGET_OS_IPHONE
 OSStatus CXXAudioToolbox::ATExtAudioFile::Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 #else
-void CXXAudioToolbox::ATExtAudioFile::Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
+void CXXAudioToolbox::CAExtAudioFile::Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 #endif /* TARGET_OS_IPHONE */
 {
 	auto result = ExtAudioFileWrite(extAudioFile_, inNumberFrames, ioData);
@@ -108,19 +108,19 @@ void CXXAudioToolbox::ATExtAudioFile::Write(UInt32 inNumberFrames, const AudioBu
 #endif /* TARGET_OS_IPHONE */
 }
 
-void CXXAudioToolbox::ATExtAudioFile::WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData)
+void CXXAudioToolbox::CAExtAudioFile::WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData)
 {
 	auto result = ExtAudioFileWriteAsync(extAudioFile_, inNumberFrames, ioData);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileWriteAsync");
 }
 
-void CXXAudioToolbox::ATExtAudioFile::Seek(SInt64 inFrameOffset)
+void CXXAudioToolbox::CAExtAudioFile::Seek(SInt64 inFrameOffset)
 {
 	auto result = ExtAudioFileSeek(extAudioFile_, inFrameOffset);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileSeek");
 }
 
-SInt64 CXXAudioToolbox::ATExtAudioFile::Tell() const
+SInt64 CXXAudioToolbox::CAExtAudioFile::Tell() const
 {
 	SInt64 pos;
 	auto result = ExtAudioFileTell(extAudioFile_, &pos);
@@ -128,7 +128,7 @@ SInt64 CXXAudioToolbox::ATExtAudioFile::Tell() const
 	return pos;
 }
 
-UInt32 CXXAudioToolbox::ATExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean * _Nullable outWritable) const
+UInt32 CXXAudioToolbox::CAExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean * _Nullable outWritable) const
 {
 	UInt32 size;
 	auto result = ExtAudioFileGetPropertyInfo(extAudioFile_, inPropertyID, &size, outWritable);
@@ -136,19 +136,19 @@ UInt32 CXXAudioToolbox::ATExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID i
 	return size;
 }
 
-void CXXAudioToolbox::ATExtAudioFile::GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const
+void CXXAudioToolbox::CAExtAudioFile::GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const
 {
 	auto result = ExtAudioFileGetProperty(extAudioFile_, inPropertyID, &ioPropertyDataSize, outPropertyData);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileGetProperty");
 }
 
-void CXXAudioToolbox::ATExtAudioFile::SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
+void CXXAudioToolbox::CAExtAudioFile::SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 {
 	auto result = ExtAudioFileSetProperty(extAudioFile_, inPropertyID, inPropertyDataSize, inPropertyData);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileSetProperty");
 }
 
-CXXCoreAudio::CAChannelLayout CXXAudioToolbox::ATExtAudioFile::FileChannelLayout() const
+CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::FileChannelLayout() const
 {
 	auto size = GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, nullptr);
 	std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -160,12 +160,12 @@ CXXCoreAudio::CAChannelLayout CXXAudioToolbox::ATExtAudioFile::FileChannelLayout
 	return channelLayout;
 }
 
-void CXXAudioToolbox::ATExtAudioFile::SetFileChannelLayout(const AudioChannelLayout& fileChannelLayout)
+void CXXAudioToolbox::CAExtAudioFile::SetFileChannelLayout(const AudioChannelLayout& fileChannelLayout)
 {
 	SetProperty(kExtAudioFileProperty_FileChannelLayout, static_cast<UInt32>(CXXCoreAudio::AudioChannelLayoutSize(&fileChannelLayout)), &fileChannelLayout);
 }
 
-CXXCoreAudio::CAStreamDescription CXXAudioToolbox::ATExtAudioFile::FileDataFormat() const
+CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::FileDataFormat() const
 {
 	CXXCoreAudio::CAStreamDescription fileDataFormat;
 	UInt32 size = sizeof(fileDataFormat);
@@ -173,7 +173,7 @@ CXXCoreAudio::CAStreamDescription CXXAudioToolbox::ATExtAudioFile::FileDataForma
 	return fileDataFormat;
 }
 
-CXXCoreAudio::CAStreamDescription CXXAudioToolbox::ATExtAudioFile::ClientDataFormat() const
+CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::ClientDataFormat() const
 {
 	CXXCoreAudio::CAStreamDescription clientDataFormat;
 	UInt32 size = sizeof(clientDataFormat);
@@ -181,7 +181,7 @@ CXXCoreAudio::CAStreamDescription CXXAudioToolbox::ATExtAudioFile::ClientDataFor
 	return clientDataFormat;
 }
 
-void CXXAudioToolbox::ATExtAudioFile::SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat, const AudioChannelLayout * const clientChannelLayout, UInt32 codecManufacturer)
+void CXXAudioToolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat, const AudioChannelLayout * const clientChannelLayout, UInt32 codecManufacturer)
 {
 	if(codecManufacturer)
 		SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof(codecManufacturer), &codecManufacturer);
@@ -190,7 +190,7 @@ void CXXAudioToolbox::ATExtAudioFile::SetClientDataFormat(const AudioStreamBasic
 		SetClientChannelLayout(*clientChannelLayout);
 }
 
-CXXCoreAudio::CAChannelLayout CXXAudioToolbox::ATExtAudioFile::ClientChannelLayout() const
+CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::ClientChannelLayout() const
 {
 	auto size = GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, nullptr);
 	std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -200,12 +200,12 @@ CXXCoreAudio::CAChannelLayout CXXAudioToolbox::ATExtAudioFile::ClientChannelLayo
 	return layout.get();
 }
 
-void CXXAudioToolbox::ATExtAudioFile::SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout)
+void CXXAudioToolbox::CAExtAudioFile::SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout)
 {
 	SetProperty(kExtAudioFileProperty_ClientChannelLayout, static_cast<UInt32>(CXXCoreAudio::AudioChannelLayoutSize(&clientChannelLayout)), &clientChannelLayout);
 }
 
-AudioConverterRef CXXAudioToolbox::ATExtAudioFile::AudioConverter() const
+AudioConverterRef CXXAudioToolbox::CAExtAudioFile::AudioConverter() const
 {
 	UInt32 size = sizeof(AudioConverterRef);
 	AudioConverterRef converter = nullptr;
@@ -213,7 +213,7 @@ AudioConverterRef CXXAudioToolbox::ATExtAudioFile::AudioConverter() const
 	return converter;
 }
 
-void CXXAudioToolbox::ATExtAudioFile::SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
+void CXXAudioToolbox::CAExtAudioFile::SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData)
 {
 	auto result = AudioConverterSetProperty(AudioConverter(), inPropertyID, inPropertyDataSize, inPropertyData);
 	ThrowIfAudioConverterError(result, "AudioConverterSetProperty");
@@ -221,7 +221,7 @@ void CXXAudioToolbox::ATExtAudioFile::SetAudioConverterProperty(AudioConverterPr
 	SetProperty(kExtAudioFileProperty_ConverterConfig, sizeof(config), &config);
 }
 
-SInt64 CXXAudioToolbox::ATExtAudioFile::FrameLength() const
+SInt64 CXXAudioToolbox::CAExtAudioFile::FrameLength() const
 {
 	SInt64 frameLength;
 	UInt32 size = sizeof(frameLength);
