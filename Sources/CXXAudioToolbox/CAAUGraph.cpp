@@ -287,7 +287,7 @@ std::vector<AUNodeInteraction> CXXAudioToolbox::CAAUGraph::NodeInteractions(AUNo
 {
 	auto interactionCount = CountNodeInteractions(inNode);
 	auto interactions = std::vector<AUNodeInteraction>(interactionCount);
-	GetNodeInteractions(inNode, &interactionCount, &interactions[0]);
+	GetNodeInteractions(inNode, &interactionCount, interactions.data());
 	return interactions;
 }
 

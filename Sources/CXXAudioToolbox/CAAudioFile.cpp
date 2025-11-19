@@ -196,7 +196,7 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::ReadableTypes()
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_ReadableTypes, 0, nullptr);
 	auto count = size / sizeof(AudioFileTypeID);
 	auto types = std::vector<AudioFileTypeID>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_ReadableTypes, 0, nullptr, size, &types[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_ReadableTypes, 0, nullptr, size, types.data());
 	return types;
 }
 
@@ -205,7 +205,7 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::WritableTypes()
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, nullptr);
 	auto count = size / sizeof(AudioFileTypeID);
 	auto types = std::vector<AudioFileTypeID>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, nullptr, size, &types[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, nullptr, size, types.data());
 	return types;
 }
 
@@ -223,7 +223,7 @@ std::vector<CXXCoreAudio::CAStreamDescription> CXXAudioToolbox::CAAudioFile::Ava
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(spec), &spec);
 	auto count = size / sizeof(AudioStreamBasicDescription);
 	auto streamDescriptions = std::vector<CXXCoreAudio::CAStreamDescription>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(spec), &spec, size, &streamDescriptions[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(spec), &spec, size, streamDescriptions.data());
 	return streamDescriptions;
 }
 
@@ -232,7 +232,7 @@ std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFile::AvailableFormatIDs(Audi
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type);
 	auto count = size / sizeof(AudioFormatID);
 	auto formatIDs = std::vector<AudioFormatID>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type, size, &formatIDs[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(type), &type, size, formatIDs.data());
 	return formatIDs;
 }
 
@@ -292,7 +292,7 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForMIMEType(CFSt
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForMIMEType, sizeof(mimeType), const_cast<void *>(reinterpret_cast<const void *>(mimeType)));
 	auto count = size / sizeof(AudioFileTypeID);
 	auto types = std::vector<AudioFileTypeID>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_TypesForMIMEType, sizeof(mimeType), const_cast<void *>(reinterpret_cast<const void *>(mimeType)), size, &types[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_TypesForMIMEType, sizeof(mimeType), const_cast<void *>(reinterpret_cast<const void *>(mimeType)), size, types.data());
 	return types;
 }
 
@@ -301,7 +301,7 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForUTI(CFStringR
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForUTI, sizeof(uti), const_cast<void *>(reinterpret_cast<const void *>(uti)));
 	auto count = size / sizeof(AudioFileTypeID);
 	auto types = std::vector<AudioFileTypeID>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_TypesForUTI, sizeof(uti), const_cast<void *>(reinterpret_cast<const void *>(uti)), size, &types[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_TypesForUTI, sizeof(uti), const_cast<void *>(reinterpret_cast<const void *>(uti)), size, types.data());
 	return types;
 }
 
@@ -310,6 +310,6 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForExtension(CFS
 	auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForExtension, sizeof(extension), const_cast<void *>(reinterpret_cast<const void *>(extension)));
 	auto count = size / sizeof(AudioFileTypeID);
 	auto types = std::vector<AudioFileTypeID>(count);
-	GetGlobalInfo(kAudioFileGlobalInfo_TypesForExtension, sizeof(extension), const_cast<void *>(reinterpret_cast<const void *>(extension)), size, &types[0]);
+	GetGlobalInfo(kAudioFileGlobalInfo_TypesForExtension, sizeof(extension), const_cast<void *>(reinterpret_cast<const void *>(extension)), size, types.data());
 	return types;
 }
