@@ -45,7 +45,7 @@ public:
 	}
 
 	/// Creates an audio file wrapper managing an existing AudioFile object.
-	AudioFileWrapper(AudioFileID _Nullable audioFile) noexcept
+	explicit AudioFileWrapper(AudioFileID _Nullable audioFile) noexcept
 	: audioFile_{audioFile}
 	{}
 

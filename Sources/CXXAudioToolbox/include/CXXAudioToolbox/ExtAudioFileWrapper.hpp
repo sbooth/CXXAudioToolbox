@@ -45,7 +45,7 @@ public:
 	}
 
 	/// Creates an extended audio file wrapper managing an existing ExtAudioFile object.
-	ExtAudioFileWrapper(ExtAudioFileRef _Nullable extAudioFile) noexcept
+	explicit ExtAudioFileWrapper(ExtAudioFileRef _Nullable extAudioFile) noexcept
 	: extAudioFile_{extAudioFile}
 	{}
 
