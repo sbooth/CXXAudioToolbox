@@ -40,7 +40,7 @@ std::vector<AudioFormatID> EncodeFormatIDs();
 /// @throw std::system_error.
 std::vector<AudioFormatID> DecodeFormatIDs();
 
-} /* namespace ATAudioFormat */
+} /* namespace CAAudioFormat */
 } /* namespace CXXAudioToolbox */
 
 CF_ASSUME_NONNULL_END
