@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "cxxcoreaudio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sbooth/CXXCoreAudio",
+      "state" : {
+        "revision" : "f801cbff3ca5e3972db8b6d47d0dbbc1bd48d2ed",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
