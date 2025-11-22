@@ -310,7 +310,7 @@ Float64 CXXAudioToolbox::CAAUGraph::Latency() const
 		NodeInfo(node, nullptr, &au);
 
 		Float64 auLatency = 0;
-		UInt32 dataSize = sizeof(auLatency);
+		UInt32 dataSize = sizeof auLatency;
 		const auto result = AudioUnitGetProperty(au, kAudioUnitProperty_Latency, kAudioUnitScope_Global, 0, &auLatency, &dataSize);
 		ThrowIfAudioUnitError(result, "AudioUnitGetProperty (kAudioUnitProperty_Latency, kAudioUnitScope_Global)");
 
@@ -330,7 +330,7 @@ Float64 CXXAudioToolbox::CAAUGraph::TailTime() const
 		NodeInfo(node, nullptr, &au);
 
 		Float64 auTailTime = 0;
-		UInt32 dataSize = sizeof(auTailTime);
+		UInt32 dataSize = sizeof auTailTime;
 		const auto result = AudioUnitGetProperty(au, kAudioUnitProperty_TailTime, kAudioUnitScope_Global, 0, &auTailTime, &dataSize);
 		ThrowIfAudioUnitError(result, "AudioUnitGetProperty (kAudioUnitProperty_TailTime, kAudioUnitScope_Global)");
 
