@@ -8,6 +8,7 @@
 
 #import "CAAudioFile.hpp"
 #import "AudioToolboxErrors.hpp"
+#import "StringFormatting.hpp"
 
 CXXAudioToolbox::CAAudioFile::CAAudioFile(CAAudioFile&& rhs) noexcept
 : mAudioFileID{std::exchange(rhs.mAudioFileID, nullptr)}
@@ -117,46 +118,60 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetUserDataSize(UInt32 inUserDataID, UInt32
 {
 	UInt32 size;
 	const auto result = AudioFileGetUserDataSize(mAudioFileID, inUserDataID, inIndex, &size);
-	ThrowIfAudioFileError(result, "AudioFileGetUserDataSize");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileGetUserDataSize(", fourcc_string(inUserDataID), ", ", std::to_string(inIndex), ")"});
+	});
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32& ioUserDataSize, void *outUserData) const
 {
 	const auto result = AudioFileGetUserData(mAudioFileID, inUserDataID, inIndex, &ioUserDataSize, outUserData);
-	ThrowIfAudioFileError(result, "AudioFileGetUserData");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileGetUserData(", fourcc_string(inUserDataID), ", ", std::to_string(inIndex), ")"});
+	});
 }
 
 void CXXAudioToolbox::CAAudioFile::SetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32 inUserDataSize, const void *inUserData)
 {
 	const auto result = AudioFileSetUserData(mAudioFileID, inUserDataID, inIndex, inUserDataSize, inUserData);
-	ThrowIfAudioFileError(result, "AudioFileGetUserData");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"SetUserData(", fourcc_string(inUserDataID), ", ", std::to_string(inIndex), ")"});
+	});
 }
 
 void CXXAudioToolbox::CAAudioFile::RemoveUserData(UInt32 inUserDataID, UInt32 inIndex)
 {
 	const auto result = AudioFileRemoveUserData(mAudioFileID, inUserDataID, inIndex);
-	ThrowIfAudioFileError(result, "AudioFileRemoveUserData");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileRemoveUserData(", fourcc_string(inUserDataID), ", ", std::to_string(inIndex), ")"});
+	});
 }
 
 UInt32 CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable isWritable) const
 {
 	UInt32 size;
 	const auto result = AudioFileGetPropertyInfo(mAudioFileID, inPropertyID, &size, isWritable);
-	ThrowIfAudioFileError(result, "AudioFileGetPropertyInfo");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileGetPropertyInfo(", fourcc_string(inPropertyID), ")"});
+	});
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const
 {
 	const auto result = AudioFileGetProperty(mAudioFileID, inPropertyID, &ioDataSize, outPropertyData);
-	ThrowIfAudioFileError(result, "AudioFileGetProperty");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileGetProperty(", fourcc_string(inPropertyID), ")"});
+	});
 }
 
 void CXXAudioToolbox::CAAudioFile::SetProperty(AudioFilePropertyID inPropertyID, UInt32 inDataSize, const void *inPropertyData)
 {
 	const auto result = AudioFileSetProperty(mAudioFileID, inPropertyID, inDataSize, inPropertyData);
-	ThrowIfAudioFileError(result, "AudioFileSetProperty");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileSetProperty(", fourcc_string(inPropertyID), ")"});
+	});
 }
 
 AudioFileTypeID CXXAudioToolbox::CAAudioFile::FileFormat() const
@@ -181,14 +196,18 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetGlobalInfoSize(AudioFilePropertyID inPro
 {
 	UInt32 size;
 	const auto result = AudioFileGetGlobalInfoSize(inPropertyID, inSpecifierSize, inSpecifier, &size);
-	ThrowIfAudioFileError(result, "AudioFileGetGlobalInfoSize");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileGetGlobalInfoSize(", fourcc_string(inPropertyID), ")"});
+	});
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData)
 {
 	const auto result = AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
-	ThrowIfAudioFileError(result, "AudioFileGetGlobalInfo");
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({"AudioFileGetGlobalInfo(", fourcc_string(inPropertyID), ")"});
+	});
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::ReadableTypes()
