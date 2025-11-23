@@ -31,7 +31,7 @@ std::string concat(std::initializer_list<std::string_view> il);
 /// @throw @c std::length_error
 /// @throw @c std::bad_alloc
 /// @throw @c std::bad_array_new_length
-template <std::size_t R, typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+template <std::size_t R = 10, typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 std::string to_string(T value) {
 	static_assert(R >= 2 && R <= 36, "Radix out of range");
 
