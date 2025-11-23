@@ -42,7 +42,7 @@ void CXXAudioToolbox::CAAudioFile::OpenURL(CFURLRef inURL, AudioFilePermissions 
 			"0x", to_hex_string(static_cast<uint8_t>(inPermissions)),
 			", ", to_fourcc_string(inFileTypeHint),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -59,7 +59,7 @@ void CXXAudioToolbox::CAAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID
 			", ", to_fourcc_string(inFormat.mFormatID),
 			", 0x", to_hex_string(inFlags), 
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -77,7 +77,7 @@ void CXXAudioToolbox::CAAudioFile::InitializeWithCallbacks(void *inClientData, A
 			", ", to_fourcc_string(inFormat.mFormatID),
 			", 0x", to_hex_string(inFlags),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -93,7 +93,7 @@ void CXXAudioToolbox::CAAudioFile::OpenWithCallbacks(void *inClientData, AudioFi
 			", _, _, _, _"
 			", ", to_fourcc_string(inFileTypeHint),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -106,7 +106,7 @@ void CXXAudioToolbox::CAAudioFile::Close()
 		ThrowIfAudioFileError(result, [=]() {
 			return concat({
 				"AudioFileClose"
-				" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+				" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 			});
 		});
 	}
@@ -118,7 +118,7 @@ void CXXAudioToolbox::CAAudioFile::Optimize()
 	ThrowIfAudioFileError(result, [=]() {
 		return concat({
 			"AudioFileOptimize"
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -139,7 +139,7 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadBytes(bool inUseCache, SInt64 inStart
 					", ", to_string(ioNumBytes),
 					", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outBuffer)),
 					")",
-					" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+					" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 				});
 			});
 			break;
@@ -158,7 +158,7 @@ void CXXAudioToolbox::CAAudioFile::WriteBytes(bool inUseCache, SInt64 inStarting
 			", ", to_string(ioNumBytes),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inBuffer)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -181,7 +181,7 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadPacketData(bool inUseCache, UInt32& i
 					", ", to_string(ioNumPackets),
 					", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outBuffer)),
 					")",
-					" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+					" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 				});
 			});
 			break;
@@ -202,7 +202,7 @@ void CXXAudioToolbox::CAAudioFile::WritePackets(bool inUseCache, UInt32 inNumByt
 			", ", to_string(ioNumPackets),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inBuffer)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -217,7 +217,7 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetUserDataSize(UInt32 inUserDataID, UInt32
 			to_fourcc_string(inUserDataID),
 			", ", to_string(inIndex),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 	return size;
@@ -234,7 +234,7 @@ void CXXAudioToolbox::CAAudioFile::GetUserData(UInt32 inUserDataID, UInt32 inInd
 			", ", to_string(ioUserDataSize),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outUserData)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -250,7 +250,7 @@ void CXXAudioToolbox::CAAudioFile::SetUserData(UInt32 inUserDataID, UInt32 inInd
 			", ", to_string(inUserDataSize),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inUserData)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -264,7 +264,7 @@ void CXXAudioToolbox::CAAudioFile::RemoveUserData(UInt32 inUserDataID, UInt32 in
 			to_fourcc_string(inUserDataID),
 			", ", to_string(inIndex),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -278,7 +278,7 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPrope
 			"AudioFileGetPropertyInfo(",
 			to_fourcc_string(inPropertyID),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 	return size;
@@ -293,7 +293,7 @@ void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID,
 			", ", to_string(ioDataSize),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -308,7 +308,7 @@ void CXXAudioToolbox::CAAudioFile::SetProperty(AudioFilePropertyID inPropertyID,
 			", ", to_string(inDataSize),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inPropertyData)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
@@ -342,7 +342,7 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetGlobalInfoSize(AudioFilePropertyID inPro
 			", ", to_string(inSpecifierSize),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 	return size;
@@ -360,7 +360,7 @@ void CXXAudioToolbox::CAAudioFile::GetGlobalInfo(AudioFilePropertyID inPropertyI
 			", ", to_string(ioDataSize),
 			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
 			")",
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 		});
 	});
 }
