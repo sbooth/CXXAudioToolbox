@@ -6,19 +6,38 @@
 
 #import "CAAudioFormat.hpp"
 #import "AudioToolboxErrors.hpp"
+#import "StringFormatting.hpp"
 
 UInt32 CXXAudioToolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier)
 {
 	UInt32 size;
 	const auto result = AudioFormatGetPropertyInfo(inPropertyID, inSpecifierSize, inSpecifier, &size);
-	ThrowIfAudioFormatError(result, "AudioFormatGetPropertyInfo");
+	ThrowIfAudioFormatError(result, "");
+	CXXAudioToolbox_ThrowIfAudioFormatError(result, concat({
+		"AudioFormatGetPropertyInfo(",
+		to_fourcc_string(inPropertyID),
+		", ", to_string(inSpecifierSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *inSpecifier, UInt32& ioPropertyDataSize, void *outPropertyData)
 {
 	const auto result = AudioFormatGetProperty(inPropertyID, inSpecifierSize, inSpecifier, &ioPropertyDataSize, outPropertyData);
-	ThrowIfAudioFormatError(result, "AudioFormatGetProperty");
+	ThrowIfAudioFormatError(result, "");
+	CXXAudioToolbox_ThrowIfAudioFormatError(result, concat({
+		"AudioFormatGetProperty(",
+		to_fourcc_string(inPropertyID),
+		", ", to_string(inSpecifierSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
+		", ", to_string(ioPropertyDataSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFormat::EncodeFormatIDs()
