@@ -35,67 +35,59 @@ void CXXAudioToolbox::CAAudioFile::OpenURL(CFURLRef inURL, AudioFilePermissions 
 {
 	Close();
 	const auto result = AudioFileOpenURL(inURL, inPermissions, inFileTypeHint, &mAudioFileID);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileOpenURL(",
-			string_from_cftype(CFURLGetString(inURL)),
-			"0x", to_hex_string(static_cast<uint8_t>(inPermissions)),
-			", ", to_fourcc_string(inFileTypeHint),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileOpenURL(",
+		string_from_cftype(CFURLGetString(inURL)),
+		"0x", to_hex_string(static_cast<uint8_t>(inPermissions)),
+		", ", to_fourcc_string(inFileTypeHint),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags)
 {
 	Close();
 	const auto result = AudioFileCreateWithURL(inURL, inFileType, &inFormat, inFlags, &mAudioFileID);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileCreateWithURL(",
-			string_from_cftype(CFURLGetString(inURL)),
-			", ", to_fourcc_string(inFileType),
-			", ", to_fourcc_string(inFormat.mFormatID),
-			", 0x", to_hex_string(inFlags), 
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileCreateWithURL(",
+		string_from_cftype(CFURLGetString(inURL)),
+		", ", to_fourcc_string(inFileType),
+		", ", to_fourcc_string(inFormat.mFormatID),
+		", 0x", to_hex_string(inFlags),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::InitializeWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags)
 {
 	Close();
 	const auto result = AudioFileInitializeWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileType, &inFormat, inFlags, &mAudioFileID);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileInitializeWithCallbacks("
-			"0x", to_hex_string(reinterpret_cast<uintptr_t>(inClientData)),
-			", _, _, _, _"
-			", ", to_fourcc_string(inFileType),
-			", ", to_fourcc_string(inFormat.mFormatID),
-			", 0x", to_hex_string(inFlags),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileInitializeWithCallbacks("
+		"0x", to_hex_string(reinterpret_cast<uintptr_t>(inClientData)),
+		", _, _, _, _"
+		", ", to_fourcc_string(inFileType),
+		", ", to_fourcc_string(inFormat.mFormatID),
+		", 0x", to_hex_string(inFlags),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc _Nullable inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc _Nullable inSetSizeFunc, AudioFileTypeID inFileTypeHint)
 {
 	Close();
 	const auto result = AudioFileOpenWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileTypeHint, &mAudioFileID);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileOpenWithCallbacks("
-			"0x", to_hex_string(reinterpret_cast<uintptr_t>(inClientData)),
-			", _, _, _, _"
-			", ", to_fourcc_string(inFileTypeHint),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileOpenWithCallbacks("
+		"0x", to_hex_string(reinterpret_cast<uintptr_t>(inClientData)),
+		", _, _, _, _"
+		", ", to_fourcc_string(inFileTypeHint),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::Close()
@@ -103,24 +95,20 @@ void CXXAudioToolbox::CAAudioFile::Close()
 	if(mAudioFileID) {
 		const auto result = AudioFileClose(mAudioFileID);
 		mAudioFileID = nullptr;
-		ThrowIfAudioFileError(result, [=]() {
-			return concat({
-				"AudioFileClose"
-				" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-			});
-		});
+		CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+			"AudioFileClose"
+			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+		}));
 	}
 }
 
 void CXXAudioToolbox::CAAudioFile::Optimize()
 {
 	const auto result = AudioFileOptimize(mAudioFileID);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileOptimize"
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileOptimize"
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 OSStatus CXXAudioToolbox::CAAudioFile::ReadBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, void *outBuffer)
@@ -131,17 +119,15 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadBytes(bool inUseCache, SInt64 inStart
 		case kAudioFileEndOfFileError:
 			break;
 		default:
-			ThrowIfAudioFileError(result, [=]() {
-				return concat({
-					"AudioFileReadBytes(",
-					inUseCache ? "true" : "false"
-					", ", to_string(inStartingByte),
-					", ", to_string(ioNumBytes),
-					", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outBuffer)),
-					")",
-					" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-				});
-			});
+			CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+				"AudioFileReadBytes(",
+				inUseCache ? "true" : "false"
+				", ", to_string(inStartingByte),
+				", ", to_string(ioNumBytes),
+				", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outBuffer)),
+				")",
+				" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+			}));
 			break;
 	}
 	return result;
@@ -150,17 +136,15 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadBytes(bool inUseCache, SInt64 inStart
 void CXXAudioToolbox::CAAudioFile::WriteBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, const void *inBuffer)
 {
 	const auto result = AudioFileWriteBytes(mAudioFileID, inUseCache, inStartingByte, &ioNumBytes, inBuffer);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileWriteBytes(",
-			inUseCache ? "true" : "false"
-			", ", to_string(inStartingByte),
-			", ", to_string(ioNumBytes),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inBuffer)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileWriteBytes(",
+		inUseCache ? "true" : "false"
+		", ", to_string(inStartingByte),
+		", ", to_string(ioNumBytes),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inBuffer)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 OSStatus CXXAudioToolbox::CAAudioFile::ReadPacketData(bool inUseCache, UInt32& ioNumBytes, AudioStreamPacketDescription * _Nullable outPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, void * _Nullable outBuffer)
@@ -171,19 +155,17 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadPacketData(bool inUseCache, UInt32& i
 		case kAudioFileEndOfFileError:
 			break;
 		default:
-			ThrowIfAudioFileError(result, [=]() {
-				return concat({
-					"AudioFileReadPacketData(",
-					inUseCache ? "true" : "false"
-					", ", to_string(ioNumBytes),
-					", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPacketDescriptions)),
-					", ", to_string(inStartingPacket),
-					", ", to_string(ioNumPackets),
-					", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outBuffer)),
-					")",
-					" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-				});
-			});
+			CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+				"AudioFileReadPacketData(",
+				inUseCache ? "true" : "false"
+				", ", to_string(ioNumBytes),
+				", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPacketDescriptions)),
+				", ", to_string(inStartingPacket),
+				", ", to_string(ioNumPackets),
+				", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outBuffer)),
+				")",
+				" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+			}));
 			break;
 	}
 	return result;
@@ -192,125 +174,109 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadPacketData(bool inUseCache, UInt32& i
 void CXXAudioToolbox::CAAudioFile::WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * _Nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer)
 {
 	const auto result = AudioFileWritePackets(mAudioFileID, inUseCache, inNumBytes, inPacketDescriptions, inStartingPacket, &ioNumPackets, inBuffer);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileWritePackets(", 
-			inUseCache ? "true" : "false"
-			", ", to_string(inNumBytes),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inPacketDescriptions)),
-			", ", to_string(inStartingPacket),
-			", ", to_string(ioNumPackets),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inBuffer)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileWritePackets(",
+		inUseCache ? "true" : "false"
+		", ", to_string(inNumBytes),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inPacketDescriptions)),
+		", ", to_string(inStartingPacket),
+		", ", to_string(ioNumPackets),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inBuffer)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 UInt32 CXXAudioToolbox::CAAudioFile::GetUserDataSize(UInt32 inUserDataID, UInt32 inIndex)
 {
 	UInt32 size;
 	const auto result = AudioFileGetUserDataSize(mAudioFileID, inUserDataID, inIndex, &size);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileGetUserDataSize(",
-			to_fourcc_string(inUserDataID),
-			", ", to_string(inIndex),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileGetUserDataSize(",
+		to_fourcc_string(inUserDataID),
+		", ", to_string(inIndex),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32& ioUserDataSize, void *outUserData) const
 {
 	const auto result = AudioFileGetUserData(mAudioFileID, inUserDataID, inIndex, &ioUserDataSize, outUserData);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileGetUserData(",
-			to_fourcc_string(inUserDataID),
-			", ", to_string(inIndex),
-			", ", to_string(ioUserDataSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outUserData)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileGetUserData(",
+		to_fourcc_string(inUserDataID),
+		", ", to_string(inIndex),
+		", ", to_string(ioUserDataSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outUserData)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::SetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32 inUserDataSize, const void *inUserData)
 {
 	const auto result = AudioFileSetUserData(mAudioFileID, inUserDataID, inIndex, inUserDataSize, inUserData);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"SetUserData(",
-			to_fourcc_string(inUserDataID),
-			", ", to_string(inIndex),
-			", ", to_string(inUserDataSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inUserData)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"SetUserData(",
+		to_fourcc_string(inUserDataID),
+		", ", to_string(inIndex),
+		", ", to_string(inUserDataSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inUserData)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::RemoveUserData(UInt32 inUserDataID, UInt32 inIndex)
 {
 	const auto result = AudioFileRemoveUserData(mAudioFileID, inUserDataID, inIndex);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileRemoveUserData(",
-			to_fourcc_string(inUserDataID),
-			", ", to_string(inIndex),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileRemoveUserData(",
+		to_fourcc_string(inUserDataID),
+		", ", to_string(inIndex),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 UInt32 CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable isWritable) const
 {
 	UInt32 size;
 	const auto result = AudioFileGetPropertyInfo(mAudioFileID, inPropertyID, &size, isWritable);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileGetPropertyInfo(",
-			to_fourcc_string(inPropertyID),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileGetPropertyInfo(",
+		to_fourcc_string(inPropertyID),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const
 {
 	const auto result = AudioFileGetProperty(mAudioFileID, inPropertyID, &ioDataSize, outPropertyData);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileGetProperty(", to_fourcc_string(inPropertyID),
-			", ", to_string(ioDataSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileGetProperty(", to_fourcc_string(inPropertyID),
+		", ", to_string(ioDataSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 void CXXAudioToolbox::CAAudioFile::SetProperty(AudioFilePropertyID inPropertyID, UInt32 inDataSize, const void *inPropertyData)
 {
 	const auto result = AudioFileSetProperty(mAudioFileID, inPropertyID, inDataSize, inPropertyData);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileSetProperty(",
-			to_fourcc_string(inPropertyID),
-			", ", to_string(inDataSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inPropertyData)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileSetProperty(",
+		to_fourcc_string(inPropertyID),
+		", ", to_string(inDataSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inPropertyData)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 AudioFileTypeID CXXAudioToolbox::CAAudioFile::FileFormat() const
@@ -335,34 +301,30 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetGlobalInfoSize(AudioFilePropertyID inPro
 {
 	UInt32 size;
 	const auto result = AudioFileGetGlobalInfoSize(inPropertyID, inSpecifierSize, inSpecifier, &size);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileGetGlobalInfoSize(", 
-			to_fourcc_string(inPropertyID),
-			", ", to_string(inSpecifierSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileGetGlobalInfoSize(",
+		to_fourcc_string(inPropertyID),
+		", ", to_string(inSpecifierSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData)
 {
 	const auto result = AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
-	ThrowIfAudioFileError(result, [=]() {
-		return concat({
-			"AudioFileGetGlobalInfo(",
-			to_fourcc_string(inPropertyID),
-			", ", to_string(inSpecifierSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
-			", ", to_string(ioDataSize),
-			", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
-			")",
-			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
-		});
-	});
+	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
+		"AudioFileGetGlobalInfo(",
+		to_fourcc_string(inPropertyID),
+		", ", to_string(inSpecifierSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inSpecifier)),
+		", ", to_string(ioDataSize),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
+		")",
+		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
+	}));
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::ReadableTypes()
