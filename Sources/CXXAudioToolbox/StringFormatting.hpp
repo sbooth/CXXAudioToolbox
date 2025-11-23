@@ -49,25 +49,49 @@ std::string to_string(T value) {
 	char *p = end;
 
 	using U = std::make_unsigned_t<T>;
+	U v;
 
-	/// Writes digits of @c v to @c p
-	auto write_digits = [&p](U v) {
-		do {
-			*--p = digits[v % R];
-			v /= R;
-		} while(v != 0);
-	};
-
+	bool is_negative = false;
 	if constexpr (std::is_signed_v<T>) {
 		if(value < 0) {
-			write_digits(static_cast<U>(-(value + 1)) + 1);
-			*--p = '-';
+			is_negative = true;
+			v = static_cast<U>(-(value + 1)) + 1;
 		}
 		else
-			write_digits(static_cast<U>(value));
+			v = static_cast<U>(value);
 	}
 	else
-		write_digits(value);
+		v = value;
+
+	// Power-of-two radix
+	if constexpr ((R & (R - 1)) == 0) {
+		constexpr std::size_t shift = [] {
+			std::size_t s = 0, b = R;
+			while((b >>= 1) != 0)
+				++s;
+			return s;
+		}();
+
+		do {
+			U digit = v & (R - 1);
+			v >>= shift;
+			*--p = digits[digit];
+		} while (v != 0);
+	}
+	// General case
+	else {
+		do {
+			U q = v / R;
+			U digit = v - q * R;
+			*--p = digits[digit];
+			v = q;
+		} while(v != 0);
+	}
+
+	if constexpr (std::is_signed_v<T>) {
+		if(is_negative)
+			*--p = '-';
+	}
 
 	return std::string(p, end - p);
 }
