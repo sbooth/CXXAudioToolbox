@@ -22,6 +22,24 @@ namespace CXXAudioToolbox {
 /// @throw @c std::bad_array_new_length
 std::string concat(std::initializer_list<std::string_view> il);
 
+/// Creates a @c std::string containing @c val formatted as hexadecimal and returns the result.
+/// @tparam T An unsigned type
+/// @param val A value to format.
+/// @param len The desired length of the output string.
+/// @throw @c std::length_error
+/// @throw @c std::bad_alloc
+/// @throw @c std::bad_array_new_length
+template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>>>
+std::string to_hex_string(T val, std::string::size_type len = sizeof(T) << 1)
+{
+//	assert(len <= sizeof(T)*2);
+	constexpr char digits[] = "0123456789ABCDEF";
+	std::string result(len, '0');
+	for(std::string::size_type i = 0, j = (len - 1) * 4; i < len; ++i, j -= 4)
+		result[i] = digits[(val >> j) & 0x0f];
+	return result;
+}
+
 /// Creates a @c std::string from a Core Foundation string using UTF-8 and returns the result.
 /// @param str A Core Foundation string containing the characters to copy.
 /// @return A @c std::string containing the contents of @c str in UTF-8.
