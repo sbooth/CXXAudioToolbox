@@ -103,9 +103,11 @@ void CXXAudioToolbox::CAAudioFile::Close()
 	if(mAudioFileID) {
 		const auto result = AudioFileClose(mAudioFileID);
 		mAudioFileID = nullptr;
-		return concat({
-			"AudioFileClose"
-			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+		ThrowIfAudioFileError(result, [=]() {
+			return concat({
+				"AudioFileClose"
+				" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+			});
 		});
 	}
 }
@@ -113,9 +115,11 @@ void CXXAudioToolbox::CAAudioFile::Close()
 void CXXAudioToolbox::CAAudioFile::Optimize()
 {
 	const auto result = AudioFileOptimize(mAudioFileID);
-	return concat({
-		"AudioFileOptimize"
-		" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+	ThrowIfAudioFileError(result, [=]() {
+		return concat({
+			"AudioFileOptimize"
+			" [", __FILE_NAME__, ": ", to_string(__LINE__), "]"
+		});
 	});
 }
 
