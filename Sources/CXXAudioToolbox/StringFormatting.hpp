@@ -112,7 +112,7 @@ std::string string_from_cftype(CFTypeRef _Nullable cf);
 /// @throw @c std::length_error
 /// @throw @c std::bad_alloc
 /// @throw @c std::bad_array_new_length
-std::string fourcc_string(uint32_t fourcc);
+std::string to_fourcc_string(uint32_t fourcc);
 
 /// Creates a string representation of an @c OSStatus result code and returns the result.
 /// @param code An @c OSStatus result code.
@@ -120,6 +120,6 @@ std::string fourcc_string(uint32_t fourcc);
 /// @throw @c std::length_error
 /// @throw @c std::bad_alloc
 /// @throw @c std::bad_array_new_length
-std::string osstatus_string(int32_t code);
+std::string to_osstatus_string(int32_t code);
 
 } /* namespace CXXAudioToolbox */

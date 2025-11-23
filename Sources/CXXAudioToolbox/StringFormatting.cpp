@@ -81,16 +81,12 @@ std::string CXXAudioToolbox::string_from_cftype(CFTypeRef cf)
 {
 	if(!cf)
 		return "(null)";
-
-	struct cf_type_ref_deleter {
-		void operator()(CFTypeRef cf CF_RELEASES_ARGUMENT) { CFRelease(cf); }
-	};
-
+	struct cf_type_ref_deleter { void operator()(CFTypeRef _Nonnull cf CF_RELEASES_ARGUMENT) { CFRelease(cf); } };
 	auto description = std::unique_ptr<std::remove_pointer_t<CFStringRef>, cf_type_ref_deleter>{CFCopyDescription(cf)};
 	return CXXAudioToolbox::string_from_cfstring(description.get());
 }
 
-std::string CXXAudioToolbox::fourcc_string(uint32_t fourcc)
+std::string CXXAudioToolbox::to_fourcc_string(uint32_t fourcc)
 {
 	if(fourcc_isprint(fourcc))
 		return concat({"'", fourcc_fourchar_string(fourcc), "'"});
@@ -98,12 +94,12 @@ std::string CXXAudioToolbox::fourcc_string(uint32_t fourcc)
 		return concat({"0x", to_hex_string(fourcc)});
 }
 
-std::string CXXAudioToolbox::osstatus_string(int32_t code)
+std::string CXXAudioToolbox::to_osstatus_string(int32_t code)
 {
 	if(fourcc_isprint(static_cast<uint32_t>(code)))
 		return concat({"'", fourcc_fourchar_string(static_cast<uint32_t>(code)), "'"});
 	else if(code > -200000 && code < 200000)
-		return std::to_string(code);
+		return to_string(code);
 	else
 		return concat({"0x", to_hex_string(static_cast<uint32_t>(code))});
 }
