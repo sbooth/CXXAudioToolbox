@@ -86,6 +86,7 @@ UInt32 CXXAudioToolbox::CAAudioConverter::GetPropertyInfo(AudioConverterProperty
 	CXXAudioToolbox_ThrowIfAudioConverterError(result, concat({
 		"AudioConverterGetPropertyInfo(",
 		to_fourcc_string(inPropertyID),
+		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outWritable)),
 		")",
 		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 	}));
@@ -96,7 +97,8 @@ void CXXAudioToolbox::CAAudioConverter::GetProperty(AudioConverterPropertyID inP
 {
 	const auto result = AudioConverterGetProperty(converter_, inPropertyID, &ioPropertyDataSize, outPropertyData);
 	CXXAudioToolbox_ThrowIfAudioConverterError(result, concat({
-		"AudioConverterGetProperty(", to_fourcc_string(inPropertyID),
+		"AudioConverterGetProperty(",
+		to_fourcc_string(inPropertyID),
 		", ", to_string(ioPropertyDataSize),
 		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
 		")",
@@ -135,7 +137,7 @@ void CXXAudioToolbox::CAAudioConverter::FillComplexBuffer(AudioConverterComplexI
 {
 	const auto result = AudioConverterFillComplexBuffer(converter_, inInputDataProc, inInputDataProcUserData, &ioOutputDataPacketSize, outOutputData, outPacketDescription);
 	CXXAudioToolbox_ThrowIfAudioConverterError(result, concat({
-		"AudioConverterFillComplexBuffer(",
+		"AudioConverterFillComplexBuffer("
 		"0x", to_hex_string(reinterpret_cast<uintptr_t>(inInputDataProc)),
 		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(inInputDataProcUserData)),
 		", ", to_string(ioOutputDataPacketSize),
