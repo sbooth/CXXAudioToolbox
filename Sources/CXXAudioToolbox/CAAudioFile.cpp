@@ -258,7 +258,8 @@ void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID,
 {
 	const auto result = AudioFileGetProperty(mAudioFileID, inPropertyID, &ioDataSize, outPropertyData);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
-		"AudioFileGetProperty(", to_fourcc_string(inPropertyID),
+		"AudioFileGetProperty(",
+		to_fourcc_string(inPropertyID),
 		", ", to_string(ioDataSize),
 		", 0x", to_hex_string(reinterpret_cast<uintptr_t>(outPropertyData)),
 		")",
