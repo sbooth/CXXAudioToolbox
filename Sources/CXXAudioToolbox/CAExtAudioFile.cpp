@@ -244,7 +244,7 @@ void CXXAudioToolbox::CAExtAudioFile::SetFileChannelLayout(const AudioChannelLay
 CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::FileDataFormat() const
 {
 	CXXCoreAudio::CAStreamDescription fileDataFormat;
-	UInt32 size = sizeof(fileDataFormat);
+	UInt32 size = sizeof fileDataFormat;
 	GetProperty(kExtAudioFileProperty_FileDataFormat, size, &fileDataFormat);
 	return fileDataFormat;
 }
@@ -252,7 +252,7 @@ CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::FileDataForma
 CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::ClientDataFormat() const
 {
 	CXXCoreAudio::CAStreamDescription clientDataFormat;
-	UInt32 size = sizeof(clientDataFormat);
+	UInt32 size = sizeof clientDataFormat;
 	GetProperty(kExtAudioFileProperty_ClientDataFormat, size, &clientDataFormat);
 	return clientDataFormat;
 }
@@ -260,8 +260,8 @@ CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::ClientDataFor
 void CXXAudioToolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat, const AudioChannelLayout * const clientChannelLayout, UInt32 codecManufacturer)
 {
 	if(codecManufacturer)
-		SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof(codecManufacturer), &codecManufacturer);
-	SetProperty(kExtAudioFileProperty_ClientDataFormat, sizeof(clientDataFormat), &clientDataFormat);
+		SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof codecManufacturer, &codecManufacturer);
+	SetProperty(kExtAudioFileProperty_ClientDataFormat, sizeof clientDataFormat, &clientDataFormat);
 	if(clientChannelLayout)
 		SetClientChannelLayout(*clientChannelLayout);
 }
@@ -301,13 +301,13 @@ void CXXAudioToolbox::CAExtAudioFile::SetAudioConverterProperty(AudioConverterPr
 		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
 	}));
 	CFPropertyListRef config = nullptr;
-	SetProperty(kExtAudioFileProperty_ConverterConfig, sizeof(config), &config);
+	SetProperty(kExtAudioFileProperty_ConverterConfig, sizeof config, &config);
 }
 
 SInt64 CXXAudioToolbox::CAExtAudioFile::FrameLength() const
 {
 	SInt64 frameLength;
-	UInt32 size = sizeof(frameLength);
+	UInt32 size = sizeof frameLength;
 	GetProperty(kExtAudioFileProperty_FileLengthFrames, size, &frameLength);
 	return frameLength;
 }
