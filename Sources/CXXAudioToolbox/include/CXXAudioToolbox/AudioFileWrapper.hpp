@@ -15,7 +15,6 @@ namespace CXXAudioToolbox {
 /// A bare-bones AudioFile wrapper modeled after std::unique_ptr.
 class AudioFileWrapper final {
 public:
-
 	/// Creates an empty audio file wrapper.
 	AudioFileWrapper() noexcept = default;
 

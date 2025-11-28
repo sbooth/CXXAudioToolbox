@@ -19,7 +19,6 @@ namespace CXXAudioToolbox {
 /// An AudioFile wrapper.
 class CAAudioFile final {
 public:
-
 	/// Creates an audio file.
 	CAAudioFile() noexcept = default;
 
