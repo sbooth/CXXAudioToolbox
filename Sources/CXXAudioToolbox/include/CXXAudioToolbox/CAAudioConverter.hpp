@@ -15,7 +15,6 @@ namespace CXXAudioToolbox {
 /// An AudioConverter wrapper.
 class CAAudioConverter final {
 public:
-
 	/// Creates an audio converter.
 	CAAudioConverter() noexcept = default;
 
