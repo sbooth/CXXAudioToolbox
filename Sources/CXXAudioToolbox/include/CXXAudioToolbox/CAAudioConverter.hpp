@@ -45,12 +45,6 @@ public:
 		return converter_ != nullptr;
 	}
 
-	/// Returns true if this object's internal AudioConverter object is not null.
-	bool IsValid() const noexcept
-	{
-		return converter_ != nullptr;
-	}
-
 	/// Returns the object's internal AudioConverter object.
 	operator AudioConverterRef const _Nullable () const noexcept
 	{

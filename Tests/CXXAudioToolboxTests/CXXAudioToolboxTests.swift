@@ -4,21 +4,21 @@ import Testing
 @Suite struct CXXCoreAudioTests {
 	@Test func audioConverter() async {
 		let converter = CXXAudioToolbox.CAAudioConverter()
-		#expect(converter.IsValid() == false)
+		#expect(converter.__convertToBool() == false)
 	}
 
 	@Test func audioFile() async {
 		let af = CXXAudioToolbox.CAAudioFile()
-		#expect(af.IsValid() == false)
+		#expect(af.__convertToBool() == false)
 	}
 
 	@Test func extAudioFile() async {
 		let eaf = CXXAudioToolbox.CAExtAudioFile()
-		#expect(eaf.IsValid() == false)
+		#expect(eaf.__convertToBool() == false)
 	}
 
 	@Test func auGraph() async {
 		let graph = CXXAudioToolbox.CAAUGraph()
-		#expect(graph.IsValid() == false)
+		#expect(graph.__convertToBool() == false)
 	}
 }
