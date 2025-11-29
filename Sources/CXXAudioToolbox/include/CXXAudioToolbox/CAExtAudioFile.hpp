@@ -50,12 +50,6 @@ public:
 		return extAudioFile_ != nullptr;
 	}
 
-	/// Returns true if this object's internal ExtAudioFile object is not null.
-	bool IsValid() const noexcept
-	{
-		return extAudioFile_ != nullptr;
-	}
-
 	/// Returns the file's internal ExtAudioFile object.
 	operator ExtAudioFileRef const _Nullable () const noexcept
 	{

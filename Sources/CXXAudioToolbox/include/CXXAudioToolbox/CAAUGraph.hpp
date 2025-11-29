@@ -46,12 +46,6 @@ public:
 		return auGraph_ != nullptr;
 	}
 
-	/// Returns true if this object's internal AUGraph object is not null.
-	bool IsValid() const noexcept
-	{
-		return auGraph_ != nullptr;
-	}
-
 	/// Returns the object's internal AUGraph object.
 	operator AUGraph const _Nullable () const noexcept
 	{
