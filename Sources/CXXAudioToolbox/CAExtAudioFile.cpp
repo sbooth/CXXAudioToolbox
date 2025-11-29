@@ -85,7 +85,7 @@ void CXXAudioToolbox::CAExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer& buffer)
 }
 
 #if TARGET_OS_IPHONE
-OSStatus CXXAudioToolbox::ATExtAudioFile::Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
+OSStatus CXXAudioToolbox::CAExtAudioFile::Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 #else
 void CXXAudioToolbox::CAExtAudioFile::Write(UInt32 inNumberFrames, const AudioBufferList *ioData)
 #endif /* TARGET_OS_IPHONE */
