@@ -43,12 +43,6 @@ public:
 		return mAudioFileID != nullptr;
 	}
 
-	/// Returns true if this object's internal AudioFile object is not null.
-	bool IsValid() const noexcept
-	{
-		return mAudioFileID != nullptr;
-	}
-
 	/// Returns the object's internal AudioFile object.
 	operator AudioFileID const _Nullable () const noexcept
 	{
