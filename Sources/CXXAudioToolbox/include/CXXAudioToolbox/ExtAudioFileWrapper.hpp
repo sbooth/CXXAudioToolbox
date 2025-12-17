@@ -25,15 +25,15 @@ public:
 	ExtAudioFileWrapper& operator=(const ExtAudioFileWrapper&) = delete;
 
 	/// Move constructor.
-	ExtAudioFileWrapper(ExtAudioFileWrapper&& rhs) noexcept
-	: extAudioFile_{rhs.release()}
+	ExtAudioFileWrapper(ExtAudioFileWrapper&& other) noexcept
+	: extAudioFile_{other.release()}
 	{}
 
 	/// Move assignment operator.
-	ExtAudioFileWrapper& operator=(ExtAudioFileWrapper&& rhs) noexcept
+	ExtAudioFileWrapper& operator=(ExtAudioFileWrapper&& other) noexcept
 	{
-		if(this != &rhs)
-			reset(rhs.release());
+		if(this != &other)
+			reset(other.release());
 		return *this;
 	}
 

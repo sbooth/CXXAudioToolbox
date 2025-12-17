@@ -9,16 +9,16 @@
 #import "CAAudioFile.hpp"
 #import "AudioToolboxErrors.hpp"
 
-CXXAudioToolbox::CAAudioFile::CAAudioFile(CAAudioFile&& rhs) noexcept
-: mAudioFileID{std::exchange(rhs.mAudioFileID, nullptr)}
+CXXAudioToolbox::CAAudioFile::CAAudioFile(CAAudioFile&& other) noexcept
+: mAudioFileID{std::exchange(other.mAudioFileID, nullptr)}
 {}
 
-CXXAudioToolbox::CAAudioFile& CXXAudioToolbox::CAAudioFile::operator=(CAAudioFile&& rhs) noexcept
+CXXAudioToolbox::CAAudioFile& CXXAudioToolbox::CAAudioFile::operator=(CAAudioFile&& other) noexcept
 {
-	if(this != &rhs) {
+	if(this != &other) {
 		if(mAudioFileID)
 			AudioFileClose(mAudioFileID);
-		mAudioFileID = std::exchange(rhs.mAudioFileID, nullptr);
+		mAudioFileID = std::exchange(other.mAudioFileID, nullptr);
 	}
 	return *this;
 }

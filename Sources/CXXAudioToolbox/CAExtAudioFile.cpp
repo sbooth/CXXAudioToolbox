@@ -26,16 +26,16 @@ CXXAudioToolbox::CAExtAudioFile::~CAExtAudioFile() noexcept
 		ExtAudioFileDispose(extAudioFile_);
 }
 
-CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& rhs) noexcept
-: extAudioFile_{std::exchange(rhs.extAudioFile_, nullptr)}
+CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& other) noexcept
+: extAudioFile_{std::exchange(other.extAudioFile_, nullptr)}
 {}
 
-CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& rhs) noexcept
+CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& other) noexcept
 {
-	if(this != &rhs) {
+	if(this != &other) {
 		if(extAudioFile_)
 			ExtAudioFileDispose(extAudioFile_);
-		extAudioFile_ = std::exchange(rhs.extAudioFile_, nullptr);
+		extAudioFile_ = std::exchange(other.extAudioFile_, nullptr);
 	}
 	return *this;
 }

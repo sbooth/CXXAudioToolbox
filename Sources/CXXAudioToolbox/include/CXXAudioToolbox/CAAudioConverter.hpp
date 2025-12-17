@@ -27,10 +27,10 @@ public:
 	CAAudioConverter& operator=(const CAAudioConverter&) = delete;
 
 	/// Move constructor.
-	CAAudioConverter(CAAudioConverter&& rhs) noexcept;
+	CAAudioConverter(CAAudioConverter&& other) noexcept;
 
 	/// Move assignment operator.
-	CAAudioConverter& operator=(CAAudioConverter&& rhs) noexcept;
+	CAAudioConverter& operator=(CAAudioConverter&& other) noexcept;
 
 	/// Destroys the audio converter and releases all associated resources.
 	~CAAudioConverter() noexcept;
