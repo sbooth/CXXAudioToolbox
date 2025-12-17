@@ -97,6 +97,7 @@ public:
 	}
 
 	/// Disposes of the managed AudioConverter object and replaces it with converter.
+	/// @note The object assumes responsibility for disposing of the passed AudioConverterRef using AudioConverterDispose.
 	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept
 	{
 		if(auto old = std::exchange(converter_, converter); old)
@@ -110,6 +111,7 @@ public:
 	}
 
 	/// Releases ownership of the managed AudioConverter object and returns it.
+	/// @note The caller assumes responsibility for disposing of the returned AudioConverterRef using AudioConverterDispose.
 	AudioConverterRef _Nullable release() noexcept
 	{
 		return std::exchange(converter_, nullptr);

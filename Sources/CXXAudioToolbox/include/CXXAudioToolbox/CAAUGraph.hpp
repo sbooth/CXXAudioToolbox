@@ -227,6 +227,7 @@ public:
 	}
 
 	/// Disposes of the managed AUGraph object and replaces it with graph.
+	/// @note The object assumes responsibility for disposing of the passed AUGraph using DisposeAUGraph.
 	void reset(AUGraph _Nullable graph = nullptr) noexcept
 	{
 		if(auto old = std::exchange(graph_, graph); old)
@@ -240,6 +241,7 @@ public:
 	}
 
 	/// Releases ownership of the managed AUGraph object and returns it.
+	/// @note The caller assumes responsibility for disposing of the returned AUGraph using DisposeAUGraph.
 	AUGraph _Nullable release() noexcept
 	{
 		return std::exchange(graph_, nullptr);

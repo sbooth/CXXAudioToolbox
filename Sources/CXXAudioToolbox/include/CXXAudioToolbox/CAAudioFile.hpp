@@ -207,6 +207,7 @@ public:
 	}
 
 	/// Closes the managed AudioFile object and replaces it with audioFile.
+	/// @note The object assumes responsibility for closing the passed AudioFileID using AudioFileClose.
 	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept
 	{
 		if(auto old = std::exchange(audioFile_, audioFile); old)
@@ -220,6 +221,7 @@ public:
 	}
 
 	/// Releases ownership of the managed AudioFile object and returns it.
+	/// @note The caller assumes responsibility for closing the returned AudioFileID using AudioFileClose.
 	AudioFileID _Nullable release() noexcept
 	{
 		return std::exchange(audioFile_, nullptr);
