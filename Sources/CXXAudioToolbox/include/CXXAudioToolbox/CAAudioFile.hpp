@@ -6,6 +6,7 @@
 
 #pragma once
 
+#import <utility>
 #import <vector>
 
 #import <AudioToolbox/AudioFile.h>
@@ -37,18 +38,20 @@ public:
 	/// Destroys the audio file and releases all associated resources.
 	~CAAudioFile() noexcept;
 
+
 	/// Returns true if this object's internal AudioFile object is not null.
 	explicit operator bool() const noexcept
 	{
-		return mAudioFileID != nullptr;
+		return audioFile_ != nullptr;
 	}
 
 	/// Returns the object's internal AudioFile object.
 	operator AudioFileID const _Nullable () const noexcept
 	{
-		return mAudioFileID;
+		return audioFile_;
 	}
 
+	
 	/// Opens an existing audio file.
 	/// @throw std::system_error.
 	void OpenURL(CFURLRef inURL, AudioFilePermissions inPermissions, AudioFileTypeID inFileTypeHint);
@@ -196,9 +199,35 @@ public:
 	/// @throw std::system_error.
 	static std::vector<AudioFileTypeID> TypesForExtension(CFStringRef extension);
 
+
+	/// Returns the managed AudioFile object.
+	AudioFileID _Nullable get() const noexcept
+	{
+		return audioFile_;
+	}
+
+	/// Closes the internal AudioFile object and replaces it with audioFile.
+	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept
+	{
+		if(auto old = std::exchange(audioFile_, audioFile); old)
+			AudioFileClose(old);
+	}
+
+	/// Swaps the managed AudioFile object with the managed AudioFile object from another audio file.
+	void swap(CAAudioFile& other) noexcept
+	{
+		std::swap(audioFile_, other.audioFile_);
+	}
+
+	/// Releases ownership of the internal AudioFile object and returns it.
+	AudioFileID _Nullable release() noexcept
+	{
+		return std::exchange(audioFile_, nullptr);
+	}
+
 private:
 	/// The underlying AudioFile object.
-	AudioFileID _Nullable mAudioFileID{nullptr};
+	AudioFileID _Nullable audioFile_{nullptr};
 };
 
 } /* namespace CXXAudioToolbox */

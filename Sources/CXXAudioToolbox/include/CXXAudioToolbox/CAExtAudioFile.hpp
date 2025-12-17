@@ -6,6 +6,7 @@
 
 #pragma once
 
+#import <utility>
 #import <stdexcept>
 
 #import <AudioToolbox/AudioConverter.h>
@@ -35,14 +36,15 @@ public:
 	// This class is non-assignable
 	CAExtAudioFile& operator=(const CAExtAudioFile&) = delete;
 
-	/// Destroys the extended audio file and releases all associated resources.
-	~CAExtAudioFile() noexcept;
-
 	/// Move constructor.
 	CAExtAudioFile(CAExtAudioFile&& other) noexcept;
 
 	/// Move assignment operator.
 	CAExtAudioFile& operator=(CAExtAudioFile&& other) noexcept;
+
+	/// Destroys the extended audio file and releases all associated resources.
+	~CAExtAudioFile() noexcept;
+
 
 	/// Returns true if this object's internal ExtAudioFile object is not null.
 	explicit operator bool() const noexcept
@@ -55,6 +57,7 @@ public:
 	{
 		return extAudioFile_;
 	}
+
 
 	/// Opens an audio file specified by a CFURLRef.
 	///
@@ -96,7 +99,7 @@ public:
 
 	/// Closes the file and disposes of the internal extended audio file.
 	/// @throw std::system_error.
-	void Close();
+	void Dispose();
 
 	/// Performs a synchronous sequential read.
 	///
@@ -285,6 +288,32 @@ public:
 		SetClientChannelLayout(*format.channelLayout.layout);
 	}
 #endif /* __OBJC__ */
+
+
+	/// Returns the managed ExtAudioFile object.
+	ExtAudioFileRef _Nullable get() const noexcept
+	{
+		return extAudioFile_;
+	}
+
+	/// Disposes of the internal ExtAudioFile object and replaces it with extAudioFile.
+	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept
+	{
+		if(auto old = std::exchange(extAudioFile_, extAudioFile); old)
+			ExtAudioFileDispose(old);
+	}
+
+	/// Swaps the managed ExtAudioFile object with the managed ExtAudioFile object from another audio converter.
+	void swap(CAExtAudioFile& other) noexcept
+	{
+		std::swap(extAudioFile_, other.extAudioFile_);
+	}
+
+	/// Releases ownership of the internal ExtAudioFile object and returns it.
+	ExtAudioFileRef _Nullable release() noexcept
+	{
+		return std::exchange(extAudioFile_, nullptr);
+	}
 
 private:
 	/// The underlying ExtAudioFile object.

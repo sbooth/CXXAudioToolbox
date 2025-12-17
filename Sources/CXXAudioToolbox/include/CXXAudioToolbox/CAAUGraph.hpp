@@ -7,6 +7,7 @@
 #pragma once
 
 #import <map>
+#import <utility>
 #import <vector>
 
 #import <AudioToolbox/AUGraph.h>
@@ -40,17 +41,19 @@ public:
 	/// Destroys the Audio Unit graph and releases all associated resources.
 	~CAAUGraph() noexcept;
 
+
 	/// Returns true if this object's internal AUGraph object is not null.
 	explicit operator bool() const noexcept
 	{
-		return auGraph_ != nullptr;
+		return graph_ != nullptr;
 	}
 
 	/// Returns the object's internal AUGraph object.
 	operator AUGraph const _Nullable () const noexcept
 	{
-		return auGraph_;
+		return graph_;
 	}
+
 
 	/// Creates a new Audio Unit graph.
 	/// @throw std::system_error.
@@ -216,9 +219,35 @@ public:
 	/// @throw std::system_error.
 	Float64 TailTime() const;
 
+
+	/// Returns the managed AUGraph object.
+	AUGraph _Nullable get() const noexcept
+	{
+		return graph_;
+	}
+
+	/// Disposes of the internal AUGraph object and replaces it with graph.
+	void reset(AUGraph _Nullable graph = nullptr) noexcept
+	{
+		if(auto old = std::exchange(graph_, graph); old)
+			DisposeAUGraph(old);
+	}
+
+	/// Swaps the managed AUGraph object with the managed AUGraph object from another graph.
+	void swap(CAAUGraph& other) noexcept
+	{
+		std::swap(graph_, other.graph_);
+	}
+
+	/// Releases ownership of the internal AUGraph object and returns it.
+	AUGraph _Nullable release() noexcept
+	{
+		return std::exchange(graph_, nullptr);
+	}
+
 private:
 	/// The underlying AUGraph object.
-	AUGraph _Nullable auGraph_{nullptr};
+	AUGraph _Nullable graph_{nullptr};
 };
 
 } /* namespace CXXAudioToolbox */

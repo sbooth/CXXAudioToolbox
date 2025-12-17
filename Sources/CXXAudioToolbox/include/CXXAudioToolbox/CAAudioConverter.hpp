@@ -35,6 +35,7 @@ public:
 	/// Destroys the audio converter and releases all associated resources.
 	~CAAudioConverter() noexcept;
 
+
 	/// Returns true if this object's internal AudioConverter object is not null.
 	explicit operator bool() const noexcept
 	{
@@ -47,6 +48,7 @@ public:
 		return converter_;
 	}
 
+	
 	/// Creates a new audio converter.
 	/// @throw std::system_error.
 	void New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat);
@@ -87,6 +89,12 @@ public:
 	/// @throw std::system_error.
 	void ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData);
 
+
+	/// Returns the managed AudioConverter object.
+	AudioConverterRef _Nullable get() const noexcept
+	{
+		return converter_;
+	}
 
 	/// Disposes of the internal AudioConverter object and replaces it with converter.
 	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept
