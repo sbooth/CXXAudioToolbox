@@ -32,8 +32,7 @@ public:
 	/// Move assignment operator.
 	AudioFileWrapper& operator=(AudioFileWrapper&& other) noexcept
 	{
-		if(this != &other)
-			reset(other.release());
+		reset(other.release());
 		return *this;
 	}
 
