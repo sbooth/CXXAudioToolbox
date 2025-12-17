@@ -118,7 +118,7 @@ public:
 	}
 
 private:
-	/// The underlying AudioConverter object.
+	/// The managed AudioConverter object.
 	AudioConverterRef _Nullable converter_{nullptr};
 };
 

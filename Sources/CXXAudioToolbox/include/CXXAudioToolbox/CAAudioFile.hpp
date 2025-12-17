@@ -228,7 +228,7 @@ public:
 	}
 
 private:
-	/// The underlying AudioFile object.
+	/// The managed AudioFile object.
 	AudioFileID _Nullable audioFile_{nullptr};
 };
 

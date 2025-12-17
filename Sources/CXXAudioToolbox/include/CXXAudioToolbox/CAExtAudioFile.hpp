@@ -318,7 +318,7 @@ public:
 	}
 
 private:
-	/// The underlying ExtAudioFile object.
+	/// The managed ExtAudioFile object.
 	ExtAudioFileRef _Nullable extAudioFile_{nullptr};
 };
 

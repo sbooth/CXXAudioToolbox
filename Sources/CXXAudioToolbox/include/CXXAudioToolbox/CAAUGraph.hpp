@@ -248,7 +248,7 @@ public:
 	}
 
 private:
-	/// The underlying AUGraph object.
+	/// The managed AUGraph object.
 	AUGraph _Nullable graph_{nullptr};
 };
 
