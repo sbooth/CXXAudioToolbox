@@ -39,13 +39,13 @@ public:
 	~CAAudioFile() noexcept;
 
 
-	/// Returns true if this object's internal AudioFile object is not null.
+	/// Returns true if the managed AudioFile object is not null.
 	explicit operator bool() const noexcept
 	{
 		return audioFile_ != nullptr;
 	}
 
-	/// Returns the object's internal AudioFile object.
+	/// Returns the managed AudioFile object.
 	operator AudioFileID const _Nullable () const noexcept
 	{
 		return audioFile_;
@@ -206,7 +206,7 @@ public:
 		return audioFile_;
 	}
 
-	/// Closes the internal AudioFile object and replaces it with audioFile.
+	/// Closes the managed AudioFile object and replaces it with audioFile.
 	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept
 	{
 		if(auto old = std::exchange(audioFile_, audioFile); old)
@@ -219,7 +219,7 @@ public:
 		std::swap(audioFile_, other.audioFile_);
 	}
 
-	/// Releases ownership of the internal AudioFile object and returns it.
+	/// Releases ownership of the managed AudioFile object and returns it.
 	AudioFileID _Nullable release() noexcept
 	{
 		return std::exchange(audioFile_, nullptr);

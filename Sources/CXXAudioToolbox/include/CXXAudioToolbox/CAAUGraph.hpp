@@ -42,13 +42,13 @@ public:
 	~CAAUGraph() noexcept;
 
 
-	/// Returns true if this object's internal AUGraph object is not null.
+	/// Returns true if the managed AUGraph object is not null.
 	explicit operator bool() const noexcept
 	{
 		return graph_ != nullptr;
 	}
 
-	/// Returns the object's internal AUGraph object.
+	/// Returns the managed AUGraph object.
 	operator AUGraph const _Nullable () const noexcept
 	{
 		return graph_;
@@ -226,7 +226,7 @@ public:
 		return graph_;
 	}
 
-	/// Disposes of the internal AUGraph object and replaces it with graph.
+	/// Disposes of the managed AUGraph object and replaces it with graph.
 	void reset(AUGraph _Nullable graph = nullptr) noexcept
 	{
 		if(auto old = std::exchange(graph_, graph); old)
@@ -239,7 +239,7 @@ public:
 		std::swap(graph_, other.graph_);
 	}
 
-	/// Releases ownership of the internal AUGraph object and returns it.
+	/// Releases ownership of the managed AUGraph object and returns it.
 	AUGraph _Nullable release() noexcept
 	{
 		return std::exchange(graph_, nullptr);

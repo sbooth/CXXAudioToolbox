@@ -46,13 +46,13 @@ public:
 	~CAExtAudioFile() noexcept;
 
 
-	/// Returns true if this object's internal ExtAudioFile object is not null.
+	/// Returns true if the managed ExtAudioFile object is not null.
 	explicit operator bool() const noexcept
 	{
 		return extAudioFile_ != nullptr;
 	}
 
-	/// Returns the file's internal ExtAudioFile object.
+	/// Returns the managed ExtAudioFile object.
 	operator ExtAudioFileRef const _Nullable () const noexcept
 	{
 		return extAudioFile_;
@@ -97,7 +97,7 @@ public:
 	/// @throw std::system_error.
 	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags);
 
-	/// Closes the file and disposes of the internal extended audio file.
+	/// Closes the file and disposes of the managed extended audio file.
 	/// @throw std::system_error.
 	void Dispose();
 
@@ -234,7 +234,7 @@ public:
 	/// @throw std::system_error.
 	void SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout);
 
-	/// Returns the internal AudioConverter (kExtAudioFileProperty_AudioConverter).
+	/// Returns the managed AudioConverter (kExtAudioFileProperty_AudioConverter).
 	/// @throw std::system_error.
 	AudioConverterRef _Nullable AudioConverter() const;
 
@@ -244,7 +244,7 @@ public:
 		return AudioConverter() != nullptr;
 	}
 
-	/// Sets a property on the internal audio converter.
+	/// Sets a property on the managed audio converter.
 	void SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData);
 
 	/// Returns the length of the file in audio frames (kExtAudioFileProperty_FileLengthFrames).
@@ -296,7 +296,7 @@ public:
 		return extAudioFile_;
 	}
 
-	/// Disposes of the internal ExtAudioFile object and replaces it with extAudioFile.
+	/// Disposes of the managed ExtAudioFile object and replaces it with extAudioFile.
 	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept
 	{
 		if(auto old = std::exchange(extAudioFile_, extAudioFile); old)
@@ -309,7 +309,7 @@ public:
 		std::swap(extAudioFile_, other.extAudioFile_);
 	}
 
-	/// Releases ownership of the internal ExtAudioFile object and returns it.
+	/// Releases ownership of the managed ExtAudioFile object and returns it.
 	ExtAudioFileRef _Nullable release() noexcept
 	{
 		return std::exchange(extAudioFile_, nullptr);

@@ -36,13 +36,13 @@ public:
 	~CAAudioConverter() noexcept;
 
 
-	/// Returns true if this object's internal AudioConverter object is not null.
+	/// Returns true if the managed AudioConverter object is not null.
 	explicit operator bool() const noexcept
 	{
 		return converter_ != nullptr;
 	}
 
-	/// Returns the object's internal AudioConverter object.
+	/// Returns the managed AudioConverter object.
 	operator AudioConverterRef const _Nullable () const noexcept
 	{
 		return converter_;
@@ -96,7 +96,7 @@ public:
 		return converter_;
 	}
 
-	/// Disposes of the internal AudioConverter object and replaces it with converter.
+	/// Disposes of the managed AudioConverter object and replaces it with converter.
 	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept
 	{
 		if(auto old = std::exchange(converter_, converter); old)
@@ -109,7 +109,7 @@ public:
 		std::swap(converter_, other.converter_);
 	}
 
-	/// Releases ownership of the internal AudioConverter object and returns it.
+	/// Releases ownership of the managed AudioConverter object and returns it.
 	AudioConverterRef _Nullable release() noexcept
 	{
 		return std::exchange(converter_, nullptr);
