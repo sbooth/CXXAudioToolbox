@@ -6,6 +6,8 @@
 
 #pragma once
 
+#import <utility>
+
 #import <AudioToolbox/AudioConverter.h>
 
 CF_ASSUME_NONNULL_BEGIN
@@ -32,12 +34,6 @@ public:
 
 	/// Destroys the audio converter and releases all associated resources.
 	~CAAudioConverter() noexcept;
-
-	/// Returns the object's internal AudioConverter object.
-	AudioConverterRef const _Nullable GetAudioConverter() const noexcept
-	{
-		return converter_;
-	}
 
 	/// Returns true if this object's internal AudioConverter object is not null.
 	explicit operator bool() const noexcept
@@ -90,6 +86,26 @@ public:
 	/// Converts PCM data from an input buffer list to an output buffer list.
 	/// @throw std::system_error.
 	void ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData);
+
+
+	/// Disposes of the internal AudioConverter object and replaces it with converter.
+	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept
+	{
+		if(auto old = std::exchange(converter_, converter); old)
+			AudioConverterDispose(old);
+	}
+
+	/// Swaps the managed AudioConverter object with the managed AudioConverter object from another audio converter.
+	void swap(CAAudioConverter& other) noexcept
+	{
+		std::swap(converter_, other.converter_);
+	}
+
+	/// Releases ownership of the internal AudioConverter object and returns it.
+	AudioConverterRef _Nullable release() noexcept
+	{
+		return std::exchange(converter_, nullptr);
+	}
 
 private:
 	/// The underlying AudioConverter object.
