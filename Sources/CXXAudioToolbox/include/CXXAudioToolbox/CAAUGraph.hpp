@@ -234,7 +234,7 @@ public:
 			DisposeAUGraph(old);
 	}
 
-	/// Swaps the managed AUGraph object with the managed AUGraph object from another graph.
+	/// Swaps the managed AUGraph object with the managed AUGraph object from another Audio Unit graph.
 	void swap(CAAUGraph& other) noexcept
 	{
 		std::swap(graph_, other.graph_);
