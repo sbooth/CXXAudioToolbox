@@ -4,8 +4,6 @@
 // MIT license
 //
 
-#import <utility>
-
 #import "CAAudioConverter.hpp"
 #import "AudioToolboxErrors.hpp"
 
