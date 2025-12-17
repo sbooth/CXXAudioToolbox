@@ -13,16 +13,16 @@ CXXAudioToolbox::CAAudioConverter::~CAAudioConverter() noexcept
 		AudioConverterDispose(converter_);
 }
 
-CXXAudioToolbox::CAAudioConverter::CAAudioConverter(CAAudioConverter&& rhs) noexcept
-: converter_{std::exchange(rhs.converter_, nullptr)}
+CXXAudioToolbox::CAAudioConverter::CAAudioConverter(CAAudioConverter&& other) noexcept
+: converter_{std::exchange(other.converter_, nullptr)}
 {}
 
-CXXAudioToolbox::CAAudioConverter& CXXAudioToolbox::CAAudioConverter::operator=(CAAudioConverter&& rhs) noexcept
+CXXAudioToolbox::CAAudioConverter& CXXAudioToolbox::CAAudioConverter::operator=(CAAudioConverter&& other) noexcept
 {
-	if(this != &rhs) {
+	if(this != &other) {
 		if(converter_)
 			AudioConverterDispose(converter_);
-		converter_ = std::exchange(rhs.converter_, nullptr);
+		converter_ = std::exchange(other.converter_, nullptr);
 	}
 	return *this;
 }

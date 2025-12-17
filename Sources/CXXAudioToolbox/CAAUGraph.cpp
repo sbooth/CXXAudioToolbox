@@ -15,16 +15,16 @@ CXXAudioToolbox::CAAUGraph::~CAAUGraph() noexcept
 		DisposeAUGraph(auGraph_);
 }
 
-CXXAudioToolbox::CAAUGraph::CAAUGraph(CAAUGraph&& rhs) noexcept
-: auGraph_{std::exchange(rhs.auGraph_, nullptr)}
+CXXAudioToolbox::CAAUGraph::CAAUGraph(CAAUGraph&& other) noexcept
+: auGraph_{std::exchange(other.auGraph_, nullptr)}
 {}
 
-CXXAudioToolbox::CAAUGraph& CXXAudioToolbox::CAAUGraph::operator=(CAAUGraph&& rhs) noexcept
+CXXAudioToolbox::CAAUGraph& CXXAudioToolbox::CAAUGraph::operator=(CAAUGraph&& other) noexcept
 {
-	if(this != &rhs) {
+	if(this != &other) {
 		if(auGraph_)
 			DisposeAUGraph(auGraph_);
-		auGraph_ = std::exchange(rhs.auGraph_, nullptr);
+		auGraph_ = std::exchange(other.auGraph_, nullptr);
 	}
 	return *this;
 }

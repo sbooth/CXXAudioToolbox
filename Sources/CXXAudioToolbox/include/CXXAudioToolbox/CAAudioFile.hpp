@@ -29,10 +29,10 @@ public:
 	CAAudioFile& operator=(const CAAudioFile&) = delete;
 
 	/// Move constructor.
-	CAAudioFile(CAAudioFile&& rhs) noexcept;
+	CAAudioFile(CAAudioFile&& other) noexcept;
 
 	/// Move assignment operator.
-	CAAudioFile& operator=(CAAudioFile&& rhs) noexcept;
+	CAAudioFile& operator=(CAAudioFile&& other) noexcept;
 
 	/// Destroys the audio file and releases all associated resources.
 	~CAAudioFile() noexcept;

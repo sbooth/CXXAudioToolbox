@@ -39,10 +39,10 @@ public:
 	~CAExtAudioFile() noexcept;
 
 	/// Move constructor.
-	CAExtAudioFile(CAExtAudioFile&& rhs) noexcept;
+	CAExtAudioFile(CAExtAudioFile&& other) noexcept;
 
 	/// Move assignment operator.
-	CAExtAudioFile& operator=(CAExtAudioFile&& rhs) noexcept;
+	CAExtAudioFile& operator=(CAExtAudioFile&& other) noexcept;
 
 	/// Returns true if this object's internal ExtAudioFile object is not null.
 	explicit operator bool() const noexcept

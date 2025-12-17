@@ -32,10 +32,10 @@ public:
 	CAAUGraph& operator=(const CAAUGraph&) = delete;
 
 	/// Move constructor
-	CAAUGraph(CAAUGraph&& rhs) noexcept;
+	CAAUGraph(CAAUGraph&& other) noexcept;
 
 	/// Move assignment operator.
-	CAAUGraph& operator=(CAAUGraph&& rhs) noexcept;
+	CAAUGraph& operator=(CAAUGraph&& other) noexcept;
 
 	/// Destroys the Audio Unit graph and releases all associated resources.
 	~CAAUGraph() noexcept;
