@@ -4,8 +4,6 @@
 // MIT license
 //
 
-#import <utility>
-
 #import "CAExtAudioFile.hpp"
 #import "AudioToolboxErrors.hpp"
 
@@ -22,46 +20,41 @@ struct free_deleter {
 
 CXXAudioToolbox::CAExtAudioFile::~CAExtAudioFile() noexcept
 {
-	if(extAudioFile_)
-		ExtAudioFileDispose(extAudioFile_);
+	reset();
 }
 
 CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& other) noexcept
-: extAudioFile_{std::exchange(other.extAudioFile_, nullptr)}
+: extAudioFile_{other.release()}
 {}
 
 CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& other) noexcept
 {
-	if(this != &other) {
-		if(extAudioFile_)
-			ExtAudioFileDispose(extAudioFile_);
-		extAudioFile_ = std::exchange(other.extAudioFile_, nullptr);
-	}
+	reset(other.release());
 	return *this;
 }
 
 void CXXAudioToolbox::CAExtAudioFile::OpenURL(CFURLRef inURL)
 {
-	Close();
+	Dispose();
 	const auto result = ExtAudioFileOpenURL(inURL, &extAudioFile_);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileOpenURL");
 }
 
 void CXXAudioToolbox::CAExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool inForWriting)
 {
-	Close();
+	Dispose();
 	const auto result = ExtAudioFileWrapAudioFileID(inFileID, inForWriting, &extAudioFile_);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileWrapAudioFileID");
 }
 
 void CXXAudioToolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags)
 {
-	Close();
+	Dispose();
 	const auto result = ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileCreateWithURL");
 }
 
-void CXXAudioToolbox::CAExtAudioFile::Close()
+void CXXAudioToolbox::CAExtAudioFile::Dispose()
 {
 	if(extAudioFile_) {
 		const auto result = ExtAudioFileDispose(extAudioFile_);

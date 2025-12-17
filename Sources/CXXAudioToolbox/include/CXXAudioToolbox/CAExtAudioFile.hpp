@@ -6,6 +6,7 @@
 
 #pragma once
 
+#import <utility>
 #import <stdexcept>
 
 #import <AudioToolbox/AudioConverter.h>
@@ -35,26 +36,28 @@ public:
 	// This class is non-assignable
 	CAExtAudioFile& operator=(const CAExtAudioFile&) = delete;
 
-	/// Destroys the extended audio file and releases all associated resources.
-	~CAExtAudioFile() noexcept;
-
 	/// Move constructor.
 	CAExtAudioFile(CAExtAudioFile&& other) noexcept;
 
 	/// Move assignment operator.
 	CAExtAudioFile& operator=(CAExtAudioFile&& other) noexcept;
 
-	/// Returns true if this object's internal ExtAudioFile object is not null.
+	/// Destroys the extended audio file and releases all associated resources.
+	~CAExtAudioFile() noexcept;
+
+
+	/// Returns true if the managed ExtAudioFile object is not null.
 	explicit operator bool() const noexcept
 	{
 		return extAudioFile_ != nullptr;
 	}
 
-	/// Returns the file's internal ExtAudioFile object.
+	/// Returns the managed ExtAudioFile object.
 	operator ExtAudioFileRef const _Nullable () const noexcept
 	{
 		return extAudioFile_;
 	}
+
 
 	/// Opens an audio file specified by a CFURLRef.
 	///
@@ -94,9 +97,9 @@ public:
 	/// @throw std::system_error.
 	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags);
 
-	/// Closes the file and disposes of the internal extended audio file.
+	/// Closes the file and disposes of the managed extended audio file.
 	/// @throw std::system_error.
-	void Close();
+	void Dispose();
 
 	/// Performs a synchronous sequential read.
 	///
@@ -231,7 +234,7 @@ public:
 	/// @throw std::system_error.
 	void SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout);
 
-	/// Returns the internal AudioConverter (kExtAudioFileProperty_AudioConverter).
+	/// Returns the managed AudioConverter (kExtAudioFileProperty_AudioConverter).
 	/// @throw std::system_error.
 	AudioConverterRef _Nullable AudioConverter() const;
 
@@ -241,7 +244,7 @@ public:
 		return AudioConverter() != nullptr;
 	}
 
-	/// Sets a property on the internal audio converter.
+	/// Sets a property on the managed audio converter.
 	void SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData);
 
 	/// Returns the length of the file in audio frames (kExtAudioFileProperty_FileLengthFrames).
@@ -286,8 +289,36 @@ public:
 	}
 #endif /* __OBJC__ */
 
+
+	/// Returns the managed ExtAudioFile object.
+	ExtAudioFileRef _Nullable get() const noexcept
+	{
+		return extAudioFile_;
+	}
+
+	/// Replaces the managed ExtAudioFile object with another ExtAudioFile object.
+	/// @note The object assumes responsibility for disposing of the passed ExtAudioFile object using ExtAudioFileDispose.
+	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept
+	{
+		if(auto old = std::exchange(extAudioFile_, extAudioFile); old)
+			ExtAudioFileDispose(old);
+	}
+
+	/// Swaps the managed ExtAudioFile object with the managed ExtAudioFile object from another audio converter.
+	void swap(CAExtAudioFile& other) noexcept
+	{
+		std::swap(extAudioFile_, other.extAudioFile_);
+	}
+
+	/// Releases ownership of the managed ExtAudioFile object and returns it.
+	/// @note The caller assumes responsibility for disposing of the returned ExtAudioFile object using ExtAudioFileDispose.
+	ExtAudioFileRef _Nullable release() noexcept
+	{
+		return std::exchange(extAudioFile_, nullptr);
+	}
+
 private:
-	/// The underlying ExtAudioFile object.
+	/// The managed ExtAudioFile object.
 	ExtAudioFileRef _Nullable extAudioFile_{nullptr};
 };
 
