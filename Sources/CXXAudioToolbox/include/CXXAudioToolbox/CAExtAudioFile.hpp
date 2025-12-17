@@ -296,8 +296,8 @@ public:
 		return extAudioFile_;
 	}
 
-	/// Disposes of the managed ExtAudioFile object and replaces it with extAudioFile.
-	/// @note The object assumes responsibility for disposing of the passed ExtAudioFileRef using ExtAudioFileDispose.
+	/// Replaces the managed ExtAudioFile object with another ExtAudioFile object.
+	/// @note The object assumes responsibility for disposing of the passed ExtAudioFile object using ExtAudioFileDispose.
 	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept
 	{
 		if(auto old = std::exchange(extAudioFile_, extAudioFile); old)
@@ -311,7 +311,7 @@ public:
 	}
 
 	/// Releases ownership of the managed ExtAudioFile object and returns it.
-	/// @note The caller assumes responsibility for disposing of the returned ExtAudioFileRef using ExtAudioFileDispose.
+	/// @note The caller assumes responsibility for disposing of the returned ExtAudioFile object using ExtAudioFileDispose.
 	ExtAudioFileRef _Nullable release() noexcept
 	{
 		return std::exchange(extAudioFile_, nullptr);
