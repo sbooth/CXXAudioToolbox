@@ -149,7 +149,7 @@ CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::FileChannelLayout
 		throw std::bad_alloc();
 	GetProperty(kExtAudioFileProperty_FileChannelLayout, size, layout.get());
 	CXXCoreAudio::CAChannelLayout channelLayout{};
-	channelLayout.Reset(layout.release());
+	channelLayout.reset(layout.release());
 	return channelLayout;
 }
 
