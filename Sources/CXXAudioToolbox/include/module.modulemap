@@ -1,3 +1,10 @@
+//
+// SPDX-FileCopyrightText: 2025 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
+//
+// Part of https://github.com/sbooth/CXXAudioToolbox
+//
+
 module CXXAudioToolbox {
 	requires cplusplus17
 	header "CXXAudioToolbox/CAAudioConverter.hpp"
