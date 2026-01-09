@@ -26,30 +26,42 @@ std::expected<void, OSStatus> CXXAudioToolbox::CAAudioFormat::GetProperty(AudioF
 
 std::expected<std::vector<AudioFormatID>, OSStatus> CXXAudioToolbox::CAAudioFormat::EncodeFormatIDs() noexcept
 {
-	const auto get_property_encode_format_ids = [&](UInt32 size) -> std::expected<std::vector<AudioFormatID>, OSStatus> {
-		try {
-			const auto count = size / sizeof(AudioFormatID);
-			auto formatIDs = std::vector<AudioFormatID>(count);
-			return GetProperty(kAudioFormatProperty_EncodeFormatIDs, 0, nullptr, size, formatIDs.data()).and_then([&] { return formatIDs; });
-		} catch(const std::exception& e) {
-			return std::unexpected(kAudio_MemFullError);
-		}
-	};
+	UInt32 size;
+	auto result = AudioFormatGetPropertyInfo(kAudioFormatProperty_EncodeFormatIDs, 0, nullptr, &size);
+	if(result != noErr)
+		return std::unexpected(result);
 
-	return GetPropertyInfo(kAudioFormatProperty_EncodeFormatIDs, 0, nullptr).and_then(get_property_encode_format_ids);
+	try {
+		const auto count = size / sizeof(AudioFormatID);
+		auto formatIDs = std::vector<AudioFormatID>(count);
+		result = AudioFormatGetProperty(kAudioFormatProperty_EncodeFormatIDs, 0, nullptr, &size, formatIDs.data());
+		if(result != noErr)
+			return std::unexpected(result);
+		formatIDs.resize(size / sizeof(AudioFormatID));
+		return formatIDs;
+	} catch(const std::exception& e) {
+		return std::unexpected(kAudio_MemFullError);
+	}
 }
 
 std::expected<std::vector<AudioFormatID>, OSStatus> CXXAudioToolbox::CAAudioFormat::DecodeFormatIDs() noexcept
 {
-	const auto get_property_encode_format_ids = [&](UInt32 size) -> std::expected<std::vector<AudioFormatID>, OSStatus> {
-		try {
-			const auto count = size / sizeof(AudioFormatID);
-			auto formatIDs = std::vector<AudioFormatID>(count);
-			return GetProperty(kAudioFormatProperty_DecodeFormatIDs, 0, nullptr, size, formatIDs.data()).and_then([&] { return formatIDs; });
-		} catch(const std::exception& e) {
-			return std::unexpected(kAudio_MemFullError);
-		}
-	};
+	UInt32 size;
+	auto result = AudioFormatGetPropertyInfo(kAudioFormatProperty_DecodeFormatIDs, 0, nullptr, &size);
+	if(result != noErr)
+		return std::unexpected(result);
 
-	return GetPropertyInfo(kAudioFormatProperty_DecodeFormatIDs, 0, nullptr).and_then(get_property_encode_format_ids);
+
+	try {
+		const auto count = size / sizeof(AudioFormatID);
+		auto formatIDs = std::vector<AudioFormatID>(count);
+
+		result = AudioFormatGetProperty(kAudioFormatProperty_DecodeFormatIDs, 0, nullptr, &size, formatIDs.data());
+		if(result != noErr)
+			return std::unexpected(result);
+		formatIDs.resize(size / sizeof(AudioFormatID));
+		return formatIDs;
+	} catch(const std::exception& e) {
+		return std::unexpected(kAudio_MemFullError);
+	}
 }
