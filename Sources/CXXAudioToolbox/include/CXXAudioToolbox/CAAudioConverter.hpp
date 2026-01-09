@@ -68,7 +68,7 @@ public:
 
 	/// Returns information about an audio converter property.
 	/// @throw std::system_error.
-	void GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable);
+	UInt32 GetPropertyInfo(AudioConverterPropertyID inPropertyID, Boolean * _Nullable outWritable);
 
 	/// Returns an audio converter property value.
 	/// @throw std::system_error.

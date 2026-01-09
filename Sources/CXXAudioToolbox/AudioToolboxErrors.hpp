@@ -20,7 +20,7 @@
 namespace CXXAudioToolbox {
 namespace detail {
 
-/// A std::error_category for return values from the AudioCodec API.
+/// A @c std::error_category for return values from the AudioCodec API.
 class AudioCodecErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "AudioCodec"; }
@@ -53,7 +53,7 @@ public:
 /// Global instance of AudioCodec error category.
 const AudioCodecErrorCategory audioCodecErrorCategory_;
 
-/// A std::error_category for return values from the AudioConverter API.
+/// A @c std::error_category for return values from the AudioConverter API.
 class AudioConverterErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "AudioConverter"; }
@@ -92,7 +92,7 @@ public:
 /// Global instance of AudioConverter error category.
 const AudioConverterErrorCategory audioConverterErrorCategory_;
 
-/// A std::error_category for return values from the AudioFile API.
+/// A @c std::error_category for return values from the AudioFile API.
 class AudioFileErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "AudioFile"; }
@@ -134,7 +134,7 @@ public:
 /// Global instance of AudioFile error category.
 const AudioFileErrorCategory audioFileErrorCategory_;
 
-/// A std::error_category for return values from the AudioFormat API.
+/// A @c std::error_category for return values from the AudioFormat API.
 class AudioFormatErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "AudioFormat"; }
@@ -165,7 +165,7 @@ public:
 /// Global instance of AudioFormat error category.
 const AudioFormatErrorCategory audioFormatErrorCategory_;
 
-/// A std::error_category for return values from the AudioUnit API.
+/// A @c std::error_category for return values from the AudioUnit API.
 class AudioUnitErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "AudioUnit"; }
@@ -223,7 +223,7 @@ public:
 /// Global instance of AudioUnit error category.
 const AudioUnitErrorCategory audioUnitErrorCategory_;
 
-/// A std::error_category for return values from the AUGraph API.
+/// A @c std::error_category for return values from the AUGraph API.
 class AUGraphErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "AUGraph"; }
@@ -253,7 +253,7 @@ public:
 /// Global instance of AUGraph error category.
 const AUGraphErrorCategory auGraphErrorCategory_;
 
-/// A std::error_category for return values from the ExtAudioFile API.
+/// A @c std::error_category for return values from the ExtAudioFile API.
 class ExtAudioFileErrorCategory : public std::error_category {
 public:
 	virtual const char * name() const noexcept override final { return "ExtAudioFile"; }
@@ -296,74 +296,172 @@ const ExtAudioFileErrorCategory extAudioFileErrorCategory_;
 
 // MARK: -
 
-/// Throws a std::system_error in the AudioCodecErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioCodecErrorCategory.
+#define CXXAudioToolbox_ThrowIfCAError(result, ecat, what) \
+{ \
+	if(__builtin_expect(result != kAudio_NoError, false)) \
+		throw std::system_error(result, ecat, what); \
+}
+
+#define CXXAudioToolbox_ThrowIfAudioCodecError(result, what) 		CXXAudioToolbox_ThrowIfCAError(result, detail::audioCodecErrorCategory_, what)
+#define CXXAudioToolbox_ThrowIfAudioConverterError(result, what) 	CXXAudioToolbox_ThrowIfCAError(result, detail::audioConverterErrorCategory_, what)
+#define CXXAudioToolbox_ThrowIfAudioFileError(result, what) 		CXXAudioToolbox_ThrowIfCAError(result, detail::audioFileErrorCategory_, what)
+#define CXXAudioToolbox_ThrowIfAudioFormatError(result, what) 		CXXAudioToolbox_ThrowIfCAError(result, detail::audioFormatErrorCategory_, what)
+#define CXXAudioToolbox_ThrowIfAudioUnitError(result, what) 		CXXAudioToolbox_ThrowIfCAError(result, detail::audioUnitErrorCategory_, what)
+#define CXXAudioToolbox_ThrowIfAUGraphError(result, what) 			CXXAudioToolbox_ThrowIfCAError(result, detail::auGraphErrorCategory_, what)
+#define CXXAudioToolbox_ThrowIfExtAudioFileError(result, what) 		CXXAudioToolbox_ThrowIfCAError(result, detail::extAudioFileErrorCategory_, what)
+
+/// Throws a @c std::system_error in the @c AudioCodecErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioCodec API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c AudioCodecErrorCategory.
 inline void ThrowIfAudioCodecError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::audioCodecErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfAudioCodecError(result, operation);
 }
 
-/// Throws a std::system_error in the AudioConverterErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioConverterErrorCategory.
+/// Throws a @c std::system_error in the @c AudioCodecErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioCodec API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result.
+/// @throw @c std::system_error in the @c AudioCodecErrorCategory
+template <typename F>
+inline void ThrowIfAudioCodecError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfAudioCodecError(result, lambda());
+}
+
+/// Throws a @c std::system_error in the @c AudioConverterErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioConverter API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c AudioConverterErrorCategory.
 inline void ThrowIfAudioConverterError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::audioConverterErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfAudioConverterError(result, operation);
 }
 
-/// Throws a std::system_error in the AudioFileErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioFileErrorCategory.
+/// Throws a @c std::system_error in the @c AudioConverterErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioConverter API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result.
+/// @throw @c std::system_error in the @c AudioConverterErrorCategory
+template <typename F>
+inline void ThrowIfAudioConverterError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfAudioConverterError(result, lambda());
+}
+
+/// Throws a @c std::system_error in the @c AudioFileErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioFile API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c AudioFileErrorCategory.
 inline void ThrowIfAudioFileError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::audioFileErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfAudioFileError(result, operation);
 }
 
-/// Throws a std::system_error in the AudioFormatErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioFormatErrorCategory.
+/// Throws a @c std::system_error in the @c AudioFileErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioFile API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result.
+/// @throw @c std::system_error in the @c AudioFileErrorCategory
+template <typename F>
+inline void ThrowIfAudioFileError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfAudioFileError(result, lambda());
+}
+
+/// Throws a @c std::system_error in the @c AudioFormatErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioFormat API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c AudioFormatErrorCategory.
 inline void ThrowIfAudioFormatError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::audioFormatErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfAudioFormatError(result, operation);
 }
 
-/// Throws a std::system_error in the AudioUnitErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AudioUnitErrorCategory.
+/// Throws a @c std::system_error in the @c AudioFormatErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioFormat API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result.
+/// @throw @c std::system_error in the @c AudioFormatErrorCategory
+template <typename F>
+inline void ThrowIfAudioFormatError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfAudioFormatError(result, lambda());
+}
+
+/// Throws a @c std::system_error in the @c AudioUnitErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioUnit API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c AudioUnitErrorCategory.
 inline void ThrowIfAudioUnitError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::audioUnitErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfAudioUnitError(result, operation);
 }
 
-/// Throws a std::system_error in the AUGraphErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the AUGraphErrorCategory.
+/// Throws a @c std::system_error in the @c AudioUnitErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AudioUnit API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result.
+/// @throw @c std::system_error in the @c AudioUnitErrorCategory
+template <typename F>
+inline void ThrowIfAudioUnitError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfAudioUnitError(result, lambda());
+}
+
+/// Throws a @c std::system_error in the @c AUGraphErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AUGraph API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c AUGraphErrorCategory.
 inline void ThrowIfAUGraphError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::auGraphErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfAUGraphError(result, operation);
 }
 
-/// Throws a std::system_error in the ExtAudioFileErrorCategory if result != kAudio_NoError.
-/// @param result An OSStatus result code.
-/// @param operation An optional string describing the operation that produced result.
-/// @throw std::system_error in the ExtAudioFileErrorCategory.
+/// Throws a @c std::system_error in the @c AUGraphErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c AUGraph API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result
+/// @throw @c std::system_error in the @c AUGraphErrorCategory
+template <typename F>
+inline void ThrowIfAUGraphError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfAUGraphError(result, lambda());
+}
+
+/// Throws a @c std::system_error in the @c ExtAudioFileErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c ExtAudioFile API.
+/// @param result An @c OSStatus result code.
+/// @param operation An optional string describing the operation producing result.
+/// @throw @c std::system_error in the @c ExtAudioFileErrorCategory.
 inline void ThrowIfExtAudioFileError(OSStatus result, const char * const operation = nullptr)
 {
-	if(__builtin_expect(result != kAudio_NoError, false))
-		throw std::system_error(result, detail::extAudioFileErrorCategory_, operation);
+	CXXAudioToolbox_ThrowIfExtAudioFileError(result, operation);
+}
+
+/// Throws a @c std::system_error in the @c ExtAudioFileErrorCategory if @c result!=kAudio_NoError.
+/// @note This is intended for results from the @c ExtAudioFile API.
+/// @note The lambda is only called if @c result!=kAudio_NoError.
+/// @param result An @c OSStatus result code.
+/// @param lambda A lambda returning a string describing the operation producing @c result.
+/// @throw @c std::system_error in the @c ExtAudioFileErrorCategory
+template <typename F>
+inline void ThrowIfExtAudioFileError(OSStatus result, const F&& lambda)
+{
+	CXXAudioToolbox_ThrowIfExtAudioFileError(result, lambda());
 }
 
 } /* namespace CXXAudioToolbox */
