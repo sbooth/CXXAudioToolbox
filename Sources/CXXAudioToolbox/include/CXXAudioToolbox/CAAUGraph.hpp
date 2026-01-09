@@ -7,6 +7,7 @@
 
 #pragma once
 
+#import <expected>
 #import <map>
 #import <utility>
 #import <vector>
@@ -57,168 +58,131 @@ public:
 
 
 	/// Creates a new Audio Unit graph.
-	/// @throw std::system_error.
-	void New();
+	std::expected<void, OSStatus> New() noexcept;
 
 	/// Disposes the Audio Unit graph.
-	/// @throw std::system_error.
-	void Dispose();
+	std::expected<void, OSStatus> Dispose() noexcept;
 
 	// MARK: - Node State
 
 	/// Adds a node to the Audio Unit graph.
-	/// @throw std::system_error.
-	AUNode AddNode(const AudioComponentDescription *inDescription);
+	std::expected<AUNode, OSStatus> AddNode(const AudioComponentDescription *inDescription) noexcept;
 
 	/// Removes a node from the Audio Unit graph.
-	/// @throw std::system_error.
-	void RemoveNode(AUNode inNode);
+	std::expected<void, OSStatus> RemoveNode(AUNode inNode) noexcept;
 
 	/// Returns the number of nodes in the Audio Unit graph.
-	/// @throw std::system_error.
-	UInt32 GetNodeCount() const;
+	std::expected<UInt32, OSStatus> GetNodeCount() const noexcept;
 
 	/// Returns the node at a given index
-	/// @throw std::system_error.
-	AUNode GetIndNode(UInt32 inIndex) const;
+	std::expected<AUNode, OSStatus> GetIndNode(UInt32 inIndex) const noexcept;
 
 	/// Returns information about a particular AUNode.
-	/// @throw std::system_error.
-	void NodeInfo(AUNode inNode, AudioComponentDescription * _Nullable outDescription, AudioUnit _Nullable * _Nullable outAudioUnit) const;
+	std::expected<void, OSStatus> NodeInfo(AUNode inNode, AudioComponentDescription * _Nullable outDescription, AudioUnit _Nullable * _Nullable outAudioUnit) const noexcept;
 
 #if !TARGET_OS_IPHONE
 	// MARK: - Sub Graphs
 
 	/// Creates a node that will represent a sub graph.
-	/// @throw std::system_error.
-	AUNode NewNodeSubGraph();
+	std::expected<AUNode, OSStatus> NewNodeSubGraph() noexcept;
 
 	/// Returns the sub graph represented by a particular AUNode.
-	/// @throw std::system_error.
-	AUGraph GetNodeInfoSubGraph(AUNode inNode) const;
+	std::expected<AUGraph, OSStatus> GetNodeInfoSubGraph(AUNode inNode) const noexcept;
 
 	/// Returns true if the node represents a sub graph.
-	/// @throw std::system_error.
-	bool IsNodeSubGraph(AUNode inNode) const;
+	std::expected<bool, OSStatus> IsNodeSubGraph(AUNode inNode) const noexcept;
 #endif /* !TARGET_OS_IPHONE */
 
 	// MARK: - Node Interactions
 
 	/// Connects a node's output to a node's input.
-	/// @throw std::system_error.
-	void ConnectNodeInput(AUNode inSourceNode, UInt32 inSourceOutputNumber, AUNode inDestNode, UInt32 inDestInputNumber);
+	std::expected<void, OSStatus> ConnectNodeInput(AUNode inSourceNode, UInt32 inSourceOutputNumber, AUNode inDestNode, UInt32 inDestInputNumber) noexcept;
 
 	/// Sets a callback for the specified node's specified input.
-	/// @throw std::system_error.
-	void SetNodeInputCallback(AUNode inDestNode, UInt32 inDestInputNumber, const AURenderCallbackStruct *inInputCallback);
+	std::expected<void, OSStatus> SetNodeInputCallback(AUNode inDestNode, UInt32 inDestInputNumber, const AURenderCallbackStruct *inInputCallback) noexcept;
 
 	/// Disconnects a node's input.
-	/// @throw std::system_error.
-	void DisconnectNodeInput(AUNode inDestNode, UInt32 inDestInputNumber);
+	std::expected<void, OSStatus> DisconnectNodeInput(AUNode inDestNode, UInt32 inDestInputNumber) noexcept;
 
 	/// Clears all of the interactions in a graph.
-	/// @throw std::system_error.
-	void ClearConnections();
+	std::expected<void, OSStatus> ClearConnections() noexcept;
 
 	/// Returns the number of interactions in the Audio Unit graph.
-	/// @throw std::system_error.
-	UInt32 GetNumberOfInteractions() const;
+	std::expected<UInt32, OSStatus> GetNumberOfInteractions() const noexcept;
 
 	/// Returns information about a particular interaction in a graph.
-	/// @throw std::system_error.
-	AUNodeInteraction GetInteractionInfo(UInt32 inInteractionIndex) const;
+	std::expected<AUNodeInteraction, OSStatus> GetInteractionInfo(UInt32 inInteractionIndex) const noexcept;
 
 	/// Returns the number of interactions of a graph's node.
-	/// @throw std::system_error.
-	UInt32 CountNodeInteractions(AUNode inNode) const;
+	std::expected<UInt32, OSStatus> CountNodeInteractions(AUNode inNode) const noexcept;
 
 	/// Retrieves information about the interactions in a graph for a given node.
-	/// @throw std::system_error.
-	void GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions) const;
+	std::expected<void, OSStatus> GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions) const noexcept;
 
 	// MARK: -
 
 	/// Updates the state of a running AUGraph.
-	/// @throw std::system_error.
-	bool Update();
+	std::expected<bool, OSStatus> Update() noexcept;
 
 	// MARK: - State Management
 
 	/// Opens a graph.
-	/// @throw std::system_error.
-	void Open();
+	std::expected<void, OSStatus> Open() noexcept;
 
 	/// Closes a graph.
-	/// @throw std::system_error.
-	void Close();
+	std::expected<void, OSStatus> Close() noexcept;
 
 	/// Initializes a graph.
-	/// @throw std::system_error.
-	void Initialize();
+	std::expected<void, OSStatus> Initialize() noexcept;
 
 	/// Uninitialize a graph.
-	/// @throw std::system_error.
-	void Uninitialize();
+	std::expected<void, OSStatus> Uninitialize() noexcept;
 
 	/// Starts a graph.
-	/// @throw std::system_error.
-	void Start();
+	std::expected<void, OSStatus> Start() noexcept;
 
 	/// Stops a graph.
-	/// @throw std::system_error.
-	void Stop();
+	std::expected<void, OSStatus> Stop() noexcept;
 
 	/// Returns true if the Audio Unit graph is open.
-	/// @throw std::system_error.
-	bool IsOpen() const;
+	std::expected<bool, OSStatus> IsOpen() const noexcept;
 
 	/// Returns true if the Audio Unit graph is initialized.
-	/// @throw std::system_error.
-	bool IsInitialized() const;
+	std::expected<bool, OSStatus> IsInitialized() const noexcept;
 
 	/// Returns true if the Audio Unit graph is running.
-	/// @throw std::system_error.
-	bool IsRunning() const;
+	std::expected<bool, OSStatus> IsRunning() const noexcept;
 
 	// MARK: - Utilities
 
 	/// Returns a short-term running average of the current CPU load of the graph.
-	/// @throw std::system_error.
-	Float32 GetCPULoad() const;
+	std::expected<Float32, OSStatus> GetCPULoad() const noexcept;
 
 	/// Returns the max CPU load of the graph since this call was last made or the graph was last started.
-	/// @throw std::system_error.
-	Float32 GetMaxCPULoad() const;
+	std::expected<Float32, OSStatus> GetMaxCPULoad() const noexcept;
 
 	/// Adds a notification callback.
-	/// @throw std::system_error.
-	void AddRenderNotify(AURenderCallback inCallback, void * _Nullable inRefCon);
+	std::expected<void, OSStatus> AddRenderNotify(AURenderCallback inCallback, void * _Nullable inRefCon) noexcept;
 
 	/// Removes a notification callback.
-	/// @throw std::system_error.
-	void RemoveRenderNotify(AURenderCallback inCallback, void * _Nullable inRefCon);
+	std::expected<void, OSStatus> RemoveRenderNotify(AURenderCallback inCallback, void * _Nullable inRefCon) noexcept;
 
 	// MARK: - Helpers
 
 	/// Returns the graph's nodes.
-	/// @throw std::system_error.
-	std::vector<AUNode> Nodes() const;
+	std::expected<std::vector<AUNode>, OSStatus> Nodes() const noexcept;
 
 	/// Returns a node's interactions.
-	/// @throw std::system_error.
-	std::vector<AUNodeInteraction> NodeInteractions(AUNode inNode) const;
+	std::expected<std::vector<AUNodeInteraction>, OSStatus> NodeInteractions(AUNode inNode) const noexcept;
 
 	/// Returns the graph's nodes and their interactions.
-	/// @throw std::system_error.
-	std::map<AUNode, std::vector<AUNodeInteraction>> NodesAndInteractions() const;
+	std::expected<std::map<AUNode, std::vector<AUNodeInteraction>>, OSStatus> NodesAndInteractions() const noexcept;
 
 	/// Returns the Audio Unit graph's latency.
-	/// @throw std::system_error..
-	Float64 Latency() const;
+	std::expected<Float64, OSStatus> Latency() const noexcept;
 
 	/// Returns the Audio Unit graph's tail time.
-	/// @throw std::system_error.
-	Float64 TailTime() const;
+	std::expected<Float64, OSStatus> TailTime() const noexcept;
 
 
 	/// Returns the managed AUGraph object.
