@@ -1,40 +1,34 @@
 //
-// Copyright © 2021-2025 Stephen F. Booth
-// Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
+// SPDX-FileCopyrightText: 2021 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
 //
-
-#import <utility>
+// Part of https://github.com/sbooth/CXXAudioToolbox
+//
 
 #import "CAAudioFile.hpp"
 #import "AudioToolboxErrors.hpp"
 #import "StringFormatting.hpp"
 
-CXXAudioToolbox::CAAudioFile::CAAudioFile(CAAudioFile&& rhs) noexcept
-: mAudioFileID{std::exchange(rhs.mAudioFileID, nullptr)}
+CXXAudioToolbox::CAAudioFile::CAAudioFile(CAAudioFile&& other) noexcept
+: audioFile_{other.release()}
 {}
 
-CXXAudioToolbox::CAAudioFile& CXXAudioToolbox::CAAudioFile::operator=(CAAudioFile&& rhs) noexcept
+CXXAudioToolbox::CAAudioFile& CXXAudioToolbox::CAAudioFile::operator=(CAAudioFile&& other) noexcept
 {
-	if(this != &rhs) {
-		if(mAudioFileID)
-			AudioFileClose(mAudioFileID);
-		mAudioFileID = std::exchange(rhs.mAudioFileID, nullptr);
-	}
+	reset(other.release());
 	return *this;
 }
 
 /// Destroys the audio file and releases all associated resources.
 CXXAudioToolbox::CAAudioFile::~CAAudioFile() noexcept
 {
-	if(mAudioFileID)
-		AudioFileClose(mAudioFileID);
+	reset();
 }
 
 void CXXAudioToolbox::CAAudioFile::OpenURL(CFURLRef inURL, AudioFilePermissions inPermissions, AudioFileTypeID inFileTypeHint)
 {
 	Close();
-	const auto result = AudioFileOpenURL(inURL, inPermissions, inFileTypeHint, &mAudioFileID);
+	const auto result = AudioFileOpenURL(inURL, inPermissions, inFileTypeHint, &audioFile_);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileOpenURL(",
 		string_from_cftype(CFURLGetString(inURL)),
@@ -48,7 +42,7 @@ void CXXAudioToolbox::CAAudioFile::OpenURL(CFURLRef inURL, AudioFilePermissions 
 void CXXAudioToolbox::CAAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags)
 {
 	Close();
-	const auto result = AudioFileCreateWithURL(inURL, inFileType, &inFormat, inFlags, &mAudioFileID);
+	const auto result = AudioFileCreateWithURL(inURL, inFileType, &inFormat, inFlags, &audioFile_);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileCreateWithURL(",
 		string_from_cftype(CFURLGetString(inURL)),
@@ -63,7 +57,7 @@ void CXXAudioToolbox::CAAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID
 void CXXAudioToolbox::CAAudioFile::InitializeWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags)
 {
 	Close();
-	const auto result = AudioFileInitializeWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileType, &inFormat, inFlags, &mAudioFileID);
+	const auto result = AudioFileInitializeWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileType, &inFormat, inFlags, &audioFile_);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileInitializeWithCallbacks("
 		"0x", to_hex_string(reinterpret_cast<uintptr_t>(inClientData)),
@@ -79,7 +73,7 @@ void CXXAudioToolbox::CAAudioFile::InitializeWithCallbacks(void *inClientData, A
 void CXXAudioToolbox::CAAudioFile::OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc _Nullable inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc _Nullable inSetSizeFunc, AudioFileTypeID inFileTypeHint)
 {
 	Close();
-	const auto result = AudioFileOpenWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileTypeHint, &mAudioFileID);
+	const auto result = AudioFileOpenWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc, inSetSizeFunc, inFileTypeHint, &audioFile_);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileOpenWithCallbacks("
 		"0x", to_hex_string(reinterpret_cast<uintptr_t>(inClientData)),
@@ -92,9 +86,9 @@ void CXXAudioToolbox::CAAudioFile::OpenWithCallbacks(void *inClientData, AudioFi
 
 void CXXAudioToolbox::CAAudioFile::Close()
 {
-	if(mAudioFileID) {
-		const auto result = AudioFileClose(mAudioFileID);
-		mAudioFileID = nullptr;
+	if(audioFile_) {
+		const auto result = AudioFileClose(audioFile_);
+		audioFile_ = nullptr;
 		CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 			"AudioFileClose"
 			" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
@@ -104,7 +98,7 @@ void CXXAudioToolbox::CAAudioFile::Close()
 
 void CXXAudioToolbox::CAAudioFile::Optimize()
 {
-	const auto result = AudioFileOptimize(mAudioFileID);
+	const auto result = AudioFileOptimize(audioFile_);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileOptimize"
 		" [", __FILE_NAME__, ":", to_string(__LINE__), "]"
@@ -113,7 +107,7 @@ void CXXAudioToolbox::CAAudioFile::Optimize()
 
 OSStatus CXXAudioToolbox::CAAudioFile::ReadBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, void *outBuffer)
 {
-	const auto result = AudioFileReadBytes(mAudioFileID, inUseCache, inStartingByte, &ioNumBytes, outBuffer);
+	const auto result = AudioFileReadBytes(audioFile_, inUseCache, inStartingByte, &ioNumBytes, outBuffer);
 	switch(result) {
 		case noErr:
 		case kAudioFileEndOfFileError:
@@ -135,7 +129,7 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadBytes(bool inUseCache, SInt64 inStart
 
 void CXXAudioToolbox::CAAudioFile::WriteBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, const void *inBuffer)
 {
-	const auto result = AudioFileWriteBytes(mAudioFileID, inUseCache, inStartingByte, &ioNumBytes, inBuffer);
+	const auto result = AudioFileWriteBytes(audioFile_, inUseCache, inStartingByte, &ioNumBytes, inBuffer);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileWriteBytes(",
 		inUseCache ? "true" : "false"
@@ -149,7 +143,7 @@ void CXXAudioToolbox::CAAudioFile::WriteBytes(bool inUseCache, SInt64 inStarting
 
 OSStatus CXXAudioToolbox::CAAudioFile::ReadPacketData(bool inUseCache, UInt32& ioNumBytes, AudioStreamPacketDescription * _Nullable outPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, void * _Nullable outBuffer)
 {
-	const auto result = AudioFileReadPacketData(mAudioFileID, inUseCache, &ioNumBytes, outPacketDescriptions, inStartingPacket, &ioNumPackets, outBuffer);
+	const auto result = AudioFileReadPacketData(audioFile_, inUseCache, &ioNumBytes, outPacketDescriptions, inStartingPacket, &ioNumPackets, outBuffer);
 	switch(result) {
 		case noErr:
 		case kAudioFileEndOfFileError:
@@ -173,7 +167,7 @@ OSStatus CXXAudioToolbox::CAAudioFile::ReadPacketData(bool inUseCache, UInt32& i
 
 void CXXAudioToolbox::CAAudioFile::WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * _Nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer)
 {
-	const auto result = AudioFileWritePackets(mAudioFileID, inUseCache, inNumBytes, inPacketDescriptions, inStartingPacket, &ioNumPackets, inBuffer);
+	const auto result = AudioFileWritePackets(audioFile_, inUseCache, inNumBytes, inPacketDescriptions, inStartingPacket, &ioNumPackets, inBuffer);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileWritePackets(",
 		inUseCache ? "true" : "false"
@@ -190,7 +184,7 @@ void CXXAudioToolbox::CAAudioFile::WritePackets(bool inUseCache, UInt32 inNumByt
 UInt32 CXXAudioToolbox::CAAudioFile::GetUserDataSize(UInt32 inUserDataID, UInt32 inIndex)
 {
 	UInt32 size;
-	const auto result = AudioFileGetUserDataSize(mAudioFileID, inUserDataID, inIndex, &size);
+	const auto result = AudioFileGetUserDataSize(audioFile_, inUserDataID, inIndex, &size);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileGetUserDataSize(",
 		to_fourcc_string(inUserDataID),
@@ -203,7 +197,7 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetUserDataSize(UInt32 inUserDataID, UInt32
 
 void CXXAudioToolbox::CAAudioFile::GetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32& ioUserDataSize, void *outUserData) const
 {
-	const auto result = AudioFileGetUserData(mAudioFileID, inUserDataID, inIndex, &ioUserDataSize, outUserData);
+	const auto result = AudioFileGetUserData(audioFile_, inUserDataID, inIndex, &ioUserDataSize, outUserData);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileGetUserData(",
 		to_fourcc_string(inUserDataID),
@@ -217,7 +211,7 @@ void CXXAudioToolbox::CAAudioFile::GetUserData(UInt32 inUserDataID, UInt32 inInd
 
 void CXXAudioToolbox::CAAudioFile::SetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32 inUserDataSize, const void *inUserData)
 {
-	const auto result = AudioFileSetUserData(mAudioFileID, inUserDataID, inIndex, inUserDataSize, inUserData);
+	const auto result = AudioFileSetUserData(audioFile_, inUserDataID, inIndex, inUserDataSize, inUserData);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"SetUserData(",
 		to_fourcc_string(inUserDataID),
@@ -231,7 +225,7 @@ void CXXAudioToolbox::CAAudioFile::SetUserData(UInt32 inUserDataID, UInt32 inInd
 
 void CXXAudioToolbox::CAAudioFile::RemoveUserData(UInt32 inUserDataID, UInt32 inIndex)
 {
-	const auto result = AudioFileRemoveUserData(mAudioFileID, inUserDataID, inIndex);
+	const auto result = AudioFileRemoveUserData(audioFile_, inUserDataID, inIndex);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileRemoveUserData(",
 		to_fourcc_string(inUserDataID),
@@ -244,7 +238,7 @@ void CXXAudioToolbox::CAAudioFile::RemoveUserData(UInt32 inUserDataID, UInt32 in
 UInt32 CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable isWritable) const
 {
 	UInt32 size;
-	const auto result = AudioFileGetPropertyInfo(mAudioFileID, inPropertyID, &size, isWritable);
+	const auto result = AudioFileGetPropertyInfo(audioFile_, inPropertyID, &size, isWritable);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileGetPropertyInfo(",
 		to_fourcc_string(inPropertyID),
@@ -256,7 +250,7 @@ UInt32 CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPrope
 
 void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const
 {
-	const auto result = AudioFileGetProperty(mAudioFileID, inPropertyID, &ioDataSize, outPropertyData);
+	const auto result = AudioFileGetProperty(audioFile_, inPropertyID, &ioDataSize, outPropertyData);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileGetProperty(",
 		to_fourcc_string(inPropertyID),
@@ -269,7 +263,7 @@ void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID,
 
 void CXXAudioToolbox::CAAudioFile::SetProperty(AudioFilePropertyID inPropertyID, UInt32 inDataSize, const void *inPropertyData)
 {
-	const auto result = AudioFileSetProperty(mAudioFileID, inPropertyID, inDataSize, inPropertyData);
+	const auto result = AudioFileSetProperty(audioFile_, inPropertyID, inDataSize, inPropertyData);
 	CXXAudioToolbox_ThrowIfAudioFileError(result, concat({
 		"AudioFileSetProperty(",
 		to_fourcc_string(inPropertyID),

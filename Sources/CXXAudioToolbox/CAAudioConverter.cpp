@@ -1,10 +1,9 @@
 //
-// Copyright © 2024-2025 Stephen F. Booth
-// Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
+// SPDX-FileCopyrightText: 2024 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
 //
-
-#import <utility>
+// Part of https://github.com/sbooth/CXXAudioToolbox
+//
 
 #import "CAAudioConverter.hpp"
 #import "AudioToolboxErrors.hpp"
@@ -12,21 +11,16 @@
 
 CXXAudioToolbox::CAAudioConverter::~CAAudioConverter() noexcept
 {
-	if(converter_)
-		AudioConverterDispose(converter_);
+	reset();
 }
 
-CXXAudioToolbox::CAAudioConverter::CAAudioConverter(CAAudioConverter&& rhs) noexcept
-: converter_{std::exchange(rhs.converter_, nullptr)}
+CXXAudioToolbox::CAAudioConverter::CAAudioConverter(CAAudioConverter&& other) noexcept
+: converter_{other.release()}
 {}
 
-CXXAudioToolbox::CAAudioConverter& CXXAudioToolbox::CAAudioConverter::operator=(CAAudioConverter&& rhs) noexcept
+CXXAudioToolbox::CAAudioConverter& CXXAudioToolbox::CAAudioConverter::operator=(CAAudioConverter&& other) noexcept
 {
-	if(this != &rhs) {
-		if(converter_)
-			AudioConverterDispose(converter_);
-		converter_ = std::exchange(rhs.converter_, nullptr);
-	}
+	reset(other.release());
 	return *this;
 }
 

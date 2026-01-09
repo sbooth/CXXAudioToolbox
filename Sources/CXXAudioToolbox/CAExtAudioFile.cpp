@@ -1,10 +1,9 @@
 //
-// Copyright © 2021-2025 Stephen F. Booth
-// Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
+// SPDX-FileCopyrightText: 2021 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
 //
-
-#import <utility>
+// Part of https://github.com/sbooth/CXXAudioToolbox
+//
 
 #import "CAExtAudioFile.hpp"
 #import "AudioToolboxErrors.hpp"
@@ -23,27 +22,22 @@ struct free_deleter {
 
 CXXAudioToolbox::CAExtAudioFile::~CAExtAudioFile() noexcept
 {
-	if(extAudioFile_)
-		ExtAudioFileDispose(extAudioFile_);
+	reset();
 }
 
-CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& rhs) noexcept
-: extAudioFile_{std::exchange(rhs.extAudioFile_, nullptr)}
+CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& other) noexcept
+: extAudioFile_{other.release()}
 {}
 
-CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& rhs) noexcept
+CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& other) noexcept
 {
-	if(this != &rhs) {
-		if(extAudioFile_)
-			ExtAudioFileDispose(extAudioFile_);
-		extAudioFile_ = std::exchange(rhs.extAudioFile_, nullptr);
-	}
+	reset(other.release());
 	return *this;
 }
 
 void CXXAudioToolbox::CAExtAudioFile::OpenURL(CFURLRef inURL)
 {
-	Close();
+	Dispose();
 	const auto result = ExtAudioFileOpenURL(inURL, &extAudioFile_);
 	CXXAudioToolbox_ThrowIfExtAudioFileError(result, concat({
 		"ExtAudioFileOpenURL(",
@@ -55,7 +49,7 @@ void CXXAudioToolbox::CAExtAudioFile::OpenURL(CFURLRef inURL)
 
 void CXXAudioToolbox::CAExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool inForWriting)
 {
-	Close();
+	Dispose();
 	const auto result = ExtAudioFileWrapAudioFileID(inFileID, inForWriting, &extAudioFile_);
 	CXXAudioToolbox_ThrowIfExtAudioFileError(result, concat({
 		"ExtAudioFileWrapAudioFileID("
@@ -68,7 +62,7 @@ void CXXAudioToolbox::CAExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool
 
 void CXXAudioToolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags)
 {
-	Close();
+	Dispose();
 	const auto result = ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
 	CXXAudioToolbox_ThrowIfExtAudioFileError(result, concat({
 		"ExtAudioFileCreateWithURL(",
@@ -82,7 +76,7 @@ void CXXAudioToolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTyp
 	}));
 }
 
-void CXXAudioToolbox::CAExtAudioFile::Close()
+void CXXAudioToolbox::CAExtAudioFile::Dispose()
 {
 	if(extAudioFile_) {
 		const auto result = ExtAudioFileDispose(extAudioFile_);
@@ -232,7 +226,7 @@ CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::FileChannelLayout
 		throw std::bad_alloc();
 	GetProperty(kExtAudioFileProperty_FileChannelLayout, size, layout.get());
 	CXXCoreAudio::CAChannelLayout channelLayout{};
-	channelLayout.Reset(layout.release());
+	channelLayout.reset(layout.release());
 	return channelLayout;
 }
 

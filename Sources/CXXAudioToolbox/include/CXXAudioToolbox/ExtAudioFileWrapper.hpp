@@ -1,7 +1,8 @@
 //
-// Copyright © 2021-2025 Stephen F. Booth
+// SPDX-FileCopyrightText: 2021 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
+//
 // Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
 //
 
 #pragma once
@@ -25,15 +26,14 @@ public:
 	ExtAudioFileWrapper& operator=(const ExtAudioFileWrapper&) = delete;
 
 	/// Move constructor.
-	ExtAudioFileWrapper(ExtAudioFileWrapper&& rhs) noexcept
-	: extAudioFile_{rhs.release()}
+	ExtAudioFileWrapper(ExtAudioFileWrapper&& other) noexcept
+	: extAudioFile_{other.release()}
 	{}
 
 	/// Move assignment operator.
-	ExtAudioFileWrapper& operator=(ExtAudioFileWrapper&& rhs) noexcept
+	ExtAudioFileWrapper& operator=(ExtAudioFileWrapper&& other) noexcept
 	{
-		if(this != &rhs)
-			reset(rhs.release());
+		reset(other.release());
 		return *this;
 	}
 
@@ -66,7 +66,8 @@ public:
 		return extAudioFile_;
 	}
 
-	/// Disposes of the managed ExtAudioFile object and replaces it with extAudioFile.
+	/// Replaces the managed ExtAudioFile object with another ExtAudioFile object.
+	/// @note The object assumes responsibility for disposing of the passed ExtAudioFile object using ExtAudioFileDispose.
 	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept
 	{
 		if(auto oldExtAudioFile = std::exchange(extAudioFile_, extAudioFile); oldExtAudioFile)
@@ -80,6 +81,7 @@ public:
 	}
 
 	/// Releases ownership of the managed ExtAudioFile object and returns it.
+	/// @note The caller assumes responsibility for disposing of the returned ExtAudioFile object using ExtAudioFileDispose.
 	ExtAudioFileRef _Nullable release() noexcept
 	{
 		return std::exchange(extAudioFile_, nullptr);

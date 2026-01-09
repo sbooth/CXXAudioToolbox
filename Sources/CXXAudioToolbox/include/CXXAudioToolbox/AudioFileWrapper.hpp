@@ -1,7 +1,8 @@
 //
-// Copyright © 2021-2025 Stephen F. Booth
+// SPDX-FileCopyrightText: 2021 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
+//
 // Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
 //
 
 #pragma once
@@ -25,15 +26,14 @@ public:
 	AudioFileWrapper& operator=(const AudioFileWrapper&) = delete;
 
 	/// Move constructor.
-	AudioFileWrapper(AudioFileWrapper&& rhs) noexcept
-	: audioFile_{rhs.release()}
+	AudioFileWrapper(AudioFileWrapper&& other) noexcept
+	: audioFile_{other.release()}
 	{}
 
 	/// Move assignment operator.
-	AudioFileWrapper& operator=(AudioFileWrapper&& rhs) noexcept
+	AudioFileWrapper& operator=(AudioFileWrapper&& other) noexcept
 	{
-		if(this != &rhs)
-			reset(rhs.release());
+		reset(other.release());
 		return *this;
 	}
 
@@ -66,7 +66,8 @@ public:
 		return audioFile_;
 	}
 
-	/// Closes the managed AudioFile object and replaces it with another.
+	/// Replaces the managed AudioFile object with another AudioFile object.
+	/// @note The object assumes responsibility for closing the passed AudioFile object using AudioFileClose.
 	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept
 	{
 		if(auto old = std::exchange(audioFile_, audioFile); old)
@@ -80,6 +81,7 @@ public:
 	}
 
 	/// Releases ownership of the managed AudioFile object and returns it.
+	/// @note The caller assumes responsibility for closing the returned AudioFile object using AudioFileClose.
 	AudioFileID _Nullable release() noexcept
 	{
 		return std::exchange(audioFile_, nullptr);

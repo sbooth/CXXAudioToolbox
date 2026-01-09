@@ -1,12 +1,14 @@
 //
-// Copyright © 2021-2025 Stephen F. Booth
+// SPDX-FileCopyrightText: 2021 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
+//
 // Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
 //
 
 #pragma once
 
 #import <map>
+#import <utility>
 #import <vector>
 
 #import <AudioToolbox/AUGraph.h>
@@ -32,25 +34,27 @@ public:
 	CAAUGraph& operator=(const CAAUGraph&) = delete;
 
 	/// Move constructor
-	CAAUGraph(CAAUGraph&& rhs) noexcept;
+	CAAUGraph(CAAUGraph&& other) noexcept;
 
 	/// Move assignment operator.
-	CAAUGraph& operator=(CAAUGraph&& rhs) noexcept;
+	CAAUGraph& operator=(CAAUGraph&& other) noexcept;
 
 	/// Destroys the Audio Unit graph and releases all associated resources.
 	~CAAUGraph() noexcept;
 
-	/// Returns true if this object's internal AUGraph object is not null.
+
+	/// Returns true if the managed AUGraph object is not null.
 	explicit operator bool() const noexcept
 	{
-		return auGraph_ != nullptr;
+		return graph_ != nullptr;
 	}
 
-	/// Returns the object's internal AUGraph object.
+	/// Returns the managed AUGraph object.
 	operator AUGraph const _Nullable () const noexcept
 	{
-		return auGraph_;
+		return graph_;
 	}
+
 
 	/// Creates a new Audio Unit graph.
 	/// @throw std::system_error.
@@ -216,9 +220,37 @@ public:
 	/// @throw std::system_error.
 	Float64 TailTime() const;
 
+
+	/// Returns the managed AUGraph object.
+	AUGraph _Nullable get() const noexcept
+	{
+		return graph_;
+	}
+
+	/// Replaces the managed AUGraph object with another AUGraph object.
+	/// @note The object assumes responsibility for disposing of the passed AUGraph object using DisposeAUGraph.
+	void reset(AUGraph _Nullable graph = nullptr) noexcept
+	{
+		if(auto old = std::exchange(graph_, graph); old)
+			DisposeAUGraph(old);
+	}
+
+	/// Swaps the managed AUGraph object with the managed AUGraph object from another Audio Unit graph.
+	void swap(CAAUGraph& other) noexcept
+	{
+		std::swap(graph_, other.graph_);
+	}
+
+	/// Releases ownership of the managed AUGraph object and returns it.
+	/// @note The caller assumes responsibility for disposing of the returned AUGraph object using DisposeAUGraph.
+	AUGraph _Nullable release() noexcept
+	{
+		return std::exchange(graph_, nullptr);
+	}
+
 private:
-	/// The underlying AUGraph object.
-	AUGraph _Nullable auGraph_{nullptr};
+	/// The managed AUGraph object.
+	AUGraph _Nullable graph_{nullptr};
 };
 
 } /* namespace CXXAudioToolbox */

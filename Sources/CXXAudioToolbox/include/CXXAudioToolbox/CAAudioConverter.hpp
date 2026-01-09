@@ -1,10 +1,13 @@
 //
-// Copyright © 2024-2025 Stephen F. Booth
+// SPDX-FileCopyrightText: 2024 Stephen F. Booth <contact@sbooth.dev>
+// SPDX-License-Identifier: MIT
+//
 // Part of https://github.com/sbooth/CXXAudioToolbox
-// MIT license
 //
 
 #pragma once
+
+#import <utility>
 
 #import <AudioToolbox/AudioConverter.h>
 
@@ -25,32 +28,28 @@ public:
 	CAAudioConverter& operator=(const CAAudioConverter&) = delete;
 
 	/// Move constructor.
-	CAAudioConverter(CAAudioConverter&& rhs) noexcept;
+	CAAudioConverter(CAAudioConverter&& other) noexcept;
 
 	/// Move assignment operator.
-	CAAudioConverter& operator=(CAAudioConverter&& rhs) noexcept;
+	CAAudioConverter& operator=(CAAudioConverter&& other) noexcept;
 
 	/// Destroys the audio converter and releases all associated resources.
 	~CAAudioConverter() noexcept;
 
-	/// Returns the object's internal AudioConverter object.
-	AudioConverterRef const _Nullable GetAudioConverter() const noexcept
-	{
-		return converter_;
-	}
 
-	/// Returns true if this object's internal AudioConverter object is not null.
+	/// Returns true if the managed AudioConverter object is not null.
 	explicit operator bool() const noexcept
 	{
 		return converter_ != nullptr;
 	}
 
-	/// Returns the object's internal AudioConverter object.
+	/// Returns the managed AudioConverter object.
 	operator AudioConverterRef const _Nullable () const noexcept
 	{
 		return converter_;
 	}
 
+	
 	/// Creates a new audio converter.
 	/// @throw std::system_error.
 	void New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat);
@@ -91,8 +90,36 @@ public:
 	/// @throw std::system_error.
 	void ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData);
 
+
+	/// Returns the managed AudioConverter object.
+	AudioConverterRef _Nullable get() const noexcept
+	{
+		return converter_;
+	}
+
+	/// Replaces the managed AudioConverter object with another AudioConverter object.
+	/// @note The object assumes responsibility for disposing of the passed AudioConverter object using AudioConverterDispose.
+	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept
+	{
+		if(auto old = std::exchange(converter_, converter); old)
+			AudioConverterDispose(old);
+	}
+
+	/// Swaps the managed AudioConverter object with the managed AudioConverter object from another audio converter.
+	void swap(CAAudioConverter& other) noexcept
+	{
+		std::swap(converter_, other.converter_);
+	}
+
+	/// Releases ownership of the managed AudioConverter object and returns it.
+	/// @note The caller assumes responsibility for disposing of the returned AudioConverter object using AudioConverterDispose.
+	AudioConverterRef _Nullable release() noexcept
+	{
+		return std::exchange(converter_, nullptr);
+	}
+
 private:
-	/// The underlying AudioConverter object.
+	/// The managed AudioConverter object.
 	AudioConverterRef _Nullable converter_{nullptr};
 };
 
