@@ -48,16 +48,10 @@ public:
 
 
 	/// Returns true if the managed ExtAudioFile object is not null.
-	explicit operator bool() const noexcept
-	{
-		return extAudioFile_ != nullptr;
-	}
+	explicit operator bool() const noexcept;
 
 	/// Returns the managed ExtAudioFile object.
-	operator ExtAudioFileRef const _Nullable () const noexcept
-	{
-		return extAudioFile_;
-	}
+	operator ExtAudioFileRef const _Nullable () const noexcept;
 
 
 	/// Opens an audio file specified by a CFURLRef.
@@ -257,72 +251,99 @@ public:
 	/// @throw std::system_error.
 	/// @throw std::runtime_error.
 	/// @throw std::bad_alloc
-	AVAudioFormat * FileFormat() const
-	{
-		const auto dataFormat = FileDataFormat();
-		const auto channelLayout = FileChannelLayout();
-		if(dataFormat.ChannelCount() > 2 && !channelLayout)
-			throw std::runtime_error("File data format > 2 channels with no file channel layout");
-		return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
-	}
+	AVAudioFormat * FileFormat() const;
 
 	/// Returns the client data format (kExtAudioFileProperty_ClientDataFormat) and channel layout (kExtAudioFileProperty_ClientChannelLayout).
 	/// @throw std::system_error.
 	/// @throw std::runtime_error.
 	/// @throw std::bad_alloc
-	AVAudioFormat * ClientFormat() const
-	{
-		const auto dataFormat = ClientDataFormat();
-		const auto channelLayout = ClientChannelLayout();
-		if(dataFormat.ChannelCount() > 2 && !channelLayout)
-			throw std::runtime_error("Client data format > 2 channels with no client channel layout");
-		return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
-	}
+	AVAudioFormat * ClientFormat() const;
 
 	/// Sets the client data format (kExtAudioFileProperty_ClientDataFormat) and channel layout (kExtAudioFileProperty_ClientChannelLayout).
 	/// @throw std::system_error.
 	/// @throw std::bad_alloc
-	void SetClientFormat(AVAudioFormat *format)
-	{
-		NSCParameterAssert(format != nil);
-		SetClientDataFormat(*format.streamDescription);
-		SetClientChannelLayout(*format.channelLayout.layout);
-	}
+	void SetClientFormat(AVAudioFormat *format);
 #endif /* __OBJC__ */
 
 
 	/// Returns the managed ExtAudioFile object.
-	ExtAudioFileRef _Nullable get() const noexcept
-	{
-		return extAudioFile_;
-	}
+	ExtAudioFileRef _Nullable get() const noexcept;
 
 	/// Replaces the managed ExtAudioFile object with another ExtAudioFile object.
 	/// @note The object assumes responsibility for disposing of the passed ExtAudioFile object using ExtAudioFileDispose.
-	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept
-	{
-		if(auto old = std::exchange(extAudioFile_, extAudioFile); old)
-			ExtAudioFileDispose(old);
-	}
+	void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept;
 
 	/// Swaps the managed ExtAudioFile object with the managed ExtAudioFile object from another audio converter.
-	void swap(CAExtAudioFile& other) noexcept
-	{
-		std::swap(extAudioFile_, other.extAudioFile_);
-	}
+	void swap(CAExtAudioFile& other) noexcept;
 
 	/// Releases ownership of the managed ExtAudioFile object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned ExtAudioFile object using ExtAudioFileDispose.
-	ExtAudioFileRef _Nullable release() noexcept
-	{
-		return std::exchange(extAudioFile_, nullptr);
-	}
+	ExtAudioFileRef _Nullable release() noexcept;
 
 private:
 	/// The managed ExtAudioFile object.
 	ExtAudioFileRef _Nullable extAudioFile_{nullptr};
 };
 
+// MARK: - Implementation -
+
+inline CAExtAudioFile::operator bool() const noexcept
+{
+	return extAudioFile_ != nullptr;
+}
+
+inline CAExtAudioFile::operator ExtAudioFileRef const _Nullable () const noexcept
+{
+	return extAudioFile_;
+}
+
+#ifdef __OBJC__
+inline AVAudioFormat * CAExtAudioFile::FileFormat() const
+{
+	const auto dataFormat = FileDataFormat();
+	const auto channelLayout = FileChannelLayout();
+	if(dataFormat.ChannelCount() > 2 && !channelLayout)
+		throw std::runtime_error("File data format > 2 channels with no file channel layout");
+	return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
+}
+
+inline AVAudioFormat * CAExtAudioFile::ClientFormat() const
+{
+	const auto dataFormat = ClientDataFormat();
+	const auto channelLayout = ClientChannelLayout();
+	if(dataFormat.ChannelCount() > 2 && !channelLayout)
+		throw std::runtime_error("Client data format > 2 channels with no client channel layout");
+	return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
+}
+
+inline void CAExtAudioFile::SetClientFormat(AVAudioFormat *format)
+{
+	NSCParameterAssert(format != nil);
+	SetClientDataFormat(*format.streamDescription);
+	SetClientChannelLayout(*format.channelLayout.layout);
+}
+#endif /* __OBJC__ */
+
+inline ExtAudioFileRef _Nullable CAExtAudioFile::get() const noexcept
+{
+	return extAudioFile_;
+}
+
+inline void CAExtAudioFile::reset(ExtAudioFileRef _Nullable extAudioFile) noexcept
+{
+	if(auto old = std::exchange(extAudioFile_, extAudioFile); old)
+		ExtAudioFileDispose(old);
+}
+
+inline void CAExtAudioFile::swap(CAExtAudioFile& other) noexcept
+{
+	std::swap(extAudioFile_, other.extAudioFile_);
+}
+
+inline ExtAudioFileRef _Nullable CAExtAudioFile::release() noexcept
+{
+	return std::exchange(extAudioFile_, nullptr);
+}
 } /* namespace CXXAudioToolbox */
 
 CF_ASSUME_NONNULL_END

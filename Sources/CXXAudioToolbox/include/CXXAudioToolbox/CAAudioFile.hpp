@@ -41,16 +41,10 @@ public:
 
 
 	/// Returns true if the managed AudioFile object is not null.
-	explicit operator bool() const noexcept
-	{
-		return audioFile_ != nullptr;
-	}
+	explicit operator bool() const noexcept;
 
 	/// Returns the managed AudioFile object.
-	operator AudioFileID const _Nullable () const noexcept
-	{
-		return audioFile_;
-	}
+	operator AudioFileID const _Nullable () const noexcept;
 
 	
 	/// Opens an existing audio file.
@@ -202,36 +196,56 @@ public:
 
 
 	/// Returns the managed AudioFile object.
-	AudioFileID _Nullable get() const noexcept
-	{
-		return audioFile_;
-	}
+	AudioFileID _Nullable get() const noexcept;
 
 	/// Replaces the managed AudioFile object with another AudioFile object.
 	/// @note The object assumes responsibility for closing the passed AudioFile object using AudioFileClose.
-	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept
-	{
-		if(auto old = std::exchange(audioFile_, audioFile); old)
-			AudioFileClose(old);
-	}
+	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept;
 
 	/// Swaps the managed AudioFile object with the managed AudioFile object from another audio file.
-	void swap(CAAudioFile& other) noexcept
-	{
-		std::swap(audioFile_, other.audioFile_);
-	}
+	void swap(CAAudioFile& other) noexcept;
 
 	/// Releases ownership of the managed AudioFile object and returns it.
 	/// @note The caller assumes responsibility for closing the returned AudioFile object using AudioFileClose.
-	AudioFileID _Nullable release() noexcept
-	{
-		return std::exchange(audioFile_, nullptr);
-	}
+	AudioFileID _Nullable release() noexcept;
 
 private:
 	/// The managed AudioFile object.
 	AudioFileID _Nullable audioFile_{nullptr};
 };
+
+// MARK: - Implementation -
+
+inline CAAudioFile::operator bool() const noexcept
+{
+	return audioFile_ != nullptr;
+}
+
+inline CAAudioFile::operator AudioFileID const _Nullable () const noexcept
+{
+	return audioFile_;
+}
+
+inline AudioFileID _Nullable CAAudioFile::get() const noexcept
+{
+	return audioFile_;
+}
+
+inline void CAAudioFile::reset(AudioFileID _Nullable audioFile) noexcept
+{
+	if(auto old = std::exchange(audioFile_, audioFile); old)
+		AudioFileClose(old);
+}
+
+inline void CAAudioFile::swap(CAAudioFile& other) noexcept
+{
+	std::swap(audioFile_, other.audioFile_);
+}
+
+inline AudioFileID _Nullable CAAudioFile::release() noexcept
+{
+	return std::exchange(audioFile_, nullptr);
+}
 
 } /* namespace CXXAudioToolbox */
 

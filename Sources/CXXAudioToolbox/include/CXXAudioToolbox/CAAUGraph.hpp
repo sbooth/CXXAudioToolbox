@@ -44,16 +44,10 @@ public:
 
 
 	/// Returns true if the managed AUGraph object is not null.
-	explicit operator bool() const noexcept
-	{
-		return graph_ != nullptr;
-	}
+	explicit operator bool() const noexcept;
 
 	/// Returns the managed AUGraph object.
-	operator AUGraph const _Nullable () const noexcept
-	{
-		return graph_;
-	}
+	operator AUGraph const _Nullable () const noexcept;
 
 
 	/// Creates a new Audio Unit graph.
@@ -222,36 +216,56 @@ public:
 
 
 	/// Returns the managed AUGraph object.
-	AUGraph _Nullable get() const noexcept
-	{
-		return graph_;
-	}
+	AUGraph _Nullable get() const noexcept;
 
 	/// Replaces the managed AUGraph object with another AUGraph object.
 	/// @note The object assumes responsibility for disposing of the passed AUGraph object using DisposeAUGraph.
-	void reset(AUGraph _Nullable graph = nullptr) noexcept
-	{
-		if(auto old = std::exchange(graph_, graph); old)
-			DisposeAUGraph(old);
-	}
+	void reset(AUGraph _Nullable graph = nullptr) noexcept;
 
 	/// Swaps the managed AUGraph object with the managed AUGraph object from another Audio Unit graph.
-	void swap(CAAUGraph& other) noexcept
-	{
-		std::swap(graph_, other.graph_);
-	}
+	void swap(CAAUGraph& other) noexcept;
 
 	/// Releases ownership of the managed AUGraph object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned AUGraph object using DisposeAUGraph.
-	AUGraph _Nullable release() noexcept
-	{
-		return std::exchange(graph_, nullptr);
-	}
+	AUGraph _Nullable release() noexcept;
 
 private:
 	/// The managed AUGraph object.
 	AUGraph _Nullable graph_{nullptr};
 };
+
+// MARK: - Implementation -
+
+inline CAAUGraph::operator bool() const noexcept
+{
+	return graph_ != nullptr;
+}
+
+inline CAAUGraph::operator AUGraph const _Nullable () const noexcept
+{
+	return graph_;
+}
+
+inline AUGraph _Nullable CAAUGraph::get() const noexcept
+{
+	return graph_;
+}
+
+inline void CAAUGraph::reset(AUGraph _Nullable graph) noexcept
+{
+	if(auto old = std::exchange(graph_, graph); old)
+		DisposeAUGraph(old);
+}
+
+inline void CAAUGraph::swap(CAAUGraph& other) noexcept
+{
+	std::swap(graph_, other.graph_);
+}
+
+inline AUGraph _Nullable CAAUGraph::release() noexcept
+{
+	return std::exchange(graph_, nullptr);
+}
 
 } /* namespace CXXAudioToolbox */
 
