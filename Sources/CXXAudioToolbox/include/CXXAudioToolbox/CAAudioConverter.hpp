@@ -39,16 +39,10 @@ public:
 
 
 	/// Returns true if the managed AudioConverter object is not null.
-	explicit operator bool() const noexcept
-	{
-		return converter_ != nullptr;
-	}
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AudioConverter object.
-	operator AudioConverterRef const _Nullable () const noexcept
-	{
-		return converter_;
-	}
+	[[nodiscard]] operator AudioConverterRef const _Nullable () const noexcept;
 
 	
 	/// Creates a new audio converter.
@@ -83,36 +77,56 @@ public:
 
 
 	/// Returns the managed AudioConverter object.
-	AudioConverterRef _Nullable get() const noexcept
-	{
-		return converter_;
-	}
+	[[nodiscard]] AudioConverterRef _Nullable get() const noexcept;
 
 	/// Replaces the managed AudioConverter object with another AudioConverter object.
 	/// @note The object assumes responsibility for disposing of the passed AudioConverter object using AudioConverterDispose.
-	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept
-	{
-		if(auto old = std::exchange(converter_, converter); old)
-			AudioConverterDispose(old);
-	}
+	void reset(AudioConverterRef _Nullable converter = nullptr) noexcept;
 
 	/// Swaps the managed AudioConverter object with the managed AudioConverter object from another audio converter.
-	void swap(CAAudioConverter& other) noexcept
-	{
-		std::swap(converter_, other.converter_);
-	}
+	void swap(CAAudioConverter& other) noexcept;
 
 	/// Releases ownership of the managed AudioConverter object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned AudioConverter object using AudioConverterDispose.
-	AudioConverterRef _Nullable release() noexcept
-	{
-		return std::exchange(converter_, nullptr);
-	}
+	[[nodiscard]] AudioConverterRef _Nullable release() noexcept;
 
 private:
 	/// The managed AudioConverter object.
 	AudioConverterRef _Nullable converter_{nullptr};
 };
+
+// MARK: - Implementation -
+
+inline CAAudioConverter::operator bool() const noexcept
+{
+	return converter_ != nullptr;
+}
+
+inline CAAudioConverter::operator AudioConverterRef const _Nullable () const noexcept
+{
+	return converter_;
+}
+
+inline AudioConverterRef _Nullable CAAudioConverter::get() const noexcept
+{
+	return converter_;
+}
+
+inline void CAAudioConverter::reset(AudioConverterRef _Nullable converter) noexcept
+{
+	if(auto old = std::exchange(converter_, converter); old)
+		AudioConverterDispose(old);
+}
+
+inline void CAAudioConverter::swap(CAAudioConverter& other) noexcept
+{
+	std::swap(converter_, other.converter_);
+}
+
+inline AudioConverterRef _Nullable CAAudioConverter::release() noexcept
+{
+	return std::exchange(converter_, nullptr);
+}
 
 } /* namespace CXXAudioToolbox */
 

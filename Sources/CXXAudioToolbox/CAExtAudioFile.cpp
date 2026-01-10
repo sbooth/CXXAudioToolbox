@@ -122,12 +122,10 @@ SInt64 CXXAudioToolbox::CAExtAudioFile::Tell() const
 	return pos;
 }
 
-UInt32 CXXAudioToolbox::CAExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean * _Nullable outWritable) const
+void CXXAudioToolbox::CAExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) const
 {
-	UInt32 size;
-	const auto result = ExtAudioFileGetPropertyInfo(extAudioFile_, inPropertyID, &size, outWritable);
+	const auto result = ExtAudioFileGetPropertyInfo(extAudioFile_, inPropertyID, outSize, outWritable);
 	ThrowIfExtAudioFileError(result, "ExtAudioFileGetPropertyInfo");
-	return size;
 }
 
 void CXXAudioToolbox::CAExtAudioFile::GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const
@@ -144,7 +142,8 @@ void CXXAudioToolbox::CAExtAudioFile::SetProperty(ExtAudioFilePropertyID inPrope
 
 CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::FileChannelLayout() const
 {
-	auto size = GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, nullptr);
+	UInt32 size;
+	GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, &size, nullptr);
 	std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
 	if(!layout)
 		throw std::bad_alloc();
@@ -186,7 +185,8 @@ void CXXAudioToolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasic
 
 CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::ClientChannelLayout() const
 {
-	auto size = GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, nullptr);
+	UInt32 size;
+	GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, &size, nullptr);
 	std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
 	if(!layout)
 		throw std::bad_alloc();

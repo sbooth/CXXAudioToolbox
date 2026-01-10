@@ -45,16 +45,10 @@ public:
 
 
 	/// Returns true if the managed AUGraph object is not null.
-	explicit operator bool() const noexcept
-	{
-		return graph_ != nullptr;
-	}
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AUGraph object.
-	operator AUGraph const _Nullable () const noexcept
-	{
-		return graph_;
-	}
+	[[nodiscard]] operator AUGraph const _Nullable () const noexcept;
 
 
 	/// Creates a new Audio Unit graph.
@@ -72,10 +66,10 @@ public:
 	std::expected<void, OSStatus> RemoveNode(AUNode inNode) noexcept;
 
 	/// Returns the number of nodes in the Audio Unit graph.
-	std::expected<UInt32, OSStatus> GetNodeCount() const noexcept;
+	[[nodiscard]] std::expected<UInt32, OSStatus> GetNodeCount() const noexcept;
 
 	/// Returns the node at a given index
-	std::expected<AUNode, OSStatus> GetIndNode(UInt32 inIndex) const noexcept;
+	[[nodiscard]] std::expected<AUNode, OSStatus> GetIndNode(UInt32 inIndex) const noexcept;
 
 	/// Returns information about a particular AUNode.
 	std::expected<void, OSStatus> NodeInfo(AUNode inNode, AudioComponentDescription * _Nullable outDescription, AudioUnit _Nullable * _Nullable outAudioUnit) const noexcept;
@@ -87,10 +81,10 @@ public:
 	std::expected<AUNode, OSStatus> NewNodeSubGraph() noexcept;
 
 	/// Returns the sub graph represented by a particular AUNode.
-	std::expected<AUGraph, OSStatus> GetNodeInfoSubGraph(AUNode inNode) const noexcept;
+	[[nodiscard]] std::expected<AUGraph, OSStatus> GetNodeInfoSubGraph(AUNode inNode) const noexcept;
 
 	/// Returns true if the node represents a sub graph.
-	std::expected<bool, OSStatus> IsNodeSubGraph(AUNode inNode) const noexcept;
+	[[nodiscard]] std::expected<bool, OSStatus> IsNodeSubGraph(AUNode inNode) const noexcept;
 #endif /* !TARGET_OS_IPHONE */
 
 	// MARK: - Node Interactions
@@ -108,13 +102,13 @@ public:
 	std::expected<void, OSStatus> ClearConnections() noexcept;
 
 	/// Returns the number of interactions in the Audio Unit graph.
-	std::expected<UInt32, OSStatus> GetNumberOfInteractions() const noexcept;
+	[[nodiscard]] std::expected<UInt32, OSStatus> GetNumberOfInteractions() const noexcept;
 
 	/// Returns information about a particular interaction in a graph.
-	std::expected<AUNodeInteraction, OSStatus> GetInteractionInfo(UInt32 inInteractionIndex) const noexcept;
+	[[nodiscard]] std::expected<AUNodeInteraction, OSStatus> GetInteractionInfo(UInt32 inInteractionIndex) const noexcept;
 
 	/// Returns the number of interactions of a graph's node.
-	std::expected<UInt32, OSStatus> CountNodeInteractions(AUNode inNode) const noexcept;
+	[[nodiscard]] std::expected<UInt32, OSStatus> CountNodeInteractions(AUNode inNode) const noexcept;
 
 	/// Retrieves information about the interactions in a graph for a given node.
 	std::expected<void, OSStatus> GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions, AUNodeInteraction *outInteractions) const noexcept;
@@ -145,21 +139,21 @@ public:
 	std::expected<void, OSStatus> Stop() noexcept;
 
 	/// Returns true if the Audio Unit graph is open.
-	std::expected<bool, OSStatus> IsOpen() const noexcept;
+	[[nodiscard]] std::expected<bool, OSStatus> IsOpen() const noexcept;
 
 	/// Returns true if the Audio Unit graph is initialized.
-	std::expected<bool, OSStatus> IsInitialized() const noexcept;
+	[[nodiscard]] std::expected<bool, OSStatus> IsInitialized() const noexcept;
 
 	/// Returns true if the Audio Unit graph is running.
-	std::expected<bool, OSStatus> IsRunning() const noexcept;
+	[[nodiscard]] std::expected<bool, OSStatus> IsRunning() const noexcept;
 
 	// MARK: - Utilities
 
 	/// Returns a short-term running average of the current CPU load of the graph.
-	std::expected<Float32, OSStatus> GetCPULoad() const noexcept;
+	[[nodiscard]] std::expected<Float32, OSStatus> GetCPULoad() const noexcept;
 
 	/// Returns the max CPU load of the graph since this call was last made or the graph was last started.
-	std::expected<Float32, OSStatus> GetMaxCPULoad() const noexcept;
+	[[nodiscard]] std::expected<Float32, OSStatus> GetMaxCPULoad() const noexcept;
 
 	/// Adds a notification callback.
 	std::expected<void, OSStatus> AddRenderNotify(AURenderCallback inCallback, void * _Nullable inRefCon) noexcept;
@@ -170,52 +164,72 @@ public:
 	// MARK: - Helpers
 
 	/// Returns the graph's nodes.
-	std::expected<std::vector<AUNode>, OSStatus> Nodes() const noexcept;
+	[[nodiscard]] std::expected<std::vector<AUNode>, OSStatus> Nodes() const noexcept;
 
 	/// Returns a node's interactions.
-	std::expected<std::vector<AUNodeInteraction>, OSStatus> NodeInteractions(AUNode inNode) const noexcept;
+	[[nodiscard]] std::expected<std::vector<AUNodeInteraction>, OSStatus> NodeInteractions(AUNode inNode) const noexcept;
 
 	/// Returns the graph's nodes and their interactions.
-	std::expected<std::map<AUNode, std::vector<AUNodeInteraction>>, OSStatus> NodesAndInteractions() const noexcept;
+	[[nodiscard]] std::expected<std::map<AUNode, std::vector<AUNodeInteraction>>, OSStatus> NodesAndInteractions() const noexcept;
 
 	/// Returns the Audio Unit graph's latency.
-	std::expected<Float64, OSStatus> Latency() const noexcept;
+	[[nodiscard]] std::expected<Float64, OSStatus> Latency() const noexcept;
 
 	/// Returns the Audio Unit graph's tail time.
-	std::expected<Float64, OSStatus> TailTime() const noexcept;
+	[[nodiscard]] std::expected<Float64, OSStatus> TailTime() const noexcept;
 
 
 	/// Returns the managed AUGraph object.
-	AUGraph _Nullable get() const noexcept
-	{
-		return graph_;
-	}
+	[[nodiscard]] AUGraph _Nullable get() const noexcept;
 
 	/// Replaces the managed AUGraph object with another AUGraph object.
 	/// @note The object assumes responsibility for disposing of the passed AUGraph object using DisposeAUGraph.
-	void reset(AUGraph _Nullable graph = nullptr) noexcept
-	{
-		if(auto old = std::exchange(graph_, graph); old)
-			DisposeAUGraph(old);
-	}
+	void reset(AUGraph _Nullable graph = nullptr) noexcept;
 
 	/// Swaps the managed AUGraph object with the managed AUGraph object from another Audio Unit graph.
-	void swap(CAAUGraph& other) noexcept
-	{
-		std::swap(graph_, other.graph_);
-	}
+	void swap(CAAUGraph& other) noexcept;
 
 	/// Releases ownership of the managed AUGraph object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned AUGraph object using DisposeAUGraph.
-	AUGraph _Nullable release() noexcept
-	{
-		return std::exchange(graph_, nullptr);
-	}
+	[[nodiscard]] AUGraph _Nullable release() noexcept;
 
 private:
 	/// The managed AUGraph object.
 	AUGraph _Nullable graph_{nullptr};
 };
+
+// MARK: - Implementation -
+
+inline CAAUGraph::operator bool() const noexcept
+{
+	return graph_ != nullptr;
+}
+
+inline CAAUGraph::operator AUGraph const _Nullable () const noexcept
+{
+	return graph_;
+}
+
+inline AUGraph _Nullable CAAUGraph::get() const noexcept
+{
+	return graph_;
+}
+
+inline void CAAUGraph::reset(AUGraph _Nullable graph) noexcept
+{
+	if(auto old = std::exchange(graph_, graph); old)
+		DisposeAUGraph(old);
+}
+
+inline void CAAUGraph::swap(CAAUGraph& other) noexcept
+{
+	std::swap(graph_, other.graph_);
+}
+
+inline AUGraph _Nullable CAAUGraph::release() noexcept
+{
+	return std::exchange(graph_, nullptr);
+}
 
 } /* namespace CXXAudioToolbox */
 

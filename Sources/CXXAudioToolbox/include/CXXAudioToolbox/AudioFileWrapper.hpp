@@ -26,70 +26,92 @@ public:
 	AudioFileWrapper& operator=(const AudioFileWrapper&) = delete;
 
 	/// Move constructor.
-	AudioFileWrapper(AudioFileWrapper&& other) noexcept
-	: audioFile_{other.release()}
-	{}
+	AudioFileWrapper(AudioFileWrapper&& other) noexcept;
 
 	/// Move assignment operator.
-	AudioFileWrapper& operator=(AudioFileWrapper&& other) noexcept
-	{
-		reset(other.release());
-		return *this;
-	}
+	AudioFileWrapper& operator=(AudioFileWrapper&& other) noexcept;
 
 	/// Calls AudioFileClose on the managed AudioFile object.
-	~AudioFileWrapper() noexcept
-	{
-		reset();
-	}
+	~AudioFileWrapper() noexcept;
 
 	/// Creates an audio file wrapper managing an existing AudioFile object.
-	explicit AudioFileWrapper(AudioFileID _Nullable audioFile) noexcept
-	: audioFile_{audioFile}
-	{}
+	explicit AudioFileWrapper(AudioFileID _Nullable audioFile) noexcept;
 
 	/// Returns true if the managed AudioFile object is not null.
-	explicit operator bool() const noexcept
-	{
-		return audioFile_ != nullptr;
-	}
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AudioFile object.
-	operator AudioFileID _Nullable() const noexcept
-	{
-		return audioFile_;
-	}
+	[[nodiscard]] operator AudioFileID _Nullable() const noexcept;
 
 	/// Returns the managed AudioFile object.
-	AudioFileID _Nullable get() const noexcept
-	{
-		return audioFile_;
-	}
+	[[nodiscard]] AudioFileID _Nullable get() const noexcept;
 
 	/// Replaces the managed AudioFile object with another AudioFile object.
 	/// @note The object assumes responsibility for closing the passed AudioFile object using AudioFileClose.
-	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept
-	{
-		if(auto old = std::exchange(audioFile_, audioFile); old)
-			AudioFileClose(old);
-	}
+	void reset(AudioFileID _Nullable audioFile = nullptr) noexcept;
 
 	/// Swaps the managed AudioFile object with the managed AudioFile object from another audio file wrapper.
-	void swap(AudioFileWrapper& other) noexcept
-	{
-		std::swap(audioFile_, other.audioFile_);
-	}
+	void swap(AudioFileWrapper& other) noexcept;
 
 	/// Releases ownership of the managed AudioFile object and returns it.
 	/// @note The caller assumes responsibility for closing the returned AudioFile object using AudioFileClose.
-	AudioFileID _Nullable release() noexcept
-	{
-		return std::exchange(audioFile_, nullptr);
-	}
+	[[nodiscard]] AudioFileID _Nullable release() noexcept;
 
 private:
 	/// The managed AudioFile object.
 	AudioFileID _Nullable audioFile_{nullptr};
 };
+
+// MARK: - Implementation -
+
+inline AudioFileWrapper::AudioFileWrapper(AudioFileWrapper&& other) noexcept
+: audioFile_{other.release()}
+{}
+
+inline AudioFileWrapper& AudioFileWrapper::operator=(AudioFileWrapper&& other) noexcept
+{
+	reset(other.release());
+	return *this;
+}
+
+inline AudioFileWrapper::~AudioFileWrapper() noexcept
+{
+	reset();
+}
+
+inline AudioFileWrapper::AudioFileWrapper(AudioFileID _Nullable audioFile) noexcept
+: audioFile_{audioFile}
+{}
+
+inline AudioFileWrapper::operator bool() const noexcept
+{
+	return audioFile_ != nullptr;
+}
+
+inline AudioFileWrapper::operator AudioFileID _Nullable() const noexcept
+{
+	return audioFile_;
+}
+
+inline AudioFileID _Nullable AudioFileWrapper::get() const noexcept
+{
+	return audioFile_;
+}
+
+inline void AudioFileWrapper::reset(AudioFileID _Nullable audioFile) noexcept
+{
+	if(auto old = std::exchange(audioFile_, audioFile); old)
+		AudioFileClose(old);
+}
+
+inline void AudioFileWrapper::swap(AudioFileWrapper& other) noexcept
+{
+	std::swap(audioFile_, other.audioFile_);
+}
+
+inline AudioFileID _Nullable AudioFileWrapper::release() noexcept
+{
+	return std::exchange(audioFile_, nullptr);
+}
 
 } /* namespace CXXAudioToolbox */

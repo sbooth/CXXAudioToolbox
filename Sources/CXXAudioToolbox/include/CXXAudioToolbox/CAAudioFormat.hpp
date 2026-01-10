@@ -22,7 +22,7 @@ namespace CAAudioFormat {
 /// @param inSpecifierSize The size of the specifier data.
 /// @param inSpecifier A specifier is a buffer of data used as an input argument to some of the properties.
 /// @return The size in bytes of the current value of the property.
-std::expected<UInt32, OSStatus> GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier) noexcept;
+[[nodiscard]] std::expected<UInt32, OSStatus> GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier) noexcept;
 
 /// Retrieves the indicated property data
 /// @param inPropertyID An AudioFormatPropertyID constant.
@@ -33,10 +33,10 @@ std::expected<UInt32, OSStatus> GetPropertyInfo(AudioFormatPropertyID inProperty
 std::expected<void, OSStatus> GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier, UInt32& ioPropertyDataSize, void * _Nullable outPropertyData) noexcept;
 
 /// Returns an array of format IDs that are valid output formats for a converter.
-std::expected<std::vector<AudioFormatID>, OSStatus> EncodeFormatIDs() noexcept;
+[[nodiscard]] std::expected<std::vector<AudioFormatID>, OSStatus> EncodeFormatIDs() noexcept;
 
 /// Returns an array of format IDs that are valid input formats for a converter.
-std::expected<std::vector<AudioFormatID>, OSStatus> DecodeFormatIDs() noexcept;
+[[nodiscard]] std::expected<std::vector<AudioFormatID>, OSStatus> DecodeFormatIDs() noexcept;
 
 } /* namespace CAAudioFormat */
 } /* namespace CXXAudioToolbox */
