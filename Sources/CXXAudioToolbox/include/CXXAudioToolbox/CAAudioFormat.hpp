@@ -22,7 +22,7 @@ namespace CAAudioFormat {
 /// @param inSpecifier A specifier is a buffer of data used as an input argument to some of the properties.
 /// @return The size in bytes of the current value of the property.
 /// @throw std::system_error.
-UInt32 GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier);
+[[nodiscard]] UInt32 GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier);
 
 /// Retrieves the indicated property data
 /// @param inPropertyID An AudioFormatPropertyID constant.
@@ -35,11 +35,11 @@ void GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, con
 
 /// Returns an array of format IDs that are valid output formats for a converter.
 /// @throw std::system_error.
-std::vector<AudioFormatID> EncodeFormatIDs();
+[[nodiscard]] std::vector<AudioFormatID> EncodeFormatIDs();
 
 /// Returns an array of format IDs that are valid input formats for a converter.
 /// @throw std::system_error.
-std::vector<AudioFormatID> DecodeFormatIDs();
+[[nodiscard]] std::vector<AudioFormatID> DecodeFormatIDs();
 
 } /* namespace CAAudioFormat */
 } /* namespace CXXAudioToolbox */

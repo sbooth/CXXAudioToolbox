@@ -41,10 +41,10 @@ public:
 
 
 	/// Returns true if the managed AudioFile object is not null.
-	explicit operator bool() const noexcept;
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AudioFile object.
-	operator AudioFileID const _Nullable () const noexcept;
+	[[nodiscard]] operator AudioFileID const _Nullable () const noexcept;
 
 	
 	/// Opens an existing audio file.
@@ -117,17 +117,17 @@ public:
 
 	/// Returns the file's format (kAudioFilePropertyFileFormat)
 	/// @throw std::system_error.
-	AudioFileTypeID FileFormat() const;
+	[[nodiscard]] AudioFileTypeID FileFormat() const;
 
 	/// Returns the file's data format (kAudioFilePropertyDataFormat)
 	/// @throw std::system_error.
-	CXXCoreAudio::CAStreamDescription DataFormat() const;
+	[[nodiscard]] CXXCoreAudio::CAStreamDescription DataFormat() const;
 
 	// MARK: Global Properties
 
 	/// Gets the size of a global audio file property.
 	/// @throw std::system_error.
-	static UInt32 GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier);
+	[[nodiscard]] static UInt32 GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier);
 
 	/// Copies the value of a global property into a buffer.
 	/// @throw std::system_error.
@@ -136,67 +136,67 @@ public:
 
 	/// Returns an array of AudioFileTypeID containing the file types (i.e. AIFF, WAVE, etc) that can be opened for reading.
 	/// @throw std::system_error.
-	static std::vector<AudioFileTypeID> ReadableTypes();
+	[[nodiscard]] static std::vector<AudioFileTypeID> ReadableTypes();
 
 	/// Returns an array of AudioFileTypeID containing the file types (i.e. AIFF, WAVE, etc) that can be opened for writing.
 	/// @throw std::system_error.
-	static std::vector<AudioFileTypeID> WritableTypes();
+	[[nodiscard]] static std::vector<AudioFileTypeID> WritableTypes();
 
 	/// Returns the name of type
 	/// @note The caller is responsible for releasing the returned string.
 	/// @throw std::system_error.
-	static CFStringRef CopyFileTypeName(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFStringRef CopyFileTypeName(AudioFileTypeID type) CF_RETURNS_RETAINED;
 
 	/// Returns an array of supported formats for the fileType and formatID combination
 	/// @throw std::system_error.
-	static std::vector<CXXCoreAudio::CAStreamDescription> AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID);
+	[[nodiscard]] static std::vector<CXXCoreAudio::CAStreamDescription> AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID);
 
 	/// Returns an array of format IDs that can be read.
 	/// @throw std::system_error.
-	static std::vector<AudioFormatID> AvailableFormatIDs(AudioFileTypeID type);
+	[[nodiscard]] static std::vector<AudioFormatID> AvailableFormatIDs(AudioFileTypeID type);
 
 
 	/// Returns an array of recognized file extensions
 	/// @throw std::system_error.
-	static CFArrayRef CopyAllExtensions() CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFArrayRef CopyAllExtensions() CF_RETURNS_RETAINED;
 
 	/// Returns an array of recognized UTIs
 	/// @throw std::system_error.
-	static CFArrayRef CopyAllUTIs() CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFArrayRef CopyAllUTIs() CF_RETURNS_RETAINED;
 
 	/// Returns an array of recognized MIME types
 	/// @throw std::system_error.
-	static CFArrayRef CopyAllMIMETypes() CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFArrayRef CopyAllMIMETypes() CF_RETURNS_RETAINED;
 
 
 	/// Returns an array of file extensions for type
 	/// @throw std::system_error.
-	static CFArrayRef CopyExtensionsForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFArrayRef CopyExtensionsForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
 
 	/// Returns an array of UTIs for type
 	/// @throw std::system_error.
-	static CFArrayRef CopyUTIsForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFArrayRef CopyUTIsForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
 
 	/// Returns an array of MIME types for type
 	/// @throw std::system_error.
-	static CFArrayRef CopyMIMETypesForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static CFArrayRef CopyMIMETypesForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
 
 
 	/// Returns an array of AudioFileTypeID that support mimeType
 	/// @throw std::system_error.
-	static std::vector<AudioFileTypeID> TypesForMIMEType(CFStringRef mimeType);
+	[[nodiscard]] static std::vector<AudioFileTypeID> TypesForMIMEType(CFStringRef mimeType);
 
 	/// Returns an array of AudioFileTypeID that support uti
 	/// @throw std::system_error.
-	static std::vector<AudioFileTypeID> TypesForUTI(CFStringRef uti);
+	[[nodiscard]] static std::vector<AudioFileTypeID> TypesForUTI(CFStringRef uti);
 
 	/// Returns an array of AudioFileTypeID that support extension
 	/// @throw std::system_error.
-	static std::vector<AudioFileTypeID> TypesForExtension(CFStringRef extension);
+	[[nodiscard]] static std::vector<AudioFileTypeID> TypesForExtension(CFStringRef extension);
 
 
 	/// Returns the managed AudioFile object.
-	AudioFileID _Nullable get() const noexcept;
+	[[nodiscard]] AudioFileID _Nullable get() const noexcept;
 
 	/// Replaces the managed AudioFile object with another AudioFile object.
 	/// @note The object assumes responsibility for closing the passed AudioFile object using AudioFileClose.
@@ -207,7 +207,7 @@ public:
 
 	/// Releases ownership of the managed AudioFile object and returns it.
 	/// @note The caller assumes responsibility for closing the returned AudioFile object using AudioFileClose.
-	AudioFileID _Nullable release() noexcept;
+	[[nodiscard]] AudioFileID _Nullable release() noexcept;
 
 private:
 	/// The managed AudioFile object.

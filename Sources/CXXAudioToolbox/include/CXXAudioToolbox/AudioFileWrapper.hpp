@@ -38,13 +38,13 @@ public:
 	explicit AudioFileWrapper(AudioFileID _Nullable audioFile) noexcept;
 
 	/// Returns true if the managed AudioFile object is not null.
-	explicit operator bool() const noexcept;
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AudioFile object.
-	operator AudioFileID _Nullable() const noexcept;
+	[[nodiscard]] operator AudioFileID _Nullable() const noexcept;
 
 	/// Returns the managed AudioFile object.
-	AudioFileID _Nullable get() const noexcept;
+	[[nodiscard]] AudioFileID _Nullable get() const noexcept;
 
 	/// Replaces the managed AudioFile object with another AudioFile object.
 	/// @note The object assumes responsibility for closing the passed AudioFile object using AudioFileClose.
@@ -55,7 +55,7 @@ public:
 
 	/// Releases ownership of the managed AudioFile object and returns it.
 	/// @note The caller assumes responsibility for closing the returned AudioFile object using AudioFileClose.
-	AudioFileID _Nullable release() noexcept;
+	[[nodiscard]] AudioFileID _Nullable release() noexcept;
 
 private:
 	/// The managed AudioFile object.

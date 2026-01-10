@@ -44,10 +44,10 @@ public:
 
 
 	/// Returns true if the managed AUGraph object is not null.
-	explicit operator bool() const noexcept;
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AUGraph object.
-	operator AUGraph const _Nullable () const noexcept;
+	[[nodiscard]] operator AUGraph const _Nullable () const noexcept;
 
 
 	/// Creates a new Audio Unit graph.
@@ -70,11 +70,11 @@ public:
 
 	/// Returns the number of nodes in the Audio Unit graph.
 	/// @throw std::system_error.
-	UInt32 GetNodeCount() const;
+	[[nodiscard]] UInt32 GetNodeCount() const;
 
 	/// Returns the node at a given index
 	/// @throw std::system_error.
-	AUNode GetIndNode(UInt32 inIndex) const;
+	[[nodiscard]] AUNode GetIndNode(UInt32 inIndex) const;
 
 	/// Returns information about a particular AUNode.
 	/// @throw std::system_error.
@@ -89,11 +89,11 @@ public:
 
 	/// Returns the sub graph represented by a particular AUNode.
 	/// @throw std::system_error.
-	AUGraph GetNodeInfoSubGraph(AUNode inNode) const;
+	[[nodiscard]] AUGraph GetNodeInfoSubGraph(AUNode inNode) const;
 
 	/// Returns true if the node represents a sub graph.
 	/// @throw std::system_error.
-	bool IsNodeSubGraph(AUNode inNode) const;
+	[[nodiscard]] bool IsNodeSubGraph(AUNode inNode) const;
 #endif /* !TARGET_OS_IPHONE */
 
 	// MARK: - Node Interactions
@@ -116,15 +116,15 @@ public:
 
 	/// Returns the number of interactions in the Audio Unit graph.
 	/// @throw std::system_error.
-	UInt32 GetNumberOfInteractions() const;
+	[[nodiscard]] UInt32 GetNumberOfInteractions() const;
 
 	/// Returns information about a particular interaction in a graph.
 	/// @throw std::system_error.
-	AUNodeInteraction GetInteractionInfo(UInt32 inInteractionIndex) const;
+	[[nodiscard]] AUNodeInteraction GetInteractionInfo(UInt32 inInteractionIndex) const;
 
 	/// Returns the number of interactions of a graph's node.
 	/// @throw std::system_error.
-	UInt32 CountNodeInteractions(AUNode inNode) const;
+	[[nodiscard]] UInt32 CountNodeInteractions(AUNode inNode) const;
 
 	/// Retrieves information about the interactions in a graph for a given node.
 	/// @throw std::system_error.
@@ -164,25 +164,25 @@ public:
 
 	/// Returns true if the Audio Unit graph is open.
 	/// @throw std::system_error.
-	bool IsOpen() const;
+	[[nodiscard]] bool IsOpen() const;
 
 	/// Returns true if the Audio Unit graph is initialized.
 	/// @throw std::system_error.
-	bool IsInitialized() const;
+	[[nodiscard]] bool IsInitialized() const;
 
 	/// Returns true if the Audio Unit graph is running.
 	/// @throw std::system_error.
-	bool IsRunning() const;
+	[[nodiscard]] bool IsRunning() const;
 
 	// MARK: - Utilities
 
 	/// Returns a short-term running average of the current CPU load of the graph.
 	/// @throw std::system_error.
-	Float32 GetCPULoad() const;
+	[[nodiscard]] Float32 GetCPULoad() const;
 
 	/// Returns the max CPU load of the graph since this call was last made or the graph was last started.
 	/// @throw std::system_error.
-	Float32 GetMaxCPULoad() const;
+	[[nodiscard]] Float32 GetMaxCPULoad() const;
 
 	/// Adds a notification callback.
 	/// @throw std::system_error.
@@ -196,27 +196,27 @@ public:
 
 	/// Returns the graph's nodes.
 	/// @throw std::system_error.
-	std::vector<AUNode> Nodes() const;
+	[[nodiscard]] std::vector<AUNode> Nodes() const;
 
 	/// Returns a node's interactions.
 	/// @throw std::system_error.
-	std::vector<AUNodeInteraction> NodeInteractions(AUNode inNode) const;
+	[[nodiscard]] std::vector<AUNodeInteraction> NodeInteractions(AUNode inNode) const;
 
 	/// Returns the graph's nodes and their interactions.
 	/// @throw std::system_error.
-	std::map<AUNode, std::vector<AUNodeInteraction>> NodesAndInteractions() const;
+	[[nodiscard]] std::map<AUNode, std::vector<AUNodeInteraction>> NodesAndInteractions() const;
 
 	/// Returns the Audio Unit graph's latency.
 	/// @throw std::system_error..
-	Float64 Latency() const;
+	[[nodiscard]] Float64 Latency() const;
 
 	/// Returns the Audio Unit graph's tail time.
 	/// @throw std::system_error.
-	Float64 TailTime() const;
+	[[nodiscard]] Float64 TailTime() const;
 
 
 	/// Returns the managed AUGraph object.
-	AUGraph _Nullable get() const noexcept;
+	[[nodiscard]] AUGraph _Nullable get() const noexcept;
 
 	/// Replaces the managed AUGraph object with another AUGraph object.
 	/// @note The object assumes responsibility for disposing of the passed AUGraph object using DisposeAUGraph.
@@ -227,7 +227,7 @@ public:
 
 	/// Releases ownership of the managed AUGraph object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned AUGraph object using DisposeAUGraph.
-	AUGraph _Nullable release() noexcept;
+	[[nodiscard]] AUGraph _Nullable release() noexcept;
 
 private:
 	/// The managed AUGraph object.
