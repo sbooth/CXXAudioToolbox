@@ -30,7 +30,7 @@ namespace CAAudioFormat {
 /// @param inSpecifier A specifier is a buffer of data used as an input argument to some of the properties.
 /// @param ioPropertyDataSize On input the size of the outPropertyData buffer. On output the number of bytes written to the buffer.
 /// @param outPropertyData The buffer in which to write the property data.
-std::expected<void, OSStatus> GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier, UInt32& ioPropertyDataSize, void * _Nullable outPropertyData) noexcept;
+[[nodiscard]] std::expected<void, OSStatus> GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void * _Nullable inSpecifier, UInt32& ioPropertyDataSize, void * _Nullable outPropertyData) noexcept;
 
 /// Returns an array of format IDs that are valid output formats for a converter.
 [[nodiscard]] std::expected<std::vector<AudioFormatID>, OSStatus> EncodeFormatIDs() noexcept;
