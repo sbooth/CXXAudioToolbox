@@ -46,34 +46,34 @@ public:
 
 	
 	/// Creates a new audio converter.
-	std::expected<void, OSStatus> New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat) noexcept;
 
 	/// Creates a new audio converter using specific codecs.
-	std::expected<void, OSStatus> NewSpecific(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat, UInt32 inNumberClassDescriptions, const AudioClassDescription *inClassDescriptions) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> NewSpecific(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat, UInt32 inNumberClassDescriptions, const AudioClassDescription *inClassDescriptions) noexcept;
 
 	/// Destroys an existing audio converter.
-	std::expected<void, OSStatus> Dispose() noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> Dispose() noexcept;
 
 	/// Resets the audio converter.
-	std::expected<void, OSStatus> Reset() noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> Reset() noexcept;
 
 	/// Returns information about an audio converter property.
-	std::expected<void, OSStatus> GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) noexcept;
 
 	/// Returns an audio converter property value.
-	std::expected<void, OSStatus> GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) noexcept;
 
 	/// Sets an audio converter property value.
-	std::expected<void, OSStatus> SetProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> SetProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData) noexcept;
 
 	/// Converts data from an input buffer to an output buffer.
-	std::expected<void, OSStatus> ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData) noexcept;
 
 	/// Converts data supplied by an input callback function, supporting non-interleaved and packetized formats.
-	std::expected<void, OSStatus> FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void * _Nullable inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription * _Nullable outPacketDescription) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void * _Nullable inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription * _Nullable outPacketDescription) noexcept;
 
 	/// Converts PCM data from an input buffer list to an output buffer list.
-	std::expected<void, OSStatus> ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData) noexcept;
+	[[nodiscard]] std::expected<void, OSStatus> ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData) noexcept;
 
 
 	/// Returns the managed AudioConverter object.
