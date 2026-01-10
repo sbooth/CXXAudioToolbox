@@ -133,12 +133,10 @@ void CXXAudioToolbox::CAAudioFile::RemoveUserData(UInt32 inUserDataID, UInt32 in
 	ThrowIfAudioFileError(result, "AudioFileRemoveUserData");
 }
 
-UInt32 CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable isWritable) const
+void CXXAudioToolbox::CAAudioFile::GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable outDataSize, UInt32 * _Nullable isWritable) const
 {
-	UInt32 size;
-	const auto result = AudioFileGetPropertyInfo(audioFile_, inPropertyID, &size, isWritable);
+	const auto result = AudioFileGetPropertyInfo(audioFile_, inPropertyID, outDataSize, isWritable);
 	ThrowIfAudioFileError(result, "AudioFileGetPropertyInfo");
-	return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const

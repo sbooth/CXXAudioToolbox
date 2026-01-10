@@ -105,7 +105,7 @@ public:
 
 	/// Gets information about the size of a property of an AudioFile and whether it can be set.
 	/// @throw std::system_error.
-	UInt32 GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable isWritable) const;
+	void GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable outDataSize, UInt32 * _Nullable isWritable) const;
 
 	/// Copies the value for a property of an AudioFile into a buffer.
 	/// @throw std::system_error.

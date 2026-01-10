@@ -179,10 +179,11 @@ public:
 
 	/// Gets information about a property.
 	/// @param inPropertyID The property being queried.
+	/// @param outSize If non-null, on exit, this is set to the size of the property's value.
 	/// @param outWritable If non-null, on exit, this indicates whether the property value is settable.
 	/// @return The size of the property's value.
 	/// @throw std::system_error.
-	UInt32 GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, Boolean * _Nullable outWritable) const;
+	void GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) const;
 
 	/// Gets a property value.
 	/// @param inPropertyID The property being fetched.
