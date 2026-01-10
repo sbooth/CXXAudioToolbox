@@ -38,10 +38,10 @@ public:
 
 
 	/// Returns true if the managed AudioConverter object is not null.
-	explicit operator bool() const noexcept;
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed AudioConverter object.
-	operator AudioConverterRef const _Nullable () const noexcept;
+	[[nodiscard]] operator AudioConverterRef const _Nullable () const noexcept;
 
 	
 	/// Creates a new audio converter.
@@ -86,7 +86,7 @@ public:
 
 
 	/// Returns the managed AudioConverter object.
-	AudioConverterRef _Nullable get() const noexcept;
+	[[nodiscard]] AudioConverterRef _Nullable get() const noexcept;
 
 	/// Replaces the managed AudioConverter object with another AudioConverter object.
 	/// @note The object assumes responsibility for disposing of the passed AudioConverter object using AudioConverterDispose.
@@ -97,7 +97,7 @@ public:
 
 	/// Releases ownership of the managed AudioConverter object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned AudioConverter object using AudioConverterDispose.
-	AudioConverterRef _Nullable release() noexcept;
+	[[nodiscard]] AudioConverterRef _Nullable release() noexcept;
 
 private:
 	/// The managed AudioConverter object.

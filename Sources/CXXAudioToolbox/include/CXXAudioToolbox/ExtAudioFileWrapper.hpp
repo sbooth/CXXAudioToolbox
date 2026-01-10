@@ -38,13 +38,13 @@ public:
 	explicit ExtAudioFileWrapper(ExtAudioFileRef _Nullable extAudioFile) noexcept;
 
 	/// Returns true if the managed ExtAudioFile object is not null.
-	explicit operator bool() const noexcept;
+	[[nodiscard]] explicit operator bool() const noexcept;
 
 	/// Returns the managed ExtAudioFile object.
-	operator ExtAudioFileRef _Nullable() const noexcept;
+	[[nodiscard]] operator ExtAudioFileRef _Nullable() const noexcept;
 
 	/// Returns the managed ExtAudioFile object.
-	ExtAudioFileRef _Nullable get() const noexcept;
+	[[nodiscard]] ExtAudioFileRef _Nullable get() const noexcept;
 
 	/// Replaces the managed ExtAudioFile object with another ExtAudioFile object.
 	/// @note The object assumes responsibility for disposing of the passed ExtAudioFile object using ExtAudioFileDispose.
@@ -55,7 +55,7 @@ public:
 
 	/// Releases ownership of the managed ExtAudioFile object and returns it.
 	/// @note The caller assumes responsibility for disposing of the returned ExtAudioFile object using ExtAudioFileDispose.
-	ExtAudioFileRef _Nullable release() noexcept;
+	[[nodiscard]] ExtAudioFileRef _Nullable release() noexcept;
 
 private:
 	/// The managed ExtAudioFile object.
