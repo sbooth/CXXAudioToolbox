@@ -7,8 +7,8 @@
 
 #pragma once
 
+#import <expected>
 #import <utility>
-#import <stdexcept>
 
 #import <AudioToolbox/AudioConverter.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
@@ -58,8 +58,7 @@ public:
 	///
 	/// Allocates a new ExtAudioFileRef, for reading an existing audio file.
 	/// @param inURL The audio file to read.
-	/// @throw std::system_error.
-	void OpenURL(CFURLRef inURL);
+	[[nodiscard]] std::expected<void, OSStatus> OpenURL(CFURLRef inURL) noexcept;
 
 	/// Wraps an AudioFileID in an ExtAudioFileRef.
 	///
@@ -71,8 +70,7 @@ public:
 	///
 	/// @param inFileID The AudioFileID to wrap
 	/// @param inForWriting true if the AudioFileID is a new file opened for writing
-	/// @throw std::system_error.
-	void WrapAudioFileID(AudioFileID inFileID, bool inForWriting);
+	[[nodiscard]] std::expected<void, OSStatus> WrapAudioFileID(AudioFileID inFileID, bool inForWriting) noexcept;
 
 	/// Creates a new audio file.
 	///
@@ -89,12 +87,10 @@ public:
 	/// with the number of channels specified by inStreamDesc.
 	/// @param inFlags The same flags as are used with AudioFileCreateWithURL
 	/// Can use these to control whether an existing file is overwritten (or not).
-	/// @throw std::system_error.
-	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags);
+	[[nodiscard]] std::expected<void, OSStatus> CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc, const AudioChannelLayout * _Nullable const inChannelLayout, UInt32 inFlags) noexcept;
 
 	/// Closes the file and disposes of the managed extended audio file.
-	/// @throw std::system_error.
-	void Dispose();
+	[[nodiscard]] std::expected<void, OSStatus> Dispose() noexcept;
 
 	/// Performs a synchronous sequential read.
 	///
@@ -112,13 +108,11 @@ public:
 	/// not being large enough, and internal optimizations. If 0 frames are
 	/// returned, however, this indicates that end-of-file was reached.
 	/// @param ioData Buffer(s) into which the audio data is read.
-	/// @throw std::system_error.
-	void Read(UInt32& ioNumberFrames, AudioBufferList *ioData);
+	[[nodiscard]] std::expected<void, OSStatus> Read(UInt32& ioNumberFrames, AudioBufferList *ioData) noexcept;
 
 	/// Performs a synchronous sequential read.
 	/// @param buffer Buffer into which the audio data is read.
-	/// @throw std::system_error.
-	void Read(CXXCoreAudio::CAAudioBuffer& buffer);
+	[[nodiscard]] std::expected<void, OSStatus> Read(CXXCoreAudio::CAAudioBuffer& buffer) noexcept;
 
 	/// Performs a synchronous sequential write.
 	///
@@ -128,11 +122,10 @@ public:
 	///
 	/// @param inNumberFrames The number of frames to write.
 	/// @param ioData The buffer(s) from which audio data is written to the file.
-	/// @throw std::system_error.
 #if TARGET_OS_IPHONE
-	OSStatus Write(UInt32 inNumberFrames, const AudioBufferList *ioData);
+	[[nodiscard]] std::expected<OSStatus, OSStatus> Write(UInt32 inNumberFrames, const AudioBufferList *ioData) noexcept;
 #else
-	void Write(UInt32 inNumberFrames, const AudioBufferList *ioData);
+	[[nodiscard]] std::expected<void, OSStatus> Write(UInt32 inNumberFrames, const AudioBufferList *ioData) noexcept;
 #endif /* TARGET_OS_IPHONE */
 
 	/// Performs an asynchronous sequential write.
@@ -154,8 +147,7 @@ public:
 	///
 	/// @param inNumberFrames The number of frames to write.
 	/// @param ioData The buffer(s) from which audio data is written to the file.
-	/// @throw std::system_error.
-	void WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData);
+	[[nodiscard]] std::expected<void, OSStatus> WriteAsync(UInt32 inNumberFrames, const AudioBufferList * _Nullable ioData) noexcept;
 
 	/// Seeks to a specific frame position.
 	///
@@ -168,102 +160,78 @@ public:
 	/// @param inFrameOffset The desired seek position, in sample frames, relative to the beginning of
 	/// the file. This is specified in the sample rate and frame count of the file's format
 	/// (not the client format).
-	/// @throw std::system_error.
-	void Seek(SInt64 inFrameOffset);
+	[[nodiscard]] std::expected<void, OSStatus> Seek(SInt64 inFrameOffset) noexcept;
 
 	/// Returns the file's read/write position.
 	/// @return The file's current read/write position in sample frames. This is specified in the
 	/// sample rate and frame count of the file's format (not the client format).
-	/// @throw std::system_error.
-	[[nodiscard]] SInt64 Tell() const;
+	[[nodiscard]] std::expected<SInt64, OSStatus> Tell() const noexcept;
 
 	/// Gets information about a property.
 	/// @param inPropertyID The property being queried.
 	/// @param outSize If non-null, on exit, this is set to the size of the property's value.
 	/// @param outWritable If non-null, on exit, this indicates whether the property value is settable.
 	/// @return The size of the property's value.
-	/// @throw std::system_error.
-	void GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) const;
+	[[nodiscard]] std::expected<void, OSStatus> GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) const;
 
 	/// Gets a property value.
 	/// @param inPropertyID The property being fetched.
 	/// @param ioPropertyDataSize On entry, the size (in bytes) of the memory pointed to by outPropertyData.
 	/// On exit, the actual size of the property data returned.
 	/// @param outPropertyData The value of the property is copied to the memory this points to.
-	/// @throw std::system_error.
-	void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const;
+	[[nodiscard]] std::expected<void, OSStatus> GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const noexcept;
 
 	/// Sets a property value.
 	/// @param inPropertyID The property being set.
 	/// @param inPropertyDataSize The size of the property data, in bytes.
 	/// @param inPropertyData Points to the property's new value.
-	/// @throw std::system_error.
-	void SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData);
+	[[nodiscard]] std::expected<void, OSStatus> SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData) noexcept;
 
 	/// Returns the file's channel layout (kExtAudioFileProperty_FileChannelLayout).
-	/// @throw std::system_error.
-	/// @throw std::bad_alloc.
-	[[nodiscard]] CXXCoreAudio::CAChannelLayout FileChannelLayout() const;
+	[[nodiscard]] std::expected<CXXCoreAudio::CAChannelLayout, OSStatus> FileChannelLayout() const noexcept;
 
 	/// Sets the file's channel layout (kExtAudioFileProperty_FileChannelLayout).
-	/// @throw std::system_error.
-	void SetFileChannelLayout(const AudioChannelLayout& fileChannelLayout);
+	std::expected<void, OSStatus> SetFileChannelLayout(const AudioChannelLayout& fileChannelLayout) noexcept;
 
 	/// Returns the file's data format (kExtAudioFileProperty_FileDataFormat).
-	/// @throw std::system_error.
-	[[nodiscard]] CXXCoreAudio::CAStreamDescription FileDataFormat() const;
+	[[nodiscard]] std::expected<CXXCoreAudio::CAStreamDescription, OSStatus> FileDataFormat() const noexcept;
 
 	/// Returns the client data format (kExtAudioFileProperty_ClientDataFormat).
-	/// @throw std::system_error.
-	[[nodiscard]] CXXCoreAudio::CAStreamDescription ClientDataFormat() const;
+	[[nodiscard]] std::expected<CXXCoreAudio::CAStreamDescription, OSStatus> ClientDataFormat() const noexcept;
 
 	/// Sets the client data format (kExtAudioFileProperty_ClientDataFormat).
-	/// @throw std::system_error.
-	void SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat, const AudioChannelLayout * const _Nullable clientChannelLayout = nullptr, UInt32 codecManufacturer = 0);
+	[[nodiscard]] std::expected<void, OSStatus> SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat) noexcept;
+
+	/// Sets the client data format (kExtAudioFileProperty_ClientDataFormat).
+	[[nodiscard]] std::expected<void, OSStatus> SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat, const AudioChannelLayout& clientChannelLayout, UInt32 codecManufacturer = 0) noexcept;
 
 	/// Returns the client channel layout (kExtAudioFileProperty_ClientChannelLayout).
-	/// @throw std::system_error.
-	/// @throw std::bad_alloc
-	[[nodiscard]] CXXCoreAudio::CAChannelLayout ClientChannelLayout() const;
+	[[nodiscard]] std::expected<CXXCoreAudio::CAChannelLayout, OSStatus> ClientChannelLayout() const noexcept;
 
 	/// Sets the client channel layout (kExtAudioFileProperty_ClientChannelLayout).
-	/// @throw std::system_error.
-	void SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout);
+	std::expected<void, OSStatus> SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout) noexcept;
 
 	/// Returns the managed AudioConverter (kExtAudioFileProperty_AudioConverter).
-	/// @throw std::system_error.
-	[[nodiscard]] AudioConverterRef _Nullable AudioConverter() const;
+	[[nodiscard]] std::expected<AudioConverterRef _Nullable, OSStatus> AudioConverter() const noexcept;
 
 	/// Returns true if the extended audio file has an internal audio converter.
-	[[nodiscard]] bool HasAudioConverter() const
-	{
-		return AudioConverter() != nullptr;
-	}
+	[[nodiscard]] bool HasAudioConverter() const noexcept;
 
 	/// Sets a property on the managed audio converter.
-	void SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData);
+	std::expected<void, OSStatus> SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData) noexcept;
 
 	/// Returns the length of the file in audio frames (kExtAudioFileProperty_FileLengthFrames).
-	/// @throw std::system_error.
-	[[nodiscard]] SInt64 FrameLength() const;
+	[[nodiscard]] std::expected<SInt64, OSStatus> FrameLength() const noexcept;
 
 #ifdef __OBJC__
 	/// Returns the file's data format (kExtAudioFileProperty_FileDataFormat) and channel layout (kExtAudioFileProperty_FileChannelLayout).
-	/// @throw std::system_error.
-	/// @throw std::runtime_error.
-	/// @throw std::bad_alloc
-	[[nodiscard]] AVAudioFormat * FileFormat() const;
+	[[nodiscard]] std::expected<AVAudioFormat *, OSStatus> FileFormat() const;
 
 	/// Returns the client data format (kExtAudioFileProperty_ClientDataFormat) and channel layout (kExtAudioFileProperty_ClientChannelLayout).
-	/// @throw std::system_error.
-	/// @throw std::runtime_error.
-	/// @throw std::bad_alloc
-	[[nodiscard]] AVAudioFormat * ClientFormat() const;
+	[[nodiscard]] std::expected<AVAudioFormat *, OSStatus> ClientFormat() const;
 
 	/// Sets the client data format (kExtAudioFileProperty_ClientDataFormat) and channel layout (kExtAudioFileProperty_ClientChannelLayout).
-	/// @throw std::system_error.
-	/// @throw std::bad_alloc
-	void SetClientFormat(AVAudioFormat *format);
+	[[nodiscard]] std::expected<void, OSStatus> SetClientFormat(AVAudioFormat *format);
 #endif /* __OBJC__ */
 
 
@@ -298,30 +266,48 @@ inline CAExtAudioFile::operator ExtAudioFileRef const _Nullable () const noexcep
 	return extAudioFile_;
 }
 
+inline bool CAExtAudioFile::HasAudioConverter() const noexcept
+{
+	const auto audioConverter = AudioConverter();
+	return audioConverter.has_value();
+}
+
 #ifdef __OBJC__
-inline AVAudioFormat * CAExtAudioFile::FileFormat() const
+inline std::expected<AVAudioFormat *, OSStatus> CAExtAudioFile::FileFormat() const
 {
-	const auto dataFormat = FileDataFormat();
+	const auto format = FileDataFormat();
+	if(!format)
+		return std::unexpected(format.error());
 	const auto channelLayout = FileChannelLayout();
-	if(dataFormat.ChannelCount() > 2 && !channelLayout)
-		throw std::runtime_error("File data format > 2 channels with no file channel layout");
-	return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
+	if(!channelLayout)
+		//			return std::unexpected(channelLayout.error());
+		return [[AVAudioFormat alloc] initWithStreamDescription:&format.value() channelLayout:nil];
+	//		assert(format.value().ChannelCount() <= 2 || channelLayout.value());
+	return [[AVAudioFormat alloc] initWithStreamDescription:&format.value() channelLayout:channelLayout.value()];
 }
 
-inline AVAudioFormat * CAExtAudioFile::ClientFormat() const
+inline std::expected<AVAudioFormat *, OSStatus> CAExtAudioFile::ClientFormat() const
 {
-	const auto dataFormat = ClientDataFormat();
+	const auto format = ClientDataFormat();
+	if(!format)
+		return std::unexpected(format.error());
 	const auto channelLayout = ClientChannelLayout();
-	if(dataFormat.ChannelCount() > 2 && !channelLayout)
-		throw std::runtime_error("Client data format > 2 channels with no client channel layout");
-	return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
+	if(!channelLayout)
+		//			return std::unexpected(channelLayout.error());
+		return [[AVAudioFormat alloc] initWithStreamDescription:&format.value() channelLayout:nil];
+	//		assert(format.value().ChannelCount() <= 2 || channelLayout.value());
+	return [[AVAudioFormat alloc] initWithStreamDescription:&format.value() channelLayout:channelLayout.value()];
 }
 
-inline void CAExtAudioFile::SetClientFormat(AVAudioFormat *format)
+inline std::expected<void, OSStatus> CAExtAudioFile::SetClientFormat(AVAudioFormat *format)
 {
 	NSCParameterAssert(format != nil);
-	SetClientDataFormat(*format.streamDescription);
-	SetClientChannelLayout(*format.channelLayout.layout);
+	const auto result = SetClientDataFormat(*format.streamDescription);
+	if(!result)
+		return std::unexpected(result.error());
+	if(const auto layout = format.channelLayout.layout; layout)
+		return SetClientChannelLayout(*layout);
+	return {};
 }
 #endif /* __OBJC__ */
 
