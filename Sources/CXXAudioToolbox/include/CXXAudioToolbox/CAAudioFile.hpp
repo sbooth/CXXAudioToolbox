@@ -7,11 +7,13 @@
 
 #pragma once
 
+#import <expected>
 #import <utility>
 #import <vector>
 
 #import <AudioToolbox/AudioFile.h>
 
+#import <CXXCFRef/CFRef.hpp>
 #import <CXXCoreAudio/CAStreamDescription.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
@@ -49,150 +51,142 @@ public:
 	
 	/// Opens an existing audio file.
 	/// @throw std::system_error.
-	void OpenURL(CFURLRef inURL, AudioFilePermissions inPermissions, AudioFileTypeID inFileTypeHint);
+	[[nodiscard]] std::expected<void, OSStatus> OpenURL(CFURLRef inURL, AudioFilePermissions inPermissions, AudioFileTypeID inFileTypeHint) noexcept;
 
 	/// Creates a new audio file (or initialises an existing file).
 	/// @throw std::system_error.
-	void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags);
+	[[nodiscard]] std::expected<void, OSStatus> CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags) noexcept;
 
 	/// Wipes clean an existing file. You provide callbacks that the AudioFile API will use to get the data.
 	/// @throw std::system_error.
-	void InitializeWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags);
+	[[nodiscard]] std::expected<void, OSStatus> InitializeWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inFormat, AudioFileFlags inFlags) noexcept;
 
 	/// Opens an existing file. You provide callbacks that the AudioFile API will use to get the data.
 	/// @throw std::system_error.
-	void OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc _Nullable inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc _Nullable inSetSizeFunc, AudioFileTypeID inFileTypeHint);
+	[[nodiscard]] std::expected<void, OSStatus> OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc _Nullable inWriteFunc, AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc _Nullable inSetSizeFunc, AudioFileTypeID inFileTypeHint) noexcept;
 
 	/// Close an existing audio file.
 	/// @throw std::system_error.
-	void Close();
+	[[nodiscard]] std::expected<void, OSStatus> Close() noexcept;
 
 	/// Moves the audio data to the end of the file and other internal optimizations of the file structure.
 	/// @throw std::system_error.
-	void Optimize();
+	[[nodiscard]] std::expected<void, OSStatus> Optimize() noexcept;
 
 	/// Reads bytes of audio data from the audio file.
 	/// @throw std::system_error.
-	OSStatus ReadBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, void *outBuffer);
+	[[nodiscard]] std::expected<OSStatus, OSStatus> ReadBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, void *outBuffer) noexcept;
 
 	/// Writes bytes of audio data to the audio file.
 	/// @throw std::system_error.
-	void WriteBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, const void *inBuffer);
+	[[nodiscard]] std::expected<void, OSStatus> WriteBytes(bool inUseCache, SInt64 inStartingByte, UInt32& ioNumBytes, const void *inBuffer) noexcept;
 
 	/// Reads packets of audio data from the audio file.
 	/// @throw std::system_error.
-	OSStatus ReadPacketData(bool inUseCache, UInt32& ioNumBytes, AudioStreamPacketDescription * _Nullable outPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, void * _Nullable outBuffer);
+	[[nodiscard]] std::expected<OSStatus, OSStatus> ReadPacketData(bool inUseCache, UInt32& ioNumBytes, AudioStreamPacketDescription * _Nullable outPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, void * _Nullable outBuffer) noexcept;
 
 	/// Writes packets of audio data to the audio file.
 	/// @throw std::system_error.
-	void WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * _Nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer);
+	[[nodiscard]] std::expected<void, OSStatus> WritePackets(bool inUseCache, UInt32 inNumBytes, const AudioStreamPacketDescription * _Nullable inPacketDescriptions, SInt64 inStartingPacket, UInt32& ioNumPackets, const void *inBuffer) noexcept;
 
 	/// Gets the size of user data in a file.
 	/// @throw std::system_error.
-	UInt32 GetUserDataSize(UInt32 inUserDataID, UInt32 inIndex);
+	[[nodiscard]] std::expected<UInt32, OSStatus> GetUserDataSize(UInt32 inUserDataID, UInt32 inIndex) noexcept;
 
 	/// Gets the data of a chunk in a file.
 	/// @throw std::system_error.
-	void GetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32& ioUserDataSize, void *outUserData) const;
+	[[nodiscard]] std::expected<void, OSStatus> GetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32& ioUserDataSize, void *outUserData) const noexcept;
 
 	/// Sets the data of a chunk in a file.
 	/// @throw std::system_error.
-	void SetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32 inUserDataSize, const void *inUserData);
+	[[nodiscard]] std::expected<void, OSStatus> SetUserData(UInt32 inUserDataID, UInt32 inIndex, UInt32 inUserDataSize, const void *inUserData) noexcept;
 
 	/// Removes a user chunk in a file.
 	/// @throw std::system_error.
-	void RemoveUserData(UInt32 inUserDataID, UInt32 inIndex);
+	[[nodiscard]] std::expected<void, OSStatus> RemoveUserData(UInt32 inUserDataID, UInt32 inIndex) noexcept;
 
 	/// Gets information about the size of a property of an AudioFile and whether it can be set.
 	/// @throw std::system_error.
-	void GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable outDataSize, UInt32 * _Nullable isWritable) const;
+	[[nodiscard]] std::expected<void, OSStatus> GetPropertyInfo(AudioFilePropertyID inPropertyID, UInt32 * _Nullable outDataSize, UInt32 * _Nullable isWritable) const;
 
 	/// Copies the value for a property of an AudioFile into a buffer.
 	/// @throw std::system_error.
-	void GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const;
+	[[nodiscard]] std::expected<void, OSStatus> GetProperty(AudioFilePropertyID inPropertyID, UInt32& ioDataSize, void *outPropertyData) const noexcept;
 
 	/// Sets the value for a property of an AudioFile.
 	/// @throw std::system_error.
-	void SetProperty(AudioFilePropertyID inPropertyID, UInt32 inDataSize, const void *inPropertyData);
+	[[nodiscard]] std::expected<void, OSStatus> SetProperty(AudioFilePropertyID inPropertyID, UInt32 inDataSize, const void *inPropertyData) noexcept;
 
 	/// Returns the file's format (kAudioFilePropertyFileFormat)
 	/// @throw std::system_error.
-	[[nodiscard]] AudioFileTypeID FileFormat() const;
+	[[nodiscard]] std::expected<AudioFileTypeID, OSStatus> FileFormat() const noexcept;
 
 	/// Returns the file's data format (kAudioFilePropertyDataFormat)
 	/// @throw std::system_error.
-	[[nodiscard]] CXXCoreAudio::CAStreamDescription DataFormat() const;
+	[[nodiscard]] std::expected<CXXCoreAudio::CAStreamDescription, OSStatus> DataFormat() const noexcept;
 
 	// MARK: Global Properties
 
 	/// Gets the size of a global audio file property.
 	/// @throw std::system_error.
-	[[nodiscard]] static UInt32 GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier);
+	[[nodiscard]] static std::expected<UInt32, OSStatus> GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier) noexcept;
 
 	/// Copies the value of a global property into a buffer.
 	/// @throw std::system_error.
-	static void GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData);
+	[[nodiscard]] static std::expected<void, OSStatus> GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize, void * _Nullable inSpecifier, UInt32& ioDataSize, void *outPropertyData) noexcept;
 
 
 	/// Returns an array of AudioFileTypeID containing the file types (i.e. AIFF, WAVE, etc) that can be opened for reading.
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<AudioFileTypeID> ReadableTypes();
+	[[nodiscard]] static std::expected<std::vector<AudioFileTypeID>, OSStatus> ReadableTypes() noexcept;
 
 	/// Returns an array of AudioFileTypeID containing the file types (i.e. AIFF, WAVE, etc) that can be opened for writing.
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<AudioFileTypeID> WritableTypes();
+	[[nodiscard]] static std::expected<std::vector<AudioFileTypeID>, OSStatus> WritableTypes() noexcept;
 
 	/// Returns the name of type
-	/// @note The caller is responsible for releasing the returned string.
-	/// @throw std::system_error.
-	[[nodiscard]] static CFStringRef CopyFileTypeName(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFString, OSStatus> CopyFileTypeName(AudioFileTypeID type) noexcept;
 
 	/// Returns an array of supported formats for the fileType and formatID combination
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<CXXCoreAudio::CAStreamDescription> AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID);
+	[[nodiscard]] static std::expected<std::vector<CXXCoreAudio::CAStreamDescription>, OSStatus> AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID) noexcept;
 
 	/// Returns an array of format IDs that can be read.
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<AudioFormatID> AvailableFormatIDs(AudioFileTypeID type);
+	[[nodiscard]] static std::expected<std::vector<AudioFormatID>, OSStatus> AvailableFormatIDs(AudioFileTypeID type) noexcept;
 
 
 	/// Returns an array of recognized file extensions
-	/// @throw std::system_error.
-	[[nodiscard]] static CFArrayRef CopyAllExtensions() CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFArray, OSStatus> CopyAllExtensions() noexcept;
 
 	/// Returns an array of recognized UTIs
-	/// @throw std::system_error.
-	[[nodiscard]] static CFArrayRef CopyAllUTIs() CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFArray, OSStatus> CopyAllUTIs() noexcept;
 
 	/// Returns an array of recognized MIME types
-	/// @throw std::system_error.
-	[[nodiscard]] static CFArrayRef CopyAllMIMETypes() CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFArray, OSStatus> CopyAllMIMETypes() noexcept;
 
 
 	/// Returns an array of file extensions for type
-	/// @throw std::system_error.
-	[[nodiscard]] static CFArrayRef CopyExtensionsForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFArray, OSStatus> CopyExtensionsForType(AudioFileTypeID type) noexcept;
 
 	/// Returns an array of UTIs for type
-	/// @throw std::system_error.
-	[[nodiscard]] static CFArrayRef CopyUTIsForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFArray, OSStatus> CopyUTIsForType(AudioFileTypeID type) noexcept;
 
 	/// Returns an array of MIME types for type
-	/// @throw std::system_error.
-	[[nodiscard]] static CFArrayRef CopyMIMETypesForType(AudioFileTypeID type) CF_RETURNS_RETAINED;
+	[[nodiscard]] static std::expected<CXXCFRef::CFArray, OSStatus> CopyMIMETypesForType(AudioFileTypeID type) noexcept;
 
 
 	/// Returns an array of AudioFileTypeID that support mimeType
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<AudioFileTypeID> TypesForMIMEType(CFStringRef mimeType);
+	[[nodiscard]] static std::expected<std::vector<AudioFileTypeID>, OSStatus> TypesForMIMEType(CFStringRef mimeType) noexcept;
 
 	/// Returns an array of AudioFileTypeID that support uti
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<AudioFileTypeID> TypesForUTI(CFStringRef uti);
+	[[nodiscard]] static std::expected<std::vector<AudioFileTypeID>, OSStatus> TypesForUTI(CFStringRef uti) noexcept;
 
 	/// Returns an array of AudioFileTypeID that support extension
 	/// @throw std::system_error.
-	[[nodiscard]] static std::vector<AudioFileTypeID> TypesForExtension(CFStringRef extension);
+	[[nodiscard]] static std::expected<std::vector<AudioFileTypeID>, OSStatus> TypesForExtension(CFStringRef extension) noexcept;
 
 
 	/// Returns the managed AudioFile object.
