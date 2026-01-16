@@ -6,7 +6,7 @@
 //
 
 module CXXAudioToolbox {
-	requires cplusplus17
+	requires cplusplus23
 	header "CXXAudioToolbox/CAAudioConverter.hpp"
 	header "CXXAudioToolbox/CAAudioFile.hpp"
 	header "CXXAudioToolbox/CAAudioFormat.hpp"

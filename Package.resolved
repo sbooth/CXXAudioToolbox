@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "cxxcfref",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sbooth/CXXCFRef",
+      "state" : {
+        "revision" : "f2667ad70b7a8db517f6c4341a3abca58c6e20a4",
+        "version" : "0.1.2"
+      }
+    },
+    {
       "identity" : "cxxcoreaudio",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sbooth/CXXCoreAudio",

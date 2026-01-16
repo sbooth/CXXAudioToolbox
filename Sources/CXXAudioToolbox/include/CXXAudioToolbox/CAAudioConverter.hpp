@@ -7,6 +7,7 @@
 
 #pragma once
 
+#import <expected>
 #import <utility>
 
 #import <AudioToolbox/AudioConverter.h>
@@ -45,44 +46,34 @@ public:
 
 	
 	/// Creates a new audio converter.
-	/// @throw std::system_error.
-	void New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat);
+	[[nodiscard]] std::expected<void, OSStatus> New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat) noexcept;
 
 	/// Creates a new audio converter using specific codecs.
-	/// @throw std::system_error.
-	void NewSpecific(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat, UInt32 inNumberClassDescriptions, const AudioClassDescription *inClassDescriptions);
+	[[nodiscard]] std::expected<void, OSStatus> NewSpecific(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat, UInt32 inNumberClassDescriptions, const AudioClassDescription *inClassDescriptions) noexcept;
 
 	/// Destroys an existing audio converter.
-	/// @throw std::system_error.
-	void Dispose();
+	[[nodiscard]] std::expected<void, OSStatus> Dispose() noexcept;
 
 	/// Resets the audio converter.
-	/// @throw std::system_error.
-	void Reset();
+	[[nodiscard]] std::expected<void, OSStatus> Reset() noexcept;
 
 	/// Returns information about an audio converter property.
-	/// @throw std::system_error.
-	void GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable);
+	[[nodiscard]] std::expected<void, OSStatus> GetPropertyInfo(AudioConverterPropertyID inPropertyID, UInt32 * _Nullable outSize, Boolean * _Nullable outWritable) noexcept;
 
 	/// Returns an audio converter property value.
-	/// @throw std::system_error.
-	void GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData);
+	[[nodiscard]] std::expected<void, OSStatus> GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) noexcept;
 
 	/// Sets an audio converter property value.
-	/// @throw std::system_error.
-	void SetProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData);
+	[[nodiscard]] std::expected<void, OSStatus> SetProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize, const void *inPropertyData) noexcept;
 
 	/// Converts data from an input buffer to an output buffer.
-	/// @throw std::system_error.
-	void ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData);
+	[[nodiscard]] std::expected<void, OSStatus> ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData) noexcept;
 
 	/// Converts data supplied by an input callback function, supporting non-interleaved and packetized formats.
-	/// @throw std::system_error.
-	void FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void * _Nullable inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription * _Nullable outPacketDescription);
+	[[nodiscard]] std::expected<void, OSStatus> FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void * _Nullable inInputDataProcUserData, UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData, AudioStreamPacketDescription * _Nullable outPacketDescription) noexcept;
 
 	/// Converts PCM data from an input buffer list to an output buffer list.
-	/// @throw std::system_error.
-	void ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData);
+	[[nodiscard]] std::expected<void, OSStatus> ConvertComplexBuffer(UInt32 inNumberPCMFrames, const AudioBufferList *inInputData, AudioBufferList *outOutputData) noexcept;
 
 
 	/// Returns the managed AudioConverter object.

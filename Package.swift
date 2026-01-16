@@ -20,7 +20,8 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://github.com/sbooth/CXXCoreAudio", from: "0.5.1")
+		.package(url: "https://github.com/sbooth/CXXCFRef", from: "0.1.2"),
+		.package(url: "https://github.com/sbooth/CXXCoreAudio", from: "0.5.1"),
 	],
 	targets: [
 		// Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,6 +29,7 @@ let package = Package(
 		.target(
 			name: "CXXAudioToolbox",
 			dependencies: [
+				"CXXCFRef",
 				"CXXCoreAudio",
 			],
 			cSettings: [
@@ -47,5 +49,5 @@ let package = Package(
 			]
 		),
 	],
-	cxxLanguageStandard: .cxx17
+	cxxLanguageStandard: .cxx2b
 )
