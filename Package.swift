@@ -20,7 +20,7 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://github.com/sbooth/CXXCFRef", from: "0.1.1"),
+		.package(url: "https://github.com/sbooth/CXXCFRef", from: "0.1.2"),
 		.package(url: "https://github.com/sbooth/CXXCoreAudio", from: "0.5.1"),
 	],
 	targets: [
