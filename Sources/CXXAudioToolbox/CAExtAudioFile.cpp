@@ -5,9 +5,9 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#import "CAExtAudioFile.hpp"
+#include "CAExtAudioFile.hpp"
 
-#import "AudioToolboxErrors.hpp"
+#include "AudioToolboxErrors.hpp"
 
 namespace {
 

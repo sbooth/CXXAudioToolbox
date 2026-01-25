@@ -7,19 +7,19 @@
 
 #pragma once
 
-#import <AudioToolbox/AudioConverter.h>
-#import <AudioToolbox/ExtendedAudioFile.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 
-#import <stdexcept>
-#import <utility>
+#include <stdexcept>
+#include <utility>
 
 #ifdef __OBJC__
-#import <AVFAudio/AVFAudio.h>
+#include <AVFAudio/AVFAudio.h>
 #endif /* __OBJC__ */
 
-#import <CXXCoreAudio/CAAudioBuffer.hpp>
-#import <CXXCoreAudio/CAChannelLayout.hpp>
-#import <CXXCoreAudio/CAStreamDescription.hpp>
+#include <CXXCoreAudio/CAAudioBuffer.hpp>
+#include <CXXCoreAudio/CAChannelLayout.hpp>
+#include <CXXCoreAudio/CAStreamDescription.hpp>
 
 CF_ASSUME_NONNULL_BEGIN
 

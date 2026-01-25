@@ -5,9 +5,9 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#import "CAAUGraph.hpp"
+#include "CAAUGraph.hpp"
 
-#import "AudioToolboxErrors.hpp"
+#include "AudioToolboxErrors.hpp"
 
 CXXAudioToolbox::CAAUGraph::~CAAUGraph() noexcept {
     reset();

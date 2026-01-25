@@ -7,9 +7,9 @@
 
 #pragma once
 
-#import <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioConverter.h>
 
-#import <utility>
+#include <utility>
 
 CF_ASSUME_NONNULL_BEGIN
 

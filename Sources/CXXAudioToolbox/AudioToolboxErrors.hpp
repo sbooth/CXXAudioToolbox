@@ -7,15 +7,15 @@
 
 #pragma once
 
-#import <AudioToolbox/AUGraph.h>
-#import <AudioToolbox/AudioCodec.h>
-#import <AudioToolbox/AudioConverter.h>
-#import <AudioToolbox/AudioFile.h>
-#import <AudioToolbox/AudioFormat.h>
-#import <AudioToolbox/ExtendedAudioFile.h>
+#include <AudioToolbox/AUGraph.h>
+#include <AudioToolbox/AudioCodec.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 
-#import <exception>
-#import <system_error>
+#include <exception>
+#include <system_error>
 
 namespace CXXAudioToolbox {
 namespace detail {
