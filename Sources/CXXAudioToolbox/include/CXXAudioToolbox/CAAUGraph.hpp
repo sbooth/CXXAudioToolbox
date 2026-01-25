@@ -22,7 +22,7 @@ namespace CXXAudioToolbox {
 /// An AUGraph wrapper.
 class CAAUGraph final {
   public:
-    // MARK: Creation and Destruction
+    // MARK: Construction and Destruction
 
     /// Creates an Audio Unit graph.
     CAAUGraph() noexcept = default;
