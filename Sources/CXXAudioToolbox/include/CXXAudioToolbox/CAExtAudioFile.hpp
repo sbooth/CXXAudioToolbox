@@ -14,7 +14,7 @@
 #include <utility>
 
 #ifdef __OBJC__
-#include <AVFAudio/AVFAudio.h>
+#import <AVFAudio/AVFAudio.h>
 #endif /* __OBJC__ */
 
 #include <CXXCoreAudio/CAAudioBuffer.hpp>
