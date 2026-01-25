@@ -7,9 +7,9 @@
 
 #pragma once
 
-#import <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/AudioFile.h>
 
-#import <utility>
+#include <utility>
 
 namespace CXXAudioToolbox {
 

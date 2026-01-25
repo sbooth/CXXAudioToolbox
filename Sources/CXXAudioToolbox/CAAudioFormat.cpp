@@ -5,9 +5,9 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#import "CAAudioFormat.hpp"
+#include "CAAudioFormat.hpp"
 
-#import "AudioToolboxErrors.hpp"
+#include "AudioToolboxErrors.hpp"
 
 UInt32 CXXAudioToolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
                                                        const void *inSpecifier) {

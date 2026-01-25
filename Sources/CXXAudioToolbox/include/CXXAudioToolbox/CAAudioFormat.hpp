@@ -7,9 +7,9 @@
 
 #pragma once
 
-#import <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioFormat.h>
 
-#import <vector>
+#include <vector>
 
 CF_ASSUME_NONNULL_BEGIN
 

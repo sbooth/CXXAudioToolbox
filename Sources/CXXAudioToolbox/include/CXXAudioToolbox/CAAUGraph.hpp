@@ -7,13 +7,13 @@
 
 #pragma once
 
-#import <CXXCoreAudio/CAStreamDescription.hpp>
+#include <CXXCoreAudio/CAStreamDescription.hpp>
 
-#import <AudioToolbox/AUGraph.h>
+#include <AudioToolbox/AUGraph.h>
 
-#import <map>
-#import <utility>
-#import <vector>
+#include <map>
+#include <utility>
+#include <vector>
 
 CF_ASSUME_NONNULL_BEGIN
 

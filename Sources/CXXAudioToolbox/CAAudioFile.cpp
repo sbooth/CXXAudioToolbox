@@ -5,9 +5,9 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#import "CAAudioFile.hpp"
+#include "CAAudioFile.hpp"
 
-#import "AudioToolboxErrors.hpp"
+#include "AudioToolboxErrors.hpp"
 
 CXXAudioToolbox::CAAudioFile::CAAudioFile(CAAudioFile&& other) noexcept
   : audioFile_{other.release()} {}

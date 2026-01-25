@@ -5,9 +5,9 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#import "CAAudioConverter.hpp"
+#include "CAAudioConverter.hpp"
 
-#import "AudioToolboxErrors.hpp"
+#include "AudioToolboxErrors.hpp"
 
 CXXAudioToolbox::CAAudioConverter::~CAAudioConverter() noexcept {
     reset();
