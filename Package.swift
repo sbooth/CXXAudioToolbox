@@ -30,9 +30,6 @@ let package = Package(
             dependencies: [
                 "CXXCoreAudio",
             ],
-            cxxSettings: [
-                .headerSearchPath("include/CXXAudioToolbox"),
-            ],
             linkerSettings: [
                 .linkedFramework("AudioToolbox"),
             ]

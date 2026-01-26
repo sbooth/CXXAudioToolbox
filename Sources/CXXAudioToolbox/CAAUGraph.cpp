@@ -5,7 +5,7 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#include "CAAUGraph.hpp"
+#include "CXXAudioToolbox/CAAUGraph.hpp"
 
 #include "AudioToolboxErrors.hpp"
 
