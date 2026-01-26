@@ -5,7 +5,7 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#include "CAAudioFile.hpp"
+#include "CXXAudioToolbox/CAAudioFile.hpp"
 
 #include "AudioToolboxErrors.hpp"
 
