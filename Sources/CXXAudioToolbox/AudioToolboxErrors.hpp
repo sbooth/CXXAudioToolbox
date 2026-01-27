@@ -23,9 +23,7 @@ namespace detail {
 /// A std::error_category for return values from the AudioCodec API.
 class AudioCodecErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "AudioCodec";
-    }
+    virtual const char *name() const noexcept override final { return "AudioCodec"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h
@@ -74,9 +72,7 @@ const AudioCodecErrorCategory audioCodecErrorCategory_;
 /// A std::error_category for return values from the AudioConverter API.
 class AudioConverterErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "AudioConverter";
-    }
+    virtual const char *name() const noexcept override final { return "AudioConverter"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h
@@ -135,9 +131,7 @@ const AudioConverterErrorCategory audioConverterErrorCategory_;
 /// A std::error_category for return values from the AudioFile API.
 class AudioFileErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "AudioFile";
-    }
+    virtual const char *name() const noexcept override final { return "AudioFile"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h
@@ -206,9 +200,7 @@ const AudioFileErrorCategory audioFileErrorCategory_;
 /// A std::error_category for return values from the AudioFormat API.
 class AudioFormatErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "AudioFormat";
-    }
+    virtual const char *name() const noexcept override final { return "AudioFormat"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h
@@ -253,9 +245,7 @@ const AudioFormatErrorCategory audioFormatErrorCategory_;
 /// A std::error_category for return values from the AudioUnit API.
 class AudioUnitErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "AudioUnit";
-    }
+    virtual const char *name() const noexcept override final { return "AudioUnit"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h
@@ -370,9 +360,7 @@ const AudioUnitErrorCategory audioUnitErrorCategory_;
 /// A std::error_category for return values from the AUGraph API.
 class AUGraphErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "AUGraph";
-    }
+    virtual const char *name() const noexcept override final { return "AUGraph"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h
@@ -415,9 +403,7 @@ const AUGraphErrorCategory auGraphErrorCategory_;
 /// A std::error_category for return values from the ExtAudioFile API.
 class ExtAudioFileErrorCategory : public std::error_category {
   public:
-    virtual const char *name() const noexcept override final {
-        return "ExtAudioFile";
-    }
+    virtual const char *name() const noexcept override final { return "ExtAudioFile"; }
     virtual std::string message(int condition) const override final {
         switch (static_cast<OSStatus>(condition)) {
             // CoreAudioBaseTypes.h

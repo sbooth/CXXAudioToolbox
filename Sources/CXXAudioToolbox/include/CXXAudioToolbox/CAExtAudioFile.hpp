@@ -32,16 +32,16 @@ class CAExtAudioFile {
     CAExtAudioFile() noexcept = default;
 
     // This class is non-copyable
-    CAExtAudioFile(const CAExtAudioFile&) = delete;
+    CAExtAudioFile(const CAExtAudioFile &) = delete;
 
     // This class is non-assignable
-    CAExtAudioFile& operator=(const CAExtAudioFile&) = delete;
+    CAExtAudioFile &operator=(const CAExtAudioFile &) = delete;
 
     /// Move constructor.
-    CAExtAudioFile(CAExtAudioFile&& other) noexcept;
+    CAExtAudioFile(CAExtAudioFile &&other) noexcept;
 
     /// Move assignment operator.
-    CAExtAudioFile& operator=(CAExtAudioFile&& other) noexcept;
+    CAExtAudioFile &operator=(CAExtAudioFile &&other) noexcept;
 
     /// Destroys the extended audio file and releases all associated resources.
     ~CAExtAudioFile() noexcept;
@@ -88,7 +88,7 @@ class CAExtAudioFile {
     /// @param inFlags The same flags as are used with AudioFileCreateWithURL
     /// Can use these to control whether an existing file is overwritten (or not).
     /// @throw std::system_error.
-    void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription& inStreamDesc,
+    void CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType, const AudioStreamBasicDescription &inStreamDesc,
                        const AudioChannelLayout *_Nullable const inChannelLayout, UInt32 inFlags);
 
     /// Closes the file and disposes of the managed extended audio file.
@@ -112,12 +112,12 @@ class CAExtAudioFile {
     /// returned, however, this indicates that end-of-file was reached.
     /// @param ioData Buffer(s) into which the audio data is read.
     /// @throw std::system_error.
-    void Read(UInt32& ioNumberFrames, AudioBufferList *ioData);
+    void Read(UInt32 &ioNumberFrames, AudioBufferList *ioData);
 
     /// Performs a synchronous sequential read.
     /// @param buffer Buffer into which the audio data is read.
     /// @throw std::system_error.
-    void Read(CXXCoreAudio::CAAudioBuffer& buffer);
+    void Read(CXXCoreAudio::CAAudioBuffer &buffer);
 
     /// Performs a synchronous sequential write.
     ///
@@ -191,7 +191,7 @@ class CAExtAudioFile {
     /// On exit, the actual size of the property data returned.
     /// @param outPropertyData The value of the property is copied to the memory this points to.
     /// @throw std::system_error.
-    void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData) const;
+    void GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 &ioPropertyDataSize, void *outPropertyData) const;
 
     /// Sets a property value.
     /// @param inPropertyID The property being set.
@@ -207,7 +207,7 @@ class CAExtAudioFile {
 
     /// Sets the file's channel layout (kExtAudioFileProperty_FileChannelLayout).
     /// @throw std::system_error.
-    void SetFileChannelLayout(const AudioChannelLayout& fileChannelLayout);
+    void SetFileChannelLayout(const AudioChannelLayout &fileChannelLayout);
 
     /// Returns the file's data format (kExtAudioFileProperty_FileDataFormat).
     /// @throw std::system_error.
@@ -219,9 +219,9 @@ class CAExtAudioFile {
 
     /// Sets the client data format (kExtAudioFileProperty_ClientDataFormat).
     /// @throw std::system_error.
-    void SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat,
+    void SetClientDataFormat(const AudioStreamBasicDescription &clientDataFormat,
                              const AudioChannelLayout *const _Nullable clientChannelLayout = nullptr,
-                             UInt32 codecManufacturer                                      = 0);
+                             UInt32 codecManufacturer = 0);
 
     /// Returns the client channel layout (kExtAudioFileProperty_ClientChannelLayout).
     /// @throw std::system_error.
@@ -230,16 +230,14 @@ class CAExtAudioFile {
 
     /// Sets the client channel layout (kExtAudioFileProperty_ClientChannelLayout).
     /// @throw std::system_error.
-    void SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout);
+    void SetClientChannelLayout(const AudioChannelLayout &clientChannelLayout);
 
     /// Returns the managed AudioConverter (kExtAudioFileProperty_AudioConverter).
     /// @throw std::system_error.
     [[nodiscard]] AudioConverterRef _Nullable AudioConverter() const;
 
     /// Returns true if the extended audio file has an internal audio converter.
-    [[nodiscard]] bool HasAudioConverter() const {
-        return AudioConverter() != nullptr;
-    }
+    [[nodiscard]] bool HasAudioConverter() const { return AudioConverter() != nullptr; }
 
     /// Sets a property on the managed audio converter.
     void SetAudioConverterProperty(AudioConverterPropertyID inPropertyID, UInt32 inPropertyDataSize,
@@ -280,7 +278,7 @@ class CAExtAudioFile {
     void reset(ExtAudioFileRef _Nullable extAudioFile = nullptr) noexcept;
 
     /// Swaps the managed ExtAudioFile object with the managed ExtAudioFile object from another audio converter.
-    void swap(CAExtAudioFile& other) noexcept;
+    void swap(CAExtAudioFile &other) noexcept;
 
     /// Releases ownership of the managed ExtAudioFile object and returns it.
     /// @note The caller assumes responsibility for disposing of the returned ExtAudioFile object using
@@ -294,17 +292,13 @@ class CAExtAudioFile {
 
 // MARK: - Implementation -
 
-inline CAExtAudioFile::operator bool() const noexcept {
-    return extAudioFile_ != nullptr;
-}
+inline CAExtAudioFile::operator bool() const noexcept { return extAudioFile_ != nullptr; }
 
-inline CAExtAudioFile::operator ExtAudioFileRef const _Nullable() const noexcept {
-    return extAudioFile_;
-}
+inline CAExtAudioFile::operator ExtAudioFileRef const _Nullable() const noexcept { return extAudioFile_; }
 
 #ifdef __OBJC__
 inline AVAudioFormat *CAExtAudioFile::FileFormat() const {
-    const auto dataFormat    = FileDataFormat();
+    const auto dataFormat = FileDataFormat();
     const auto channelLayout = FileChannelLayout();
     if (dataFormat.ChannelCount() > 2 && !channelLayout) {
         throw std::runtime_error("File data format > 2 channels with no file channel layout");
@@ -313,7 +307,7 @@ inline AVAudioFormat *CAExtAudioFile::FileFormat() const {
 }
 
 inline AVAudioFormat *CAExtAudioFile::ClientFormat() const {
-    const auto dataFormat    = ClientDataFormat();
+    const auto dataFormat = ClientDataFormat();
     const auto channelLayout = ClientChannelLayout();
     if (dataFormat.ChannelCount() > 2 && !channelLayout) {
         throw std::runtime_error("Client data format > 2 channels with no client channel layout");
@@ -328,9 +322,7 @@ inline void CAExtAudioFile::SetClientFormat(AVAudioFormat *format) {
 }
 #endif /* __OBJC__ */
 
-inline ExtAudioFileRef _Nullable CAExtAudioFile::get() const noexcept {
-    return extAudioFile_;
-}
+inline ExtAudioFileRef _Nullable CAExtAudioFile::get() const noexcept { return extAudioFile_; }
 
 inline void CAExtAudioFile::reset(ExtAudioFileRef _Nullable extAudioFile) noexcept {
     if (auto old = std::exchange(extAudioFile_, extAudioFile); old) {
@@ -338,13 +330,9 @@ inline void CAExtAudioFile::reset(ExtAudioFileRef _Nullable extAudioFile) noexce
     }
 }
 
-inline void CAExtAudioFile::swap(CAExtAudioFile& other) noexcept {
-    std::swap(extAudioFile_, other.extAudioFile_);
-}
+inline void CAExtAudioFile::swap(CAExtAudioFile &other) noexcept { std::swap(extAudioFile_, other.extAudioFile_); }
 
-inline ExtAudioFileRef _Nullable CAExtAudioFile::release() noexcept {
-    return std::exchange(extAudioFile_, nullptr);
-}
+inline ExtAudioFileRef _Nullable CAExtAudioFile::release() noexcept { return std::exchange(extAudioFile_, nullptr); }
 } /* namespace CXXAudioToolbox */
 
 CF_ASSUME_NONNULL_END

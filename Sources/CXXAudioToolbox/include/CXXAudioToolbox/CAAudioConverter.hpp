@@ -22,16 +22,16 @@ class CAAudioConverter final {
     CAAudioConverter() noexcept = default;
 
     // This class is non-copyable
-    CAAudioConverter(const CAAudioConverter&) = delete;
+    CAAudioConverter(const CAAudioConverter &) = delete;
 
     // This class is non-assignable
-    CAAudioConverter& operator=(const CAAudioConverter&) = delete;
+    CAAudioConverter &operator=(const CAAudioConverter &) = delete;
 
     /// Move constructor.
-    CAAudioConverter(CAAudioConverter&& other) noexcept;
+    CAAudioConverter(CAAudioConverter &&other) noexcept;
 
     /// Move assignment operator.
-    CAAudioConverter& operator=(CAAudioConverter&& other) noexcept;
+    CAAudioConverter &operator=(CAAudioConverter &&other) noexcept;
 
     /// Destroys the audio converter and releases all associated resources.
     ~CAAudioConverter() noexcept;
@@ -44,12 +44,12 @@ class CAAudioConverter final {
 
     /// Creates a new audio converter.
     /// @throw std::system_error.
-    void New(const AudioStreamBasicDescription& inSourceFormat, const AudioStreamBasicDescription& inDestinationFormat);
+    void New(const AudioStreamBasicDescription &inSourceFormat, const AudioStreamBasicDescription &inDestinationFormat);
 
     /// Creates a new audio converter using specific codecs.
     /// @throw std::system_error.
-    void NewSpecific(const AudioStreamBasicDescription& inSourceFormat,
-                     const AudioStreamBasicDescription& inDestinationFormat, UInt32 inNumberClassDescriptions,
+    void NewSpecific(const AudioStreamBasicDescription &inSourceFormat,
+                     const AudioStreamBasicDescription &inDestinationFormat, UInt32 inNumberClassDescriptions,
                      const AudioClassDescription *inClassDescriptions);
 
     /// Destroys an existing audio converter.
@@ -67,7 +67,7 @@ class CAAudioConverter final {
 
     /// Returns an audio converter property value.
     /// @throw std::system_error.
-    void GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize, void *outPropertyData);
+    void GetProperty(AudioConverterPropertyID inPropertyID, UInt32 &ioPropertyDataSize, void *outPropertyData);
 
     /// Sets an audio converter property value.
     /// @throw std::system_error.
@@ -75,12 +75,12 @@ class CAAudioConverter final {
 
     /// Converts data from an input buffer to an output buffer.
     /// @throw std::system_error.
-    void ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32& ioOutputDataSize, void *outOutputData);
+    void ConvertBuffer(UInt32 inInputDataSize, const void *inInputData, UInt32 &ioOutputDataSize, void *outOutputData);
 
     /// Converts data supplied by an input callback function, supporting non-interleaved and packetized formats.
     /// @throw std::system_error.
     void FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc, void *_Nullable inInputDataProcUserData,
-                           UInt32& ioOutputDataPacketSize, AudioBufferList *outOutputData,
+                           UInt32 &ioOutputDataPacketSize, AudioBufferList *outOutputData,
                            AudioStreamPacketDescription *_Nullable outPacketDescription);
 
     /// Converts PCM data from an input buffer list to an output buffer list.
@@ -97,7 +97,7 @@ class CAAudioConverter final {
     void reset(AudioConverterRef _Nullable converter = nullptr) noexcept;
 
     /// Swaps the managed AudioConverter object with the managed AudioConverter object from another audio converter.
-    void swap(CAAudioConverter& other) noexcept;
+    void swap(CAAudioConverter &other) noexcept;
 
     /// Releases ownership of the managed AudioConverter object and returns it.
     /// @note The caller assumes responsibility for disposing of the returned AudioConverter object using
@@ -111,17 +111,11 @@ class CAAudioConverter final {
 
 // MARK: - Implementation -
 
-inline CAAudioConverter::operator bool() const noexcept {
-    return converter_ != nullptr;
-}
+inline CAAudioConverter::operator bool() const noexcept { return converter_ != nullptr; }
 
-inline CAAudioConverter::operator AudioConverterRef const _Nullable() const noexcept {
-    return converter_;
-}
+inline CAAudioConverter::operator AudioConverterRef const _Nullable() const noexcept { return converter_; }
 
-inline AudioConverterRef _Nullable CAAudioConverter::get() const noexcept {
-    return converter_;
-}
+inline AudioConverterRef _Nullable CAAudioConverter::get() const noexcept { return converter_; }
 
 inline void CAAudioConverter::reset(AudioConverterRef _Nullable converter) noexcept {
     if (auto old = std::exchange(converter_, converter); old) {
@@ -129,13 +123,9 @@ inline void CAAudioConverter::reset(AudioConverterRef _Nullable converter) noexc
     }
 }
 
-inline void CAAudioConverter::swap(CAAudioConverter& other) noexcept {
-    std::swap(converter_, other.converter_);
-}
+inline void CAAudioConverter::swap(CAAudioConverter &other) noexcept { std::swap(converter_, other.converter_); }
 
-inline AudioConverterRef _Nullable CAAudioConverter::release() noexcept {
-    return std::exchange(converter_, nullptr);
-}
+inline AudioConverterRef _Nullable CAAudioConverter::release() noexcept { return std::exchange(converter_, nullptr); }
 
 } /* namespace CXXAudioToolbox */
 

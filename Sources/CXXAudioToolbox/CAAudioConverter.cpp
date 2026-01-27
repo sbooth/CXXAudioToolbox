@@ -9,29 +9,26 @@
 
 #include "AudioToolboxErrors.hpp"
 
-CXXAudioToolbox::CAAudioConverter::~CAAudioConverter() noexcept {
-    reset();
-}
+CXXAudioToolbox::CAAudioConverter::~CAAudioConverter() noexcept { reset(); }
 
-CXXAudioToolbox::CAAudioConverter::CAAudioConverter(CAAudioConverter&& other) noexcept
-  : converter_{other.release()} {}
+CXXAudioToolbox::CAAudioConverter::CAAudioConverter(CAAudioConverter &&other) noexcept : converter_{other.release()} {}
 
-CXXAudioToolbox::CAAudioConverter& CXXAudioToolbox::CAAudioConverter::operator=(CAAudioConverter&& other) noexcept {
+CXXAudioToolbox::CAAudioConverter &CXXAudioToolbox::CAAudioConverter::operator=(CAAudioConverter &&other) noexcept {
     reset(other.release());
     return *this;
 }
 
-void CXXAudioToolbox::CAAudioConverter::New(const AudioStreamBasicDescription& inSourceFormat,
-                                            const AudioStreamBasicDescription& inDestinationFormat) {
+void CXXAudioToolbox::CAAudioConverter::New(const AudioStreamBasicDescription &inSourceFormat,
+                                            const AudioStreamBasicDescription &inDestinationFormat) {
     Dispose();
     const auto result = AudioConverterNew(&inSourceFormat, &inDestinationFormat, &converter_);
     ThrowIfAudioConverterError(result, "AudioConverterNew");
 }
 
-void CXXAudioToolbox::CAAudioConverter::NewSpecific(const AudioStreamBasicDescription& inSourceFormat,
-                                                    const AudioStreamBasicDescription& inDestinationFormat,
-                                                    UInt32                             inNumberClassDescriptions,
-                                                    const AudioClassDescription       *inClassDescriptions) {
+void CXXAudioToolbox::CAAudioConverter::NewSpecific(const AudioStreamBasicDescription &inSourceFormat,
+                                                    const AudioStreamBasicDescription &inDestinationFormat,
+                                                    UInt32 inNumberClassDescriptions,
+                                                    const AudioClassDescription *inClassDescriptions) {
     Dispose();
     const auto result = AudioConverterNewSpecific(&inSourceFormat, &inDestinationFormat, inNumberClassDescriptions,
                                                   inClassDescriptions, &converter_);
@@ -41,7 +38,7 @@ void CXXAudioToolbox::CAAudioConverter::NewSpecific(const AudioStreamBasicDescri
 void CXXAudioToolbox::CAAudioConverter::Dispose() {
     if (converter_) {
         const auto result = AudioConverterDispose(converter_);
-        converter_        = nullptr;
+        converter_ = nullptr;
         ThrowIfAudioConverterError(result, "AudioConverterDispose");
     }
 }
@@ -57,7 +54,7 @@ void CXXAudioToolbox::CAAudioConverter::GetPropertyInfo(AudioConverterPropertyID
     ThrowIfAudioConverterError(result, "AudioConverterGetPropertyInfo");
 }
 
-void CXXAudioToolbox::CAAudioConverter::GetProperty(AudioConverterPropertyID inPropertyID, UInt32& ioPropertyDataSize,
+void CXXAudioToolbox::CAAudioConverter::GetProperty(AudioConverterPropertyID inPropertyID, UInt32 &ioPropertyDataSize,
                                                     void *outPropertyData) {
     const auto result = AudioConverterGetProperty(converter_, inPropertyID, &ioPropertyDataSize, outPropertyData);
     ThrowIfAudioConverterError(result, "AudioConverterGetProperty");
@@ -70,24 +67,24 @@ void CXXAudioToolbox::CAAudioConverter::SetProperty(AudioConverterPropertyID inP
 }
 
 void CXXAudioToolbox::CAAudioConverter::ConvertBuffer(UInt32 inInputDataSize, const void *inInputData,
-                                                      UInt32& ioOutputDataSize, void *outOutputData) {
+                                                      UInt32 &ioOutputDataSize, void *outOutputData) {
     const auto result =
           AudioConverterConvertBuffer(converter_, inInputDataSize, inInputData, &ioOutputDataSize, outOutputData);
     ThrowIfAudioConverterError(result, "AudioConverterConvertBuffer");
 }
 
 void CXXAudioToolbox::CAAudioConverter::FillComplexBuffer(AudioConverterComplexInputDataProc inInputDataProc,
-                                                          void *inInputDataProcUserData, UInt32& ioOutputDataPacketSize,
-                                                          AudioBufferList              *outOutputData,
+                                                          void *inInputDataProcUserData, UInt32 &ioOutputDataPacketSize,
+                                                          AudioBufferList *outOutputData,
                                                           AudioStreamPacketDescription *outPacketDescription) {
     const auto result = AudioConverterFillComplexBuffer(converter_, inInputDataProc, inInputDataProcUserData,
                                                         &ioOutputDataPacketSize, outOutputData, outPacketDescription);
     ThrowIfAudioConverterError(result, "AudioConverterFillComplexBuffer");
 }
 
-void CXXAudioToolbox::CAAudioConverter::ConvertComplexBuffer(UInt32                 inNumberPCMFrames,
+void CXXAudioToolbox::CAAudioConverter::ConvertComplexBuffer(UInt32 inNumberPCMFrames,
                                                              const AudioBufferList *inInputData,
-                                                             AudioBufferList       *outOutputData) {
+                                                             AudioBufferList *outOutputData) {
     const auto result = AudioConverterConvertComplexBuffer(converter_, inNumberPCMFrames, inInputData, outOutputData);
     ThrowIfAudioConverterError(result, "AudioConverterConvertComplexBuffer");
 }
