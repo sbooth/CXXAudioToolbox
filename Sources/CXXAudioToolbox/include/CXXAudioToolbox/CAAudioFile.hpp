@@ -65,7 +65,7 @@ class CAAudioFile final {
     /// @throw std::system_error.
     void OpenWithCallbacks(void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc _Nullable inWriteFunc,
                            AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc _Nullable inSetSizeFunc,
-                           AudioFileTypeID inFileTypeHint);
+                           AudioFileTypeID       inFileTypeHint);
 
     /// Close an existing audio file.
     /// @throw std::system_error.
@@ -85,13 +85,13 @@ class CAAudioFile final {
 
     /// Reads packets of audio data from the audio file.
     /// @throw std::system_error.
-    OSStatus ReadPacketData(bool inUseCache, UInt32& ioNumBytes,
+    OSStatus ReadPacketData(bool inUseCache, UInt32&                                              ioNumBytes,
                             AudioStreamPacketDescription *_Nullable outPacketDescriptions, SInt64 inStartingPacket,
                             UInt32& ioNumPackets, void *_Nullable outBuffer);
 
     /// Writes packets of audio data to the audio file.
     /// @throw std::system_error.
-    void WritePackets(bool inUseCache, UInt32 inNumBytes,
+    void WritePackets(bool inUseCache, UInt32                                                    inNumBytes,
                       const AudioStreamPacketDescription *_Nullable inPacketDescriptions, SInt64 inStartingPacket,
                       UInt32& ioNumPackets, const void *inBuffer);
 

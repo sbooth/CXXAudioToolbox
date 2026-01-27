@@ -60,7 +60,7 @@ void CXXAudioToolbox::CAAudioFile::OpenWithCallbacks(void *inClientData, AudioFi
 void CXXAudioToolbox::CAAudioFile::Close() {
     if (audioFile_) {
         const auto result = AudioFileClose(audioFile_);
-        audioFile_ = nullptr;
+        audioFile_        = nullptr;
         ThrowIfAudioFileError(result, "AudioFileClose");
     }
 }
@@ -116,7 +116,7 @@ void CXXAudioToolbox::CAAudioFile::WritePackets(bool inUseCache, UInt32 inNumByt
 }
 
 UInt32 CXXAudioToolbox::CAAudioFile::GetUserDataSize(UInt32 inUserDataID, UInt32 inIndex) {
-    UInt32 size;
+    UInt32     size;
     const auto result = AudioFileGetUserDataSize(audioFile_, inUserDataID, inIndex, &size);
     ThrowIfAudioFileError(result, "AudioFileGetUserDataSize");
     return size;
@@ -159,14 +159,14 @@ void CXXAudioToolbox::CAAudioFile::SetProperty(AudioFilePropertyID inPropertyID,
 
 AudioFileTypeID CXXAudioToolbox::CAAudioFile::FileFormat() const {
     AudioFileTypeID fileFormat;
-    UInt32 size = sizeof fileFormat;
+    UInt32          size = sizeof fileFormat;
     GetProperty(kAudioFilePropertyFileFormat, size, &fileFormat);
     return fileFormat;
 }
 
 CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAAudioFile::DataFormat() const {
     CXXCoreAudio::CAStreamDescription fileDataFormat;
-    UInt32 size = sizeof fileDataFormat;
+    UInt32                            size = sizeof fileDataFormat;
     GetProperty(kAudioFilePropertyDataFormat, size, &fileDataFormat);
     return fileDataFormat;
 }
@@ -175,14 +175,14 @@ CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAAudioFile::DataFormat() con
 
 UInt32 CXXAudioToolbox::CAAudioFile::GetGlobalInfoSize(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize,
                                                        void *_Nullable inSpecifier) {
-    UInt32 size;
+    UInt32     size;
     const auto result = AudioFileGetGlobalInfoSize(inPropertyID, inSpecifierSize, inSpecifier, &size);
     ThrowIfAudioFileError(result, "AudioFileGetGlobalInfoSize");
     return size;
 }
 
 void CXXAudioToolbox::CAAudioFile::GetGlobalInfo(AudioFilePropertyID inPropertyID, UInt32 inSpecifierSize,
-                                                 void *_Nullable inSpecifier, UInt32& ioDataSize,
+                                                 void *_Nullable inSpecifier, UInt32&     ioDataSize,
                                                  void *outPropertyData) {
     const auto result =
           AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
@@ -190,7 +190,7 @@ void CXXAudioToolbox::CAAudioFile::GetGlobalInfo(AudioFilePropertyID inPropertyI
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::ReadableTypes() {
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_ReadableTypes, 0, nullptr);
+    auto size  = GetGlobalInfoSize(kAudioFileGlobalInfo_ReadableTypes, 0, nullptr);
     auto count = size / sizeof(AudioFileTypeID);
     auto types = std::vector<AudioFileTypeID>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_ReadableTypes, 0, nullptr, size, types.data());
@@ -198,7 +198,7 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::ReadableTypes() {
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::WritableTypes() {
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, nullptr);
+    auto size  = GetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, nullptr);
     auto count = size / sizeof(AudioFileTypeID);
     auto types = std::vector<AudioFileTypeID>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, nullptr, size, types.data());
@@ -207,7 +207,7 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::WritableTypes() {
 
 CFStringRef CXXAudioToolbox::CAAudioFile::CopyFileTypeName(AudioFileTypeID type) {
     CFStringRef s;
-    UInt32 size = sizeof s;
+    UInt32      size = sizeof s;
     GetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, sizeof type, &type, size, &s);
     return s;
 }
@@ -215,7 +215,7 @@ CFStringRef CXXAudioToolbox::CAAudioFile::CopyFileTypeName(AudioFileTypeID type)
 std::vector<CXXCoreAudio::CAStreamDescription>
 CXXAudioToolbox::CAAudioFile::AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID) {
     AudioFileTypeAndFormatID spec{fileType, formatID};
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof spec, &spec);
+    auto size  = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof spec, &spec);
     auto count = size / sizeof(AudioStreamBasicDescription);
     auto streamDescriptions = std::vector<CXXCoreAudio::CAStreamDescription>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof spec, &spec, size,
@@ -224,8 +224,8 @@ CXXAudioToolbox::CAAudioFile::AvailableStreamDescriptions(AudioFileTypeID fileTy
 }
 
 std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFile::AvailableFormatIDs(AudioFileTypeID type) {
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof type, &type);
-    auto count = size / sizeof(AudioFormatID);
+    auto size      = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof type, &type);
+    auto count     = size / sizeof(AudioFormatID);
     auto formatIDs = std::vector<AudioFormatID>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof type, &type, size, formatIDs.data());
     return formatIDs;
@@ -233,49 +233,49 @@ std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFile::AvailableFormatIDs(Audi
 
 CFArrayRef CXXAudioToolbox::CAAudioFile::CopyAllExtensions() {
     CFArrayRef a;
-    UInt32 size = sizeof a;
+    UInt32     size = sizeof a;
     GetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, nullptr, size, &a);
     return a;
 }
 
 CFArrayRef CXXAudioToolbox::CAAudioFile::CopyAllUTIs() {
     CFArrayRef a;
-    UInt32 size = sizeof a;
+    UInt32     size = sizeof a;
     GetGlobalInfo(kAudioFileGlobalInfo_AllUTIs, 0, nullptr, size, &a);
     return a;
 }
 
 CFArrayRef CXXAudioToolbox::CAAudioFile::CopyAllMIMETypes() {
     CFArrayRef a;
-    UInt32 size = sizeof a;
+    UInt32     size = sizeof a;
     GetGlobalInfo(kAudioFileGlobalInfo_AllMIMETypes, 0, nullptr, size, &a);
     return a;
 }
 
 CFArrayRef CXXAudioToolbox::CAAudioFile::CopyExtensionsForType(AudioFileTypeID type) {
     CFArrayRef a;
-    UInt32 size = sizeof a;
+    UInt32     size = sizeof a;
     GetGlobalInfo(kAudioFileGlobalInfo_ExtensionsForType, sizeof type, &type, size, &a);
     return a;
 }
 
 CFArrayRef CXXAudioToolbox::CAAudioFile::CopyUTIsForType(AudioFileTypeID type) {
     CFArrayRef a;
-    UInt32 size = sizeof a;
+    UInt32     size = sizeof a;
     GetGlobalInfo(kAudioFileGlobalInfo_UTIsForType, sizeof type, &type, size, &a);
     return a;
 }
 
 CFArrayRef CXXAudioToolbox::CAAudioFile::CopyMIMETypesForType(AudioFileTypeID type) {
     CFArrayRef mimeTypes;
-    UInt32 size = sizeof mimeTypes;
+    UInt32     size = sizeof mimeTypes;
     GetGlobalInfo(kAudioFileGlobalInfo_MIMETypesForType, sizeof type, &type, size, &mimeTypes);
     return mimeTypes;
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForMIMEType(CFStringRef mimeType) {
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForMIMEType, sizeof mimeType,
-                                  const_cast<void *>(reinterpret_cast<const void *>(mimeType)));
+    auto size  = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForMIMEType, sizeof mimeType,
+                                   const_cast<void *>(reinterpret_cast<const void *>(mimeType)));
     auto count = size / sizeof(AudioFileTypeID);
     auto types = std::vector<AudioFileTypeID>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_TypesForMIMEType, sizeof mimeType,
@@ -284,8 +284,8 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForMIMEType(CFSt
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForUTI(CFStringRef uti) {
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForUTI, sizeof uti,
-                                  const_cast<void *>(reinterpret_cast<const void *>(uti)));
+    auto size  = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForUTI, sizeof uti,
+                                   const_cast<void *>(reinterpret_cast<const void *>(uti)));
     auto count = size / sizeof(AudioFileTypeID);
     auto types = std::vector<AudioFileTypeID>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_TypesForUTI, sizeof uti, const_cast<void *>(reinterpret_cast<const void *>(uti)),
@@ -294,8 +294,8 @@ std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForUTI(CFStringR
 }
 
 std::vector<AudioFileTypeID> CXXAudioToolbox::CAAudioFile::TypesForExtension(CFStringRef extension) {
-    auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForExtension, sizeof extension,
-                                  const_cast<void *>(reinterpret_cast<const void *>(extension)));
+    auto size  = GetGlobalInfoSize(kAudioFileGlobalInfo_TypesForExtension, sizeof extension,
+                                   const_cast<void *>(reinterpret_cast<const void *>(extension)));
     auto count = size / sizeof(AudioFileTypeID);
     auto types = std::vector<AudioFileTypeID>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_TypesForExtension, sizeof extension,

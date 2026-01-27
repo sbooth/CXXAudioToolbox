@@ -221,7 +221,7 @@ class CAExtAudioFile {
     /// @throw std::system_error.
     void SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat,
                              const AudioChannelLayout *const _Nullable clientChannelLayout = nullptr,
-                             UInt32 codecManufacturer = 0);
+                             UInt32 codecManufacturer                                      = 0);
 
     /// Returns the client channel layout (kExtAudioFileProperty_ClientChannelLayout).
     /// @throw std::system_error.
@@ -304,7 +304,7 @@ inline CAExtAudioFile::operator ExtAudioFileRef const _Nullable() const noexcept
 
 #ifdef __OBJC__
 inline AVAudioFormat *CAExtAudioFile::FileFormat() const {
-    const auto dataFormat = FileDataFormat();
+    const auto dataFormat    = FileDataFormat();
     const auto channelLayout = FileChannelLayout();
     if (dataFormat.ChannelCount() > 2 && !channelLayout) {
         throw std::runtime_error("File data format > 2 channels with no file channel layout");
@@ -313,7 +313,7 @@ inline AVAudioFormat *CAExtAudioFile::FileFormat() const {
 }
 
 inline AVAudioFormat *CAExtAudioFile::ClientFormat() const {
-    const auto dataFormat = ClientDataFormat();
+    const auto dataFormat    = ClientDataFormat();
     const auto channelLayout = ClientChannelLayout();
     if (dataFormat.ChannelCount() > 2 && !channelLayout) {
         throw std::runtime_error("Client data format > 2 channels with no client channel layout");
