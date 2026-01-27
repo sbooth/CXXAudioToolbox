@@ -21,7 +21,7 @@ void CXXAudioToolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropert
                                                  const void *inSpecifier, UInt32 &ioPropertyDataSize,
                                                  void *outPropertyData) {
     const auto result =
-          AudioFormatGetProperty(inPropertyID, inSpecifierSize, inSpecifier, &ioPropertyDataSize, outPropertyData);
+            AudioFormatGetProperty(inPropertyID, inSpecifierSize, inSpecifier, &ioPropertyDataSize, outPropertyData);
     ThrowIfAudioFormatError(result, "AudioFormatGetProperty");
 }
 

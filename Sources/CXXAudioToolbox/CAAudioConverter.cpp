@@ -69,7 +69,7 @@ void CXXAudioToolbox::CAAudioConverter::SetProperty(AudioConverterPropertyID inP
 void CXXAudioToolbox::CAAudioConverter::ConvertBuffer(UInt32 inInputDataSize, const void *inInputData,
                                                       UInt32 &ioOutputDataSize, void *outOutputData) {
     const auto result =
-          AudioConverterConvertBuffer(converter_, inInputDataSize, inInputData, &ioOutputDataSize, outOutputData);
+            AudioConverterConvertBuffer(converter_, inInputDataSize, inInputData, &ioOutputDataSize, outOutputData);
     ThrowIfAudioConverterError(result, "AudioConverterConvertBuffer");
 }
 

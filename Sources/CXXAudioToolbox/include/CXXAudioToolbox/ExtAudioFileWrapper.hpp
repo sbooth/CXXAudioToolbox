@@ -68,7 +68,7 @@ class ExtAudioFileWrapper final {
 // MARK: - Implementation -
 
 inline ExtAudioFileWrapper::ExtAudioFileWrapper(ExtAudioFileWrapper &&other) noexcept
-        : extAudioFile_{other.release()} {}
+    : extAudioFile_{other.release()} {}
 
 inline ExtAudioFileWrapper &ExtAudioFileWrapper::operator=(ExtAudioFileWrapper &&other) noexcept {
     reset(other.release());
@@ -78,7 +78,7 @@ inline ExtAudioFileWrapper &ExtAudioFileWrapper::operator=(ExtAudioFileWrapper &
 inline ExtAudioFileWrapper::~ExtAudioFileWrapper() noexcept { reset(); }
 
 inline ExtAudioFileWrapper::ExtAudioFileWrapper(ExtAudioFileRef _Nullable extAudioFile) noexcept
-        : extAudioFile_{extAudioFile} {}
+    : extAudioFile_{extAudioFile} {}
 
 inline ExtAudioFileWrapper::operator bool() const noexcept { return extAudioFile_ != nullptr; }
 

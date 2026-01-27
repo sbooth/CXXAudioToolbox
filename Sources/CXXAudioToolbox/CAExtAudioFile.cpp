@@ -46,7 +46,7 @@ void CXXAudioToolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTyp
                                                     UInt32 inFlags) {
     Dispose();
     const auto result =
-          ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
+            ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
     ThrowIfExtAudioFileError(result, "ExtAudioFileCreateWithURL");
 }
 

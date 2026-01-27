@@ -34,9 +34,9 @@ void CXXAudioToolbox::CAAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID
 }
 
 void CXXAudioToolbox::CAAudioFile::InitializeWithCallbacks(
-      void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc,
-      AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType,
-      const AudioStreamBasicDescription &inFormat, AudioFileFlags inFlags) {
+        void *inClientData, AudioFile_ReadProc inReadFunc, AudioFile_WriteProc inWriteFunc,
+        AudioFile_GetSizeProc inGetSizeFunc, AudioFile_SetSizeProc inSetSizeFunc, AudioFileTypeID inFileType,
+        const AudioStreamBasicDescription &inFormat, AudioFileFlags inFlags) {
     Close();
     const auto result = AudioFileInitializeWithCallbacks(inClientData, inReadFunc, inWriteFunc, inGetSizeFunc,
                                                          inSetSizeFunc, inFileType, &inFormat, inFlags, &audioFile_);
@@ -182,7 +182,7 @@ void CXXAudioToolbox::CAAudioFile::GetGlobalInfo(AudioFilePropertyID inPropertyI
                                                  void *_Nullable inSpecifier, UInt32 &ioDataSize,
                                                  void *outPropertyData) {
     const auto result =
-          AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
+            AudioFileGetGlobalInfo(inPropertyID, inSpecifierSize, inSpecifier, &ioDataSize, outPropertyData);
     ThrowIfAudioFileError(result, "AudioFileGetGlobalInfo");
 }
 
