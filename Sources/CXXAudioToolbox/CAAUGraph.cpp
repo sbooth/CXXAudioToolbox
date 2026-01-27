@@ -9,14 +9,11 @@
 
 #include "AudioToolboxErrors.hpp"
 
-CXXAudioToolbox::CAAUGraph::~CAAUGraph() noexcept {
-    reset();
-}
+CXXAudioToolbox::CAAUGraph::~CAAUGraph() noexcept { reset(); }
 
-CXXAudioToolbox::CAAUGraph::CAAUGraph(CAAUGraph&& other) noexcept
-  : graph_{other.release()} {}
+CXXAudioToolbox::CAAUGraph::CAAUGraph(CAAUGraph &&other) noexcept : graph_{other.release()} {}
 
-CXXAudioToolbox::CAAUGraph& CXXAudioToolbox::CAAUGraph::operator=(CAAUGraph&& other) noexcept {
+CXXAudioToolbox::CAAUGraph &CXXAudioToolbox::CAAUGraph::operator=(CAAUGraph &&other) noexcept {
     reset(other.release());
     return *this;
 }
@@ -99,7 +96,7 @@ bool CXXAudioToolbox::CAAUGraph::IsNodeSubGraph(AUNode inNode) const {
 void CXXAudioToolbox::CAAUGraph::ConnectNodeInput(AUNode inSourceNode, UInt32 inSourceOutputNumber, AUNode inDestNode,
                                                   UInt32 inDestInputNumber) {
     const auto result =
-          AUGraphConnectNodeInput(graph_, inSourceNode, inSourceOutputNumber, inDestNode, inDestInputNumber);
+            AUGraphConnectNodeInput(graph_, inSourceNode, inSourceOutputNumber, inDestNode, inDestInputNumber);
     ThrowIfAUGraphError(result, "AUGraphConnectNodeInput");
 }
 
@@ -273,7 +270,7 @@ Float64 CXXAudioToolbox::CAAUGraph::Latency() const {
         Float64 auLatency = 0;
         UInt32 dataSize = sizeof auLatency;
         const auto result =
-              AudioUnitGetProperty(au, kAudioUnitProperty_Latency, kAudioUnitScope_Global, 0, &auLatency, &dataSize);
+                AudioUnitGetProperty(au, kAudioUnitProperty_Latency, kAudioUnitScope_Global, 0, &auLatency, &dataSize);
         ThrowIfAudioUnitError(result, "AudioUnitGetProperty (kAudioUnitProperty_Latency, kAudioUnitScope_Global)");
 
         latency += auLatency;
@@ -292,8 +289,8 @@ Float64 CXXAudioToolbox::CAAUGraph::TailTime() const {
 
         Float64 auTailTime = 0;
         UInt32 dataSize = sizeof auTailTime;
-        const auto result =
-              AudioUnitGetProperty(au, kAudioUnitProperty_TailTime, kAudioUnitScope_Global, 0, &auTailTime, &dataSize);
+        const auto result = AudioUnitGetProperty(au, kAudioUnitProperty_TailTime, kAudioUnitScope_Global, 0,
+                                                 &auTailTime, &dataSize);
         ThrowIfAudioUnitError(result, "AudioUnitGetProperty (kAudioUnitProperty_TailTime, kAudioUnitScope_Global)");
 
         tailTime += auTailTime;

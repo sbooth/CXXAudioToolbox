@@ -12,22 +12,18 @@
 namespace {
 
 struct free_deleter {
-    template <typename T>
-    void operator()(T *_Nonnull ptr) const {
+    template <typename T> void operator()(T *_Nonnull ptr) const {
         std::free(const_cast<std::remove_const_t<T> *>(ptr));
     }
 };
 
 } /* namespace */
 
-CXXAudioToolbox::CAExtAudioFile::~CAExtAudioFile() noexcept {
-    reset();
-}
+CXXAudioToolbox::CAExtAudioFile::~CAExtAudioFile() noexcept { reset(); }
 
-CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile&& other) noexcept
-  : extAudioFile_{other.release()} {}
+CXXAudioToolbox::CAExtAudioFile::CAExtAudioFile(CAExtAudioFile &&other) noexcept : extAudioFile_{other.release()} {}
 
-CXXAudioToolbox::CAExtAudioFile& CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile&& other) noexcept {
+CXXAudioToolbox::CAExtAudioFile &CXXAudioToolbox::CAExtAudioFile::operator=(CAExtAudioFile &&other) noexcept {
     reset(other.release());
     return *this;
 }
@@ -45,12 +41,12 @@ void CXXAudioToolbox::CAExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool
 }
 
 void CXXAudioToolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType,
-                                                    const AudioStreamBasicDescription& inStreamDesc,
+                                                    const AudioStreamBasicDescription &inStreamDesc,
                                                     const AudioChannelLayout *_Nullable const inChannelLayout,
                                                     UInt32 inFlags) {
     Dispose();
     const auto result =
-          ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
+            ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
     ThrowIfExtAudioFileError(result, "ExtAudioFileCreateWithURL");
 }
 
@@ -62,12 +58,12 @@ void CXXAudioToolbox::CAExtAudioFile::Dispose() {
     }
 }
 
-void CXXAudioToolbox::CAExtAudioFile::Read(UInt32& ioNumberFrames, AudioBufferList *ioData) {
+void CXXAudioToolbox::CAExtAudioFile::Read(UInt32 &ioNumberFrames, AudioBufferList *ioData) {
     const auto result = ExtAudioFileRead(extAudioFile_, &ioNumberFrames, ioData);
     ThrowIfExtAudioFileError(result, "ExtAudioFileRead");
 }
 
-void CXXAudioToolbox::CAExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer& buffer) {
+void CXXAudioToolbox::CAExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer &buffer) {
     buffer.PrepareForReading();
     UInt32 frameCount = buffer.FrameCapacity();
     Read(frameCount, buffer);
@@ -121,7 +117,7 @@ void CXXAudioToolbox::CAExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID inP
     ThrowIfExtAudioFileError(result, "ExtAudioFileGetPropertyInfo");
 }
 
-void CXXAudioToolbox::CAExtAudioFile::GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32& ioPropertyDataSize,
+void CXXAudioToolbox::CAExtAudioFile::GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 &ioPropertyDataSize,
                                                   void *outPropertyData) const {
     const auto result = ExtAudioFileGetProperty(extAudioFile_, inPropertyID, &ioPropertyDataSize, outPropertyData);
     ThrowIfExtAudioFileError(result, "ExtAudioFileGetProperty");
@@ -146,7 +142,7 @@ CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::FileChannelLayout
     return channelLayout;
 }
 
-void CXXAudioToolbox::CAExtAudioFile::SetFileChannelLayout(const AudioChannelLayout& fileChannelLayout) {
+void CXXAudioToolbox::CAExtAudioFile::SetFileChannelLayout(const AudioChannelLayout &fileChannelLayout) {
     SetProperty(kExtAudioFileProperty_FileChannelLayout,
                 static_cast<UInt32>(CXXCoreAudio::AudioChannelLayoutSize(&fileChannelLayout)), &fileChannelLayout);
 }
@@ -165,7 +161,7 @@ CXXCoreAudio::CAStreamDescription CXXAudioToolbox::CAExtAudioFile::ClientDataFor
     return clientDataFormat;
 }
 
-void CXXAudioToolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasicDescription& clientDataFormat,
+void CXXAudioToolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasicDescription &clientDataFormat,
                                                           const AudioChannelLayout *const clientChannelLayout,
                                                           UInt32 codecManufacturer) {
     if (codecManufacturer) {
@@ -188,7 +184,7 @@ CXXCoreAudio::CAChannelLayout CXXAudioToolbox::CAExtAudioFile::ClientChannelLayo
     return layout.get();
 }
 
-void CXXAudioToolbox::CAExtAudioFile::SetClientChannelLayout(const AudioChannelLayout& clientChannelLayout) {
+void CXXAudioToolbox::CAExtAudioFile::SetClientChannelLayout(const AudioChannelLayout &clientChannelLayout) {
     SetProperty(kExtAudioFileProperty_ClientChannelLayout,
                 static_cast<UInt32>(CXXCoreAudio::AudioChannelLayoutSize(&clientChannelLayout)), &clientChannelLayout);
 }

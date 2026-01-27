@@ -34,7 +34,7 @@ namespace CAAudioFormat {
 /// @param outPropertyData The buffer in which to write the property data.
 /// @throw std::system_error.
 void GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, const void *_Nullable inSpecifier,
-                 UInt32& ioPropertyDataSize, void *_Nullable outPropertyData);
+                 UInt32 &ioPropertyDataSize, void *_Nullable outPropertyData);
 
 /// Returns an array of format IDs that are valid output formats for a converter.
 /// @throw std::system_error.
