@@ -17,7 +17,7 @@
 
 CF_ASSUME_NONNULL_BEGIN
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// An AUGraph wrapper.
 class CAAUGraph final {
@@ -252,6 +252,6 @@ inline void CAAUGraph::swap(CAAUGraph &other) noexcept { std::swap(graph_, other
 
 inline AUGraph _Nullable CAAUGraph::release() noexcept { return std::exchange(graph_, nullptr); }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
 
 CF_ASSUME_NONNULL_END

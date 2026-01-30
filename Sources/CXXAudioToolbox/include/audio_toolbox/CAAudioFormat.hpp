@@ -13,7 +13,7 @@
 
 CF_ASSUME_NONNULL_BEGIN
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 namespace CAAudioFormat {
 
 /// Retrieves information about the given property.
@@ -45,6 +45,6 @@ void GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize, con
 [[nodiscard]] std::vector<AudioFormatID> DecodeFormatIDs();
 
 } /* namespace CAAudioFormat */
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
 
 CF_ASSUME_NONNULL_END

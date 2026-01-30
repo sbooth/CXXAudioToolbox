@@ -10,22 +10,22 @@ import Testing
 
 @Suite struct CXXCoreAudioTests {
     @Test func audioConverter() async {
-        let converter = CXXAudioToolbox.CAAudioConverter()
+        let converter = audio_toolbox.CAAudioConverter()
         #expect(converter.__convertToBool() == false)
     }
 
     @Test func audioFile() async {
-        let af = CXXAudioToolbox.CAAudioFile()
+        let af = audio_toolbox.CAAudioFile()
         #expect(af.__convertToBool() == false)
     }
 
     @Test func extAudioFile() async {
-        let eaf = CXXAudioToolbox.CAExtAudioFile()
+        let eaf = audio_toolbox.CAExtAudioFile()
         #expect(eaf.__convertToBool() == false)
     }
 
     @Test func auGraph() async {
-        let graph = CXXAudioToolbox.CAAUGraph()
+        let graph = audio_toolbox.CAAUGraph()
         #expect(graph.__convertToBool() == false)
     }
 }

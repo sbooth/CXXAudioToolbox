@@ -11,7 +11,7 @@
 
 #include <utility>
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// A bare-bones AudioFile wrapper modeled after std::unique_ptr.
 class AudioFileWrapper final {
@@ -91,4 +91,4 @@ inline void AudioFileWrapper::swap(AudioFileWrapper &other) noexcept { std::swap
 
 inline AudioFileID _Nullable AudioFileWrapper::release() noexcept { return std::exchange(audioFile_, nullptr); }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */

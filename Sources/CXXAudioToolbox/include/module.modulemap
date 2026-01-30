@@ -7,12 +7,12 @@
 
 module CXXAudioToolbox {
 	requires cplusplus17
-	header "CXXAudioToolbox/CAAudioConverter.hpp"
-	header "CXXAudioToolbox/CAAudioFile.hpp"
-	header "CXXAudioToolbox/CAAudioFormat.hpp"
-	header "CXXAudioToolbox/CAAUGraph.hpp"
-	header "CXXAudioToolbox/CAExtAudioFile.hpp"
-	header "CXXAudioToolbox/AudioFileWrapper.hpp"
-	header "CXXAudioToolbox/ExtAudioFileWrapper.hpp"
+	header "audio_toolbox/CAAudioConverter.hpp"
+	header "audio_toolbox/CAAudioFile.hpp"
+	header "audio_toolbox/CAAudioFormat.hpp"
+	header "audio_toolbox/CAAUGraph.hpp"
+	header "audio_toolbox/CAExtAudioFile.hpp"
+	header "audio_toolbox/AudioFileWrapper.hpp"
+	header "audio_toolbox/ExtAudioFileWrapper.hpp"
 	export *
 }

@@ -23,7 +23,7 @@
 
 CF_ASSUME_NONNULL_BEGIN
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// An ExtAudioFIle wrapper.
 class CAExtAudioFile {
@@ -333,6 +333,6 @@ inline void CAExtAudioFile::reset(ExtAudioFileRef _Nullable extAudioFile) noexce
 inline void CAExtAudioFile::swap(CAExtAudioFile &other) noexcept { std::swap(extAudioFile_, other.extAudioFile_); }
 
 inline ExtAudioFileRef _Nullable CAExtAudioFile::release() noexcept { return std::exchange(extAudioFile_, nullptr); }
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
 
 CF_ASSUME_NONNULL_END

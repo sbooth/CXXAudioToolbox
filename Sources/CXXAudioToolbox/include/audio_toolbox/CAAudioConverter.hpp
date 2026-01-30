@@ -13,7 +13,7 @@
 
 CF_ASSUME_NONNULL_BEGIN
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// An AudioConverter wrapper.
 class CAAudioConverter final {
@@ -127,6 +127,6 @@ inline void CAAudioConverter::swap(CAAudioConverter &other) noexcept { std::swap
 
 inline AudioConverterRef _Nullable CAAudioConverter::release() noexcept { return std::exchange(converter_, nullptr); }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
 
 CF_ASSUME_NONNULL_END

@@ -17,7 +17,7 @@
 #include <exception>
 #include <system_error>
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 namespace detail {
 
 /// A std::error_category for return values from the AudioCodec API.
@@ -543,4 +543,4 @@ inline void ThrowIfExtAudioFileError(OSStatus result, const char *const operatio
     }
 }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */

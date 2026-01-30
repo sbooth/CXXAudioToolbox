@@ -5,11 +5,11 @@
 // Part of https://github.com/sbooth/CXXAudioToolbox
 //
 
-#include "CXXAudioToolbox/CAAudioFormat.hpp"
+#include "audio_toolbox/CAAudioFormat.hpp"
 
 #include "AudioToolboxErrors.hpp"
 
-UInt32 CXXAudioToolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
+UInt32 audio_toolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
                                                        const void *inSpecifier) {
     UInt32 size;
     const auto result = AudioFormatGetPropertyInfo(inPropertyID, inSpecifierSize, inSpecifier, &size);
@@ -17,7 +17,7 @@ UInt32 CXXAudioToolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inP
     return size;
 }
 
-void CXXAudioToolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
+void audio_toolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
                                                  const void *inSpecifier, UInt32 &ioPropertyDataSize,
                                                  void *outPropertyData) {
     const auto result =
@@ -25,7 +25,7 @@ void CXXAudioToolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropert
     ThrowIfAudioFormatError(result, "AudioFormatGetProperty");
 }
 
-std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFormat::EncodeFormatIDs() {
+std::vector<AudioFormatID> audio_toolbox::CAAudioFormat::EncodeFormatIDs() {
     auto size = GetPropertyInfo(kAudioFormatProperty_EncodeFormatIDs, 0, nullptr);
     auto count = size / sizeof(AudioFormatID);
     auto formatIDs = std::vector<AudioFormatID>(count);
@@ -33,7 +33,7 @@ std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFormat::EncodeFormatIDs() {
     return formatIDs;
 }
 
-std::vector<AudioFormatID> CXXAudioToolbox::CAAudioFormat::DecodeFormatIDs() {
+std::vector<AudioFormatID> audio_toolbox::CAAudioFormat::DecodeFormatIDs() {
     auto size = GetPropertyInfo(kAudioFormatProperty_DecodeFormatIDs, 0, nullptr);
     auto count = size / sizeof(AudioFormatID);
     auto formatIDs = std::vector<AudioFormatID>(count);

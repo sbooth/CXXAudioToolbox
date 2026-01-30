@@ -16,7 +16,7 @@
 
 CF_ASSUME_NONNULL_BEGIN
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// An AudioFile wrapper.
 class CAAudioFile final {
@@ -241,6 +241,6 @@ inline void CAAudioFile::swap(CAAudioFile &other) noexcept { std::swap(audioFile
 
 inline AudioFileID _Nullable CAAudioFile::release() noexcept { return std::exchange(audioFile_, nullptr); }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
 
 CF_ASSUME_NONNULL_END

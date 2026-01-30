@@ -11,7 +11,7 @@
 
 #include <utility>
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// A bare-bones ExtAudioFile wrapper modeled after std::unique_ptr.
 class ExtAudioFileWrapper final {
@@ -100,4 +100,4 @@ inline ExtAudioFileRef _Nullable ExtAudioFileWrapper::release() noexcept {
     return std::exchange(extAudioFile_, nullptr);
 }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
