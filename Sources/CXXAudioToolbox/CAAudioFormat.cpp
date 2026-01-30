@@ -10,7 +10,7 @@
 #include "AudioToolboxErrors.hpp"
 
 UInt32 audio_toolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
-                                                       const void *inSpecifier) {
+                                                     const void *inSpecifier) {
     UInt32 size;
     const auto result = AudioFormatGetPropertyInfo(inPropertyID, inSpecifierSize, inSpecifier, &size);
     ThrowIfAudioFormatError(result, "AudioFormatGetPropertyInfo");
@@ -18,8 +18,8 @@ UInt32 audio_toolbox::CAAudioFormat::GetPropertyInfo(AudioFormatPropertyID inPro
 }
 
 void audio_toolbox::CAAudioFormat::GetProperty(AudioFormatPropertyID inPropertyID, UInt32 inSpecifierSize,
-                                                 const void *inSpecifier, UInt32 &ioPropertyDataSize,
-                                                 void *outPropertyData) {
+                                               const void *inSpecifier, UInt32 &ioPropertyDataSize,
+                                               void *outPropertyData) {
     const auto result =
             AudioFormatGetProperty(inPropertyID, inSpecifierSize, inSpecifier, &ioPropertyDataSize, outPropertyData);
     ThrowIfAudioFormatError(result, "AudioFormatGetProperty");

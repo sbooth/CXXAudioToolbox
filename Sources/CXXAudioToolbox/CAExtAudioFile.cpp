@@ -41,9 +41,9 @@ void audio_toolbox::CAExtAudioFile::WrapAudioFileID(AudioFileID inFileID, bool i
 }
 
 void audio_toolbox::CAExtAudioFile::CreateWithURL(CFURLRef inURL, AudioFileTypeID inFileType,
-                                                    const AudioStreamBasicDescription &inStreamDesc,
-                                                    const AudioChannelLayout *_Nullable const inChannelLayout,
-                                                    UInt32 inFlags) {
+                                                  const AudioStreamBasicDescription &inStreamDesc,
+                                                  const AudioChannelLayout *_Nullable const inChannelLayout,
+                                                  UInt32 inFlags) {
     Dispose();
     const auto result =
             ExtAudioFileCreateWithURL(inURL, inFileType, &inStreamDesc, inChannelLayout, inFlags, &extAudioFile_);
@@ -112,19 +112,19 @@ SInt64 audio_toolbox::CAExtAudioFile::Tell() const {
 }
 
 void audio_toolbox::CAExtAudioFile::GetPropertyInfo(ExtAudioFilePropertyID inPropertyID, UInt32 *_Nullable outSize,
-                                                      Boolean *_Nullable outWritable) const {
+                                                    Boolean *_Nullable outWritable) const {
     const auto result = ExtAudioFileGetPropertyInfo(extAudioFile_, inPropertyID, outSize, outWritable);
     ThrowIfExtAudioFileError(result, "ExtAudioFileGetPropertyInfo");
 }
 
 void audio_toolbox::CAExtAudioFile::GetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 &ioPropertyDataSize,
-                                                  void *outPropertyData) const {
+                                                void *outPropertyData) const {
     const auto result = ExtAudioFileGetProperty(extAudioFile_, inPropertyID, &ioPropertyDataSize, outPropertyData);
     ThrowIfExtAudioFileError(result, "ExtAudioFileGetProperty");
 }
 
 void audio_toolbox::CAExtAudioFile::SetProperty(ExtAudioFilePropertyID inPropertyID, UInt32 inPropertyDataSize,
-                                                  const void *inPropertyData) {
+                                                const void *inPropertyData) {
     const auto result = ExtAudioFileSetProperty(extAudioFile_, inPropertyID, inPropertyDataSize, inPropertyData);
     ThrowIfExtAudioFileError(result, "ExtAudioFileSetProperty");
 }
@@ -162,8 +162,8 @@ CXXCoreAudio::CAStreamDescription audio_toolbox::CAExtAudioFile::ClientDataForma
 }
 
 void audio_toolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasicDescription &clientDataFormat,
-                                                          const AudioChannelLayout *const clientChannelLayout,
-                                                          UInt32 codecManufacturer) {
+                                                        const AudioChannelLayout *const clientChannelLayout,
+                                                        UInt32 codecManufacturer) {
     if (codecManufacturer) {
         SetProperty(kExtAudioFileProperty_CodecManufacturer, sizeof codecManufacturer, &codecManufacturer);
     }
@@ -197,7 +197,7 @@ AudioConverterRef audio_toolbox::CAExtAudioFile::AudioConverter() const {
 }
 
 void audio_toolbox::CAExtAudioFile::SetAudioConverterProperty(AudioConverterPropertyID inPropertyID,
-                                                                UInt32 inPropertyDataSize, const void *inPropertyData) {
+                                                              UInt32 inPropertyDataSize, const void *inPropertyData) {
     const auto result = AudioConverterSetProperty(AudioConverter(), inPropertyID, inPropertyDataSize, inPropertyData);
     ThrowIfAudioConverterError(result, "AudioConverterSetProperty");
     CFPropertyListRef config = nullptr;

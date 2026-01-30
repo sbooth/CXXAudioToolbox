@@ -61,7 +61,7 @@ AUNode audio_toolbox::CAAUGraph::GetIndNode(UInt32 inIndex) const {
 }
 
 void audio_toolbox::CAAUGraph::NodeInfo(AUNode inNode, AudioComponentDescription *outDescription,
-                                          AudioUnit *outAudioUnit) const {
+                                        AudioUnit *outAudioUnit) const {
     const auto result = AUGraphNodeInfo(graph_, inNode, outDescription, outAudioUnit);
     ThrowIfAUGraphError(result, "AUGraphNodeInfo");
 }
@@ -94,14 +94,14 @@ bool audio_toolbox::CAAUGraph::IsNodeSubGraph(AUNode inNode) const {
 // MARK: - Node Interactions
 
 void audio_toolbox::CAAUGraph::ConnectNodeInput(AUNode inSourceNode, UInt32 inSourceOutputNumber, AUNode inDestNode,
-                                                  UInt32 inDestInputNumber) {
+                                                UInt32 inDestInputNumber) {
     const auto result =
             AUGraphConnectNodeInput(graph_, inSourceNode, inSourceOutputNumber, inDestNode, inDestInputNumber);
     ThrowIfAUGraphError(result, "AUGraphConnectNodeInput");
 }
 
 void audio_toolbox::CAAUGraph::SetNodeInputCallback(AUNode inDestNode, UInt32 inDestInputNumber,
-                                                      const AURenderCallbackStruct *inInputCallback) {
+                                                    const AURenderCallbackStruct *inInputCallback) {
     const auto result = AUGraphSetNodeInputCallback(graph_, inDestNode, inDestInputNumber, inInputCallback);
     ThrowIfAUGraphError(result, "AUGraphSetNodeInputCallback");
 }
@@ -138,7 +138,7 @@ UInt32 audio_toolbox::CAAUGraph::CountNodeInteractions(AUNode inNode) const {
 }
 
 void audio_toolbox::CAAUGraph::GetNodeInteractions(AUNode inNode, UInt32 *ioNumInteractions,
-                                                     AUNodeInteraction *outInteractions) const {
+                                                   AUNodeInteraction *outInteractions) const {
     const auto result = AUGraphGetNodeInteractions(graph_, inNode, ioNumInteractions, outInteractions);
     ThrowIfAUGraphError(result, "AUGraphGetNodeInteractions");
 }
