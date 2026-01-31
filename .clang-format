@@ -15,7 +15,9 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex: '^".*"$'
     Priority: 1
-  - Regex: '^<CXXCoreAudio/'
+  - Regex: '^<audio_toolbox/'
+    Priority: 1
+  - Regex: '^<core_audio/'
     Priority: 2
   - Regex: '^<(AudioToolbox|AVFAudio)/'
     Priority: 3

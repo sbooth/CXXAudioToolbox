@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <CXXCoreAudio/CAStreamDescription.hpp>
+#include <core_audio/StreamDescription.hpp>
 
 #include <AudioToolbox/AudioFile.h>
 
@@ -16,7 +16,7 @@
 
 CF_ASSUME_NONNULL_BEGIN
 
-namespace CXXAudioToolbox {
+namespace audio_toolbox {
 
 /// An AudioFile wrapper.
 class CAAudioFile final {
@@ -130,7 +130,7 @@ class CAAudioFile final {
 
     /// Returns the file's data format (kAudioFilePropertyDataFormat)
     /// @throw std::system_error.
-    [[nodiscard]] CXXCoreAudio::CAStreamDescription DataFormat() const;
+    [[nodiscard]] core_audio::StreamDescription DataFormat() const;
 
     // MARK: Global Properties
 
@@ -161,7 +161,7 @@ class CAAudioFile final {
 
     /// Returns an array of supported formats for the fileType and formatID combination
     /// @throw std::system_error.
-    [[nodiscard]] static std::vector<CXXCoreAudio::CAStreamDescription>
+    [[nodiscard]] static std::vector<core_audio::StreamDescription>
     AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID);
 
     /// Returns an array of format IDs that can be read.
@@ -241,6 +241,6 @@ inline void CAAudioFile::swap(CAAudioFile &other) noexcept { std::swap(audioFile
 
 inline AudioFileID _Nullable CAAudioFile::release() noexcept { return std::exchange(audioFile_, nullptr); }
 
-} /* namespace CXXAudioToolbox */
+} /* namespace audio_toolbox */
 
 CF_ASSUME_NONNULL_END
