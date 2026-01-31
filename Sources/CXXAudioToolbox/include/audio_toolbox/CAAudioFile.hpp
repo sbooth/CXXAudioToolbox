@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <CXXCoreAudio/CAStreamDescription.hpp>
+#include <core_audio/StreamDescription.hpp>
 
 #include <AudioToolbox/AudioFile.h>
 
@@ -130,7 +130,7 @@ class CAAudioFile final {
 
     /// Returns the file's data format (kAudioFilePropertyDataFormat)
     /// @throw std::system_error.
-    [[nodiscard]] CXXCoreAudio::CAStreamDescription DataFormat() const;
+    [[nodiscard]] core_audio::StreamDescription DataFormat() const;
 
     // MARK: Global Properties
 
@@ -161,7 +161,7 @@ class CAAudioFile final {
 
     /// Returns an array of supported formats for the fileType and formatID combination
     /// @throw std::system_error.
-    [[nodiscard]] static std::vector<CXXCoreAudio::CAStreamDescription>
+    [[nodiscard]] static std::vector<core_audio::StreamDescription>
     AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID);
 
     /// Returns an array of format IDs that can be read.

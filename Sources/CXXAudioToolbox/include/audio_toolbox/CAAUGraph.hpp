@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <CXXCoreAudio/CAStreamDescription.hpp>
+#include <core_audio/StreamDescription.hpp>
 
 #include <AudioToolbox/AUGraph.h>
 

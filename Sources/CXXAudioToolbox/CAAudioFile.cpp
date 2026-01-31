@@ -161,8 +161,8 @@ AudioFileTypeID audio_toolbox::CAAudioFile::FileFormat() const {
     return fileFormat;
 }
 
-CXXCoreAudio::CAStreamDescription audio_toolbox::CAAudioFile::DataFormat() const {
-    CXXCoreAudio::CAStreamDescription fileDataFormat;
+core_audio::StreamDescription audio_toolbox::CAAudioFile::DataFormat() const {
+    core_audio::StreamDescription fileDataFormat;
     UInt32 size = sizeof fileDataFormat;
     GetProperty(kAudioFilePropertyDataFormat, size, &fileDataFormat);
     return fileDataFormat;
@@ -208,12 +208,12 @@ CFStringRef audio_toolbox::CAAudioFile::CopyFileTypeName(AudioFileTypeID type) {
     return s;
 }
 
-std::vector<CXXCoreAudio::CAStreamDescription>
+std::vector<core_audio::StreamDescription>
 audio_toolbox::CAAudioFile::AvailableStreamDescriptions(AudioFileTypeID fileType, AudioFormatID formatID) {
     AudioFileTypeAndFormatID spec{fileType, formatID};
     auto size = GetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof spec, &spec);
     auto count = size / sizeof(AudioStreamBasicDescription);
-    auto streamDescriptions = std::vector<CXXCoreAudio::CAStreamDescription>(count);
+    auto streamDescriptions = std::vector<core_audio::StreamDescription>(count);
     GetGlobalInfo(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof spec, &spec, size,
                   streamDescriptions.data());
     return streamDescriptions;

@@ -63,11 +63,11 @@ void audio_toolbox::CAExtAudioFile::Read(UInt32 &ioNumberFrames, AudioBufferList
     ThrowIfExtAudioFileError(result, "ExtAudioFileRead");
 }
 
-void audio_toolbox::CAExtAudioFile::Read(CXXCoreAudio::CAAudioBuffer &buffer) {
-    buffer.PrepareForReading();
-    UInt32 frameCount = buffer.FrameCapacity();
+void audio_toolbox::CAExtAudioFile::Read(core_audio::BufferList &buffer) {
+    buffer.prepareForReading();
+    UInt32 frameCount = buffer.frameCapacity();
     Read(frameCount, buffer);
-    buffer.SetFrameLength(frameCount);
+    buffer.setFrameLength(frameCount);
 }
 
 #if TARGET_OS_IPHONE
@@ -129,7 +129,7 @@ void audio_toolbox::CAExtAudioFile::SetProperty(ExtAudioFilePropertyID inPropert
     ThrowIfExtAudioFileError(result, "ExtAudioFileSetProperty");
 }
 
-CXXCoreAudio::CAChannelLayout audio_toolbox::CAExtAudioFile::FileChannelLayout() const {
+core_audio::ChannelLayout audio_toolbox::CAExtAudioFile::FileChannelLayout() const {
     UInt32 size;
     GetPropertyInfo(kExtAudioFileProperty_FileChannelLayout, &size, nullptr);
     std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -137,25 +137,25 @@ CXXCoreAudio::CAChannelLayout audio_toolbox::CAExtAudioFile::FileChannelLayout()
         throw std::bad_alloc();
     }
     GetProperty(kExtAudioFileProperty_FileChannelLayout, size, layout.get());
-    CXXCoreAudio::CAChannelLayout channelLayout{};
+    core_audio::ChannelLayout channelLayout{};
     channelLayout.reset(layout.release());
     return channelLayout;
 }
 
 void audio_toolbox::CAExtAudioFile::SetFileChannelLayout(const AudioChannelLayout &fileChannelLayout) {
     SetProperty(kExtAudioFileProperty_FileChannelLayout,
-                static_cast<UInt32>(CXXCoreAudio::AudioChannelLayoutSize(&fileChannelLayout)), &fileChannelLayout);
+                static_cast<UInt32>(core_audio::audioChannelLayoutSize(&fileChannelLayout)), &fileChannelLayout);
 }
 
-CXXCoreAudio::CAStreamDescription audio_toolbox::CAExtAudioFile::FileDataFormat() const {
-    CXXCoreAudio::CAStreamDescription fileDataFormat;
+core_audio::StreamDescription audio_toolbox::CAExtAudioFile::FileDataFormat() const {
+    core_audio::StreamDescription fileDataFormat;
     UInt32 size = sizeof fileDataFormat;
     GetProperty(kExtAudioFileProperty_FileDataFormat, size, &fileDataFormat);
     return fileDataFormat;
 }
 
-CXXCoreAudio::CAStreamDescription audio_toolbox::CAExtAudioFile::ClientDataFormat() const {
-    CXXCoreAudio::CAStreamDescription clientDataFormat;
+core_audio::StreamDescription audio_toolbox::CAExtAudioFile::ClientDataFormat() const {
+    core_audio::StreamDescription clientDataFormat;
     UInt32 size = sizeof clientDataFormat;
     GetProperty(kExtAudioFileProperty_ClientDataFormat, size, &clientDataFormat);
     return clientDataFormat;
@@ -173,7 +173,7 @@ void audio_toolbox::CAExtAudioFile::SetClientDataFormat(const AudioStreamBasicDe
     }
 }
 
-CXXCoreAudio::CAChannelLayout audio_toolbox::CAExtAudioFile::ClientChannelLayout() const {
+core_audio::ChannelLayout audio_toolbox::CAExtAudioFile::ClientChannelLayout() const {
     UInt32 size;
     GetPropertyInfo(kExtAudioFileProperty_ClientChannelLayout, &size, nullptr);
     std::unique_ptr<AudioChannelLayout, free_deleter> layout{static_cast<AudioChannelLayout *>(std::malloc(size))};
@@ -186,7 +186,7 @@ CXXCoreAudio::CAChannelLayout audio_toolbox::CAExtAudioFile::ClientChannelLayout
 
 void audio_toolbox::CAExtAudioFile::SetClientChannelLayout(const AudioChannelLayout &clientChannelLayout) {
     SetProperty(kExtAudioFileProperty_ClientChannelLayout,
-                static_cast<UInt32>(CXXCoreAudio::AudioChannelLayoutSize(&clientChannelLayout)), &clientChannelLayout);
+                static_cast<UInt32>(core_audio::audioChannelLayoutSize(&clientChannelLayout)), &clientChannelLayout);
 }
 
 AudioConverterRef audio_toolbox::CAExtAudioFile::AudioConverter() const {

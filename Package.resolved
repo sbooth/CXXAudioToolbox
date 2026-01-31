@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sbooth/CXXCoreAudio",
       "state" : {
-        "revision" : "1af4736ed771f9a6f37be42600e1bfe5208eb330",
-        "version" : "0.5.1"
+        "revision" : "e2c308d5411f01732b09864600b70ef62dd1762f",
+        "version" : "0.6.0"
       }
     }
   ],
