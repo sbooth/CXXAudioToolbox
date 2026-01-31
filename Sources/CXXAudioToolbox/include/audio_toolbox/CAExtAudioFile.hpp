@@ -300,7 +300,7 @@ inline CAExtAudioFile::operator ExtAudioFileRef const _Nullable() const noexcept
 inline AVAudioFormat *CAExtAudioFile::FileFormat() const {
     const auto dataFormat = FileDataFormat();
     const auto channelLayout = FileChannelLayout();
-    if (dataFormat.ChannelCount() > 2 && !channelLayout) {
+    if (dataFormat.channelCount() > 2 && !channelLayout) {
         throw std::runtime_error("File data format > 2 channels with no file channel layout");
     }
     return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
@@ -309,7 +309,7 @@ inline AVAudioFormat *CAExtAudioFile::FileFormat() const {
 inline AVAudioFormat *CAExtAudioFile::ClientFormat() const {
     const auto dataFormat = ClientDataFormat();
     const auto channelLayout = ClientChannelLayout();
-    if (dataFormat.ChannelCount() > 2 && !channelLayout) {
+    if (dataFormat.channelCount() > 2 && !channelLayout) {
         throw std::runtime_error("Client data format > 2 channels with no client channel layout");
     }
     return [[AVAudioFormat alloc] initWithStreamDescription:&dataFormat channelLayout:channelLayout];
